@@ -1,0 +1,23 @@
+<%- include("template/cabecera",{tituloweb:'Visualizador QR'}) %>
+<H3>CONSULTANDO</H3>
+<% if(componentes) { %>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Operación</th>
+        <th scope="col">Número de Serie</th>  
+        <th scope="col">Código TI</th>  
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= componentes.operacion %></td>
+        <td><%= componentes.numero_serie %></td>
+        <td><%= componentes.codigo_TI %></td>
+      </tr>
+   
+    </tbody>
+  </table>
+<%} %>
+  <%- include("template/footer") %>    
