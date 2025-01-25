@@ -6,8 +6,10 @@ const canvasElement = document.getElementById("qr-canvas");
 const canvas = canvasElement.getContext("2d");
 
 // Seleccionar el botón y el input
-const btnHabilitar = document.getElementById("btnmanual");
+const btnManual = document.getElementById("btnmanual");
 const miInput = document.getElementById("codigoti");
+const btnVerificar = document.getElementById("btnverificar");
+
 
 //div donde llegara nuestro canvas
 const btnScanQR = document.getElementById("btn-scan-qr");
@@ -91,11 +93,11 @@ window.addEventListener('load', (e) => {
   //HABILITAR INPUT "codigoti" cuando se presione  
 
 // Agregar un evento de clic al botón
-btnHabilitar.addEventListener("click", () => {
+btnManual.addEventListener("click", () => {
   // Habilitar el input
   miInput.disabled = false;
   // Opcional: Puedes esconder el botón después de habilitar el input
-  btnHabilitar.style.display = "none";
+  btnManual.style.display = "none";
 });
 
 //EVENTO PARA CONVERTIR A MAYUSCULAS
@@ -107,7 +109,10 @@ function convertirAMayusculas() {
   inputTexto.value = inputTexto.value.toUpperCase();
 }
 
-
+// Agregar un evento de clic al botón
+btnVerificar.addEventListener("click", () => {
+  console.log(miInput.value);
+});
 
 
 

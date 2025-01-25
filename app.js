@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-
+const bodyParser = require('body-parser');
 //variable de entorno numero 1
 const port =process.env.PORT || 3000;
 require('dotenv').config()
@@ -20,6 +20,11 @@ app.use(express.static(__dirname + "/public"))
 app.use('/',require('./router/RouterWeb'));
 app.use('/',require('./router/componentes_router'));
 
+
+//body parser permite acceder y procesar lods datos que se envian desde el formulario html
+app.use(bodyParser.json());
+//se utiliza para analizar los datos de la url enviados en las solicitudes POST
+app.use(bodyParser.urlencoded({extended:false}));
 //para varios archivos
   app.use((req,res,next) => {
     res.status(404).render("404",{

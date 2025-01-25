@@ -1,11 +1,18 @@
 const express=require('express');
 const router=express.Router();
-//const componentes=require('../models/componentesModel.js');
-const connection = require('../models/db');
 
-const componentescontroller = require('../controllers/componentesController');  
+
+//const componentescontroller = require('../controllers/componentesController');  
 const { route } = require('./RouterWeb');
-  router.post('/mostrar',componentescontroller.mostrar)
+  //router.post('/Mostrar_Info_Componente',componentescontroller.mostrar)
+
+  router.post('/Mostrar_Info_Componente',(req,res)=>{
+    const codigoti=req.body.codigoti;
+    console.log(codigoti);
+    res.render('Mostrar_Info_Componente.ejs');
+    //console.log(componentescontroller.mostrar);
+    
+  });
 
 
 
@@ -17,6 +24,7 @@ router.get("/CodigoQR", (req, res) => {
     res.render("CODIGOQR.ejs");
 
   })
+
 
 
 
@@ -35,5 +43,7 @@ router.get('/Mostrar_Info_Componente/:codigo_TI',(req,res)=>{
   
 })
 });
+
+
 
 module.exports= router;

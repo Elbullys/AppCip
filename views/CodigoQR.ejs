@@ -5,19 +5,21 @@
       <div class="row text-center">
         <a id="btn-scan-qr" href="#">
           <img src="https://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2017/07/1499401426qr_icon.svg" class="img-fluid text-center" width="175">
-        <a/>
+        </a>
         <canvas hidden="" id="qr-canvas" class="img-fluid"></canvas>
         </div>
         <div class="row mx-5 my-3">
         <button class="btn btn-success btn-sm rounded-3 mb-2" onclick= encenderCamara()>Encender camara</button>
         <button class="btn btn-danger btn-sm rounded-3" onclick="cerrarCamara()">Detener camara</button>
        <h3 id="respuestas" class="text-center fw-light"></h3> 
-          <div class="row mx-5 my-3">
+       <form action="/Mostrar_Info_Componente" method="post">  
+       <div class="row mx-5 my-3">
           
             <label for="codigoti" class="form-label"> Código TI</label>
-            <input type="text" class="form-control" id="codigoti" name="codigoti" oninput="convertirAMayusculas()" disabled>
-            <a id="btnverificar" href="/Mostrar_Info_Componente/codigoti" class="btn btn-outline-primary">Verificar</a>
+            <input type="text" class="form-control" id="codigoti" name="codigoti" oninput="convertirAMayusculas()">
+            <button id="btnverificar" type="submit" class="btn btn-outline-primary">Verificar</button>
           </div>
+        </form>
        <button id="btnmanual" type="button" class="btn btn-outline-primary">Introducir código TI Manual</button>
       </div>
     </div>
