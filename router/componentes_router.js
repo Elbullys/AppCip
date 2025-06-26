@@ -43,7 +43,21 @@ router.get("/Consultar_Componentes", (req, res) => {
   //con EJS se renderiza en index.ejs
   res.render("Consultar_Componentes.ejs");
 
-})
+  /*connection.query('SELECT U.id_unidad,R.nombre_responsable,U.nombre_unidad,D.tipo_equipo,M.marca,M.modelo,C.numero_serie,C.operacion,C.codigo_TI,C.observaciones,C.status_componente,A.area,C.status_inventario FROM componentes C INNER JOIN unidad U ON U.id_unidad=C.FK_id_unidad INNER JOIN RESPONSABLE R ON R.id_responsable=C.FK_id_responsable INNER JOIN CATALOGO_COMPONENTES CC ON CC.id_catalogo_componente=C.FK_id_catalogo_componentes INNER JOIN MARCA M ON M.id_marca=CC.FK_id_marca_cata INNER JOIN dispositivos D ON D.id_dispositivo=C.FK_id_dispositivo INNER JOIN AREA A ON A.id_area=R.FK_id_area limit 25',(error,results)=>{
+
+    if (error){
+      throw error;
+    }
+    else
+    {
+      res.render("Consultar_Componentes.ejs",{results:results});
+    }
+  
+})*/
+  
+});
+
+
 
 
 /*

@@ -1,12 +1,112 @@
-.navbar-brand img {
-    width: 125px; 
-    height: 30px; 
+/* ========================= */
+/* Estilo para la barra de navegación INICIO   */
+/* ========================= */
+/*  */
+.navbar {
+    background-color: #f8f9fa; /* Fondo claro */
 }
 
+.navbar-light .navbar-nav .nav-link {
+    color: #002852; /* Color azul para los enlaces */
+    font-weight: bold; /* Texto en negrita */
+    padding: 10px 15px; /* Espaciado alrededor de los enlaces */
+}
 
-/* Estilo personalizado para la tabla */
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #014c9b; /* Color azul más oscuro al pasar el mouse */
+}
 
-/*
-/* Estilo personalizado para la tabla */
+.navbar-light .navbar-brand img {
+    width: 200px; /* Ajusta el ancho del logo */
+    height: auto; /* Mantiene la proporción del logo */
+}
+
+/* Estilo para el menú desplegable */
+.dropdown-menu {
+    background-color: #ffffff; /* Fondo blanco para el menú desplegable */
+}
+
+.dropdown-item {
+    color: #002852; /* Color azul para los elementos del menú */
+    padding: 10px 15px; /* Espaciado alrededor de los elementos del menú */
+}
+
+.dropdown-item:hover {
+    background-color: #e9ecef; /* Color de fondo al pasar el mouse */
+}
+
+/* Estilo para los botones */
+.btn-outline-primary {
+    border-color: #007bff; /* Color del borde del botón */
+    padding: 8px 16px; /* Espaciado alrededor del botón */
+}
+
+.btn-outline-primary:hover {
+    background-color: #014c9b; /* Color de fondo al pasar el mouse */
+    color: white; /* Color del texto al pasar el mouse */
+}
+
+/* Estilo para la tarjeta */
+.card {
+    border: none; /* Sin borde para la tarjeta */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+.card-header {
+    background-color: #ffffff; /* Fondo azul para el encabezado de la tarjeta */
+    color: #2f4eaa; /* Texto blanco para el encabezado de la tarjeta */
+    font-weight: bold; /* Texto en negrita */
+     
+}
+/* ========================= */
+/* Estilo para la barra de navegación FIN   */
+/* ========================= */
 
 
+
+/* ========================= */
+/* Estilo para la tabla  INICIO    */
+/* ========================= */
+
+
+.table {
+    border-collapse: collapse; /* Colapsa los bordes de la tabla */
+}
+
+.table thead th {
+    background-color: #4989ce !important; /* Fondo azul oscuro para el encabezado */
+    color: white; /* Texto blanco para el encabezado */
+    text-align: center !important; /* Centra el texto en el encabezado */
+    padding: 12px; /* Espaciado interno en el encabezado */
+}
+
+.table tbody td {
+    background-color: #ffffff; /* Fondo blanco para las celdas */
+    color: #3a435b; /* Texto azul para las celdas */
+    padding: 10px; /* Espaciado interno en las celdas */
+    border: 1px solid #dee2e6; /* Borde gris claro */
+    text-align: center; /* Centra el texto en las celdas */
+}
+
+.table tbody tr:nth-child(even) td {
+    background-color: #f2f2f2; /* Fondo gris claro para filas pares */
+}
+
+.table tbody tr:hover td {
+    background-color: #e9ecef; /* Color de fondo al pasar el mouse */
+}
+
+.table-responsive {
+    margin-top: 20px; /* Espaciado superior para separar la tabla de otros elementos */
+}
+
+table.table td a.edit {
+    color: #1da9be;
+}
+table.table td a.delete {
+    color: #1da9be;
+}
+
+/* ========================= */
+/* Estilo para la tabla  FIN    */
+/* ========================= */
