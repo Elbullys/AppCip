@@ -31,10 +31,10 @@ const encenderCamara = () => {
       tick();
       scan();
    // Mostrar el botón
-    btnHabilitar.style.display = "inline-block"; // Cambiar a "inline-block" o "block"
+    //btnHabilitar.style.display = "inline-block"; // Cambiar a "inline-block" o "block"
     
     // Habilitar el botón
-    btnHabilitar.disabled = false;
+    //btnHabilitar.disabled = false;
     });
 };
 
@@ -63,12 +63,12 @@ const cerrarCamara = () => {
   canvasElement.hidden = true;
   btnScanQR.hidden = false;
 };
-
+/*
 const activarSonido = () => {
   var audio = document.getElementById('audioScaner');
   audio.play();
 }
-
+*/
 //callback cuando termina de leer el codigo QR
 qrcode.callback = (respuesta) => {
   if (respuesta) {
@@ -78,7 +78,7 @@ qrcode.callback = (respuesta) => {
  
     //respuestas.textContent=`${respuesfinal}`;
     Swal.fire(respuesta)
-    activarSonido();
+    //activarSonido();
     //setRespuesta(respuesta);
     //encenderCamara();    
     cerrarCamara();    
