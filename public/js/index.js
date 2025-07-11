@@ -31,10 +31,10 @@ const encenderCamara = () => {
       tick();
       scan();
    // Mostrar el botón
-    //btnHabilitar.style.display = "inline-block"; // Cambiar a "inline-block" o "block"
+    btnHabilitar.style.display = "inline-block"; // Cambiar a "inline-block" o "block"
     
     // Habilitar el botón
-    //btnHabilitar.disabled = false;
+    btnHabilitar.disabled = false;
     });
 };
 

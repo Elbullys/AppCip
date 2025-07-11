@@ -1,4 +1,12 @@
 <%- include("template/cabecera",{tituloweb:'Visualizador QR'}) %>
+
+<style>
+        #qr-canvas {
+            width: 300px;
+            height: 300px;
+            margin: 1rem auto;
+        }
+    </style>
 <div class="row justify-content-center mt-5">
   <div class="col-sm-4 shadow p-3">
     <h5 class="text-center">Escanear codigo QR</h5>
@@ -48,9 +56,6 @@
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
- <script src="/js/Plugins/qrCode.min.js"></script>
-  <script src="/js/index.js"></script>
- 
-<audio id="audioScaner" src="/public/js/sounds/sonido.mp3"></audio>
+
+
 <%- include("template/footer") %>

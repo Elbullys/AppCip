@@ -14,6 +14,12 @@ router.get("/", (req, res) => {
     //con EJS se renderiza en index.ejs
     res.render("servicios", {servicio:"servicio automotriz"})
   })
+
+    router.get("/leercodigoQR", (req, res) => {
+    //console.log(__dirname)
+    //con EJS se renderiza en index.ejs
+    res.render("LeerCodigoQR")
+  })
   
 
 
