@@ -1,9 +1,17 @@
 <%- include("template/cabecera",{tituloweb:'Visualizador QR'}) %>
 
-    <div class="container">
-        <h1>Resultado del Escaneo</h1>
+      <div class="container">
+        <h1>Escanea un Código QR</h1>
         
-        <a href="/" class="btn">Escanear otro</a>
+        <div class="scanner-container">
+            <video id="qr-video" width="400" height="300"></video>
+            <button id="start-btn">Iniciar Escáner</button>
+        </div>
+        <div id="result" class="hidden">
+            <h2>Resultado:</h2>
+            <p id="qr-result"></p>
+        </div>
     </div>
+    <script src="/js/scanner.js"></script>
     
 <%- include("template/footer") %>
