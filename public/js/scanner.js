@@ -1,3 +1,6 @@
+
+
+
 // Iniciar el escaneo automáticamente al cargar la página
 window.addEventListener('load', async () => {
     const video = document.getElementById('qr-video');
