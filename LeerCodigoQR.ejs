@@ -1,5 +1,11 @@
 <%- include("template/cabecera",{tituloweb:'Visualizador QR'}) %>
-
+ <style>
+        #qr-canvas {
+            width: 300px;
+            height: 300px;
+            margin: 1rem auto;
+        }
+    </style>
     <div class="container">
         <h1>Escanea un Código QR</h1>
         
@@ -13,4 +19,11 @@
         </div>
     </div>
     <script src="/js/scanner.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script>
+        if(typeof jsQR === 'undefined') {
+            console.error('jsQR library not loaded');
+        }
+    </script>
 <%- include("template/footer") %>
+
