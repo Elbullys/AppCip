@@ -26,13 +26,14 @@
       <h3 id="respuestas" class="text-center fw-light"></h3>
       <form action="/Mostrar_Info_Componente" method="post">
         <div class="row mx-5 my-3">
-          <label for="codigoti" class="form-label"> Código TI</label>
+          <label for="codigoti" class="text-title form-label text-center"> Código TI</label>
           <input
             type="text"
-            class="form-control"
+            class="form-control text-center "
+            oninput="this.value = this.value.toUpperCase();"
             id="codigoti"
             name="codigoti"
-            oninput="convertirAMayusculas()"
+            required
           />
           <button
             id="btnverificar"

@@ -1,4 +1,4 @@
-const mysql= require("mysql2");
+/*const mysql= require("mysql2");
 //CONEXION A BASE DE DATOS
 
 const connection = mysql.createConnection({

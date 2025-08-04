@@ -3,110 +3,183 @@
 /* ========================= */
 /*  */
 .navbar {
-    background-color: #f8f9fa; /* Fondo claro */
+  background-color: #f8f9fa; /* Fondo claro */
 }
 
 .navbar-light .navbar-nav .nav-link {
-    color: #002852; /* Color azul para los enlaces */
-    font-weight: bold; /* Texto en negrita */
-    padding: 10px 15px; /* Espaciado alrededor de los enlaces */
+  color: #002852; /* Color azul para los enlaces */
+  font-weight: bold; /* Texto en negrita */
+  padding: 10px 15px; /* Espaciado alrededor de los enlaces */
 }
 
 .navbar-light .navbar-nav .nav-link:hover {
-    color: #014c9b; /* Color azul más oscuro al pasar el mouse */
+  color: #014c9b; /* Color azul más oscuro al pasar el mouse */
 }
 
 .navbar-light .navbar-brand img {
-    width: 200px; /* Ajusta el ancho del logo */
-    height: auto; /* Mantiene la proporción del logo */
+  width: 200px; /* Ajusta el ancho del logo */
+  height: auto; /* Mantiene la proporción del logo */
 }
 
 /* Estilo para el menú desplegable */
 .dropdown-menu {
-    background-color: #ffffff; /* Fondo blanco para el menú desplegable */
+  background-color: #ffffff; /* Fondo blanco para el menú desplegable */
 }
 
 .dropdown-item {
-    color: #002852; /* Color azul para los elementos del menú */
-    padding: 10px 15px; /* Espaciado alrededor de los elementos del menú */
+  color: #002852; /* Color azul para los elementos del menú */
+  padding: 10px 15px; /* Espaciado alrededor de los elementos del menú */
 }
 
 .dropdown-item:hover {
-    background-color: #e9ecef; /* Color de fondo al pasar el mouse */
+  background-color: #e9ecef; /* Color de fondo al pasar el mouse */
 }
 
 /* Estilo para los botones */
 .btn-outline-primary {
-    border-color: #007bff; /* Color del borde del botón */
-    padding: 8px 16px; /* Espaciado alrededor del botón */
+  border-color: #007bff; /* Color del borde del botón */
+  padding: 8px 16px; /* Espaciado alrededor del botón */
 }
 
 .btn-outline-primary:hover {
-    background-color: #014c9b; /* Color de fondo al pasar el mouse */
-    color: white; /* Color del texto al pasar el mouse */
+  background-color: #014c9b; /* Color de fondo al pasar el mouse */
+  color: white; /* Color del texto al pasar el mouse */
 }
 
 /* Estilo para la tarjeta */
 .card {
-    border: none; /* Sin borde para la tarjeta */
-    border-radius: 8px; /* Bordes redondeados */
+  border: none; /* Sin borde para la tarjeta */
+  border-radius: 8px; /* Bordes redondeados */
 }
 
 .card-header {
-    background-color: #ffffff; /* Fondo azul para el encabezado de la tarjeta */
-    color: #2f4eaa; /* Texto blanco para el encabezado de la tarjeta */
-    font-weight: bold; /* Texto en negrita */
-     
+  background-color: #ffffff; /* Fondo azul para el encabezado de la tarjeta */
+  color: #2f4eaa; /* Texto  para el encabezado de la tarjeta */
+  font-weight: bold; /* Texto en negrita */
 }
 /* ========================= */
 /* Estilo para la barra de navegación FIN   */
 /* ========================= */
 
-
-
 /* ========================= */
 /* Estilo para la tabla  INICIO    */
 /* ========================= */
 
-
 .table {
-    border-collapse: collapse; /* Colapsa los bordes de la tabla */
+  border-collapse: collapse; /* Colapsa los bordes de la tabla */
 }
 
 .table thead th {
-    background-color: #4989ce !important; /* Fondo azul oscuro para el encabezado */
-    color: white; /* Texto blanco para el encabezado */
-    text-align: center !important; /* Centra el texto en el encabezado */
-    padding: 12px; /* Espaciado interno en el encabezado */
+  background-color: #4989ce !important; /* Fondo azul oscuro para el encabezado */
+  color: white; /* Texto blanco para el encabezado */
+  text-align: center !important; /* Centra el texto en el encabezado */
+  padding: 12px; /* Espaciado interno en el encabezado */
 }
 
 .table tbody td {
-    background-color: #ffffff; /* Fondo blanco para las celdas */
-    color: #3a435b; /* Texto azul para las celdas */
-    padding: 10px; /* Espaciado interno en las celdas */
-    border: 1px solid #dee2e6; /* Borde gris claro */
-    text-align: center; /* Centra el texto en las celdas */
+  background-color: #ffffff; /* Fondo blanco para las celdas */
+  color: #3a435b; /* Texto azul para las celdas */
+  padding: 10px; /* Espaciado interno en las celdas */
+  border: 1px solid #dee2e6; /* Borde gris claro */
+  text-align: center; /* Centra el texto en las celdas */
 }
 
 .table tbody tr:nth-child(even) td {
-    background-color: #f2f2f2; /* Fondo gris claro para filas pares */
+  background-color: #f2f2f2; /* Fondo gris claro para filas pares */
 }
 
 .table tbody tr:hover td {
-    background-color: #e9ecef; /* Color de fondo al pasar el mouse */
+  background-color: #e9ecef; /* Color de fondo al pasar el mouse */
 }
 
 .table-responsive {
-    margin-top: 20px; /* Espaciado superior para separar la tabla de otros elementos */
+  margin-top: 20px; /* Espaciado superior para separar la tabla de otros elementos */
 }
 
 table.table td a.edit {
-    color: #1da9be;
+  color: #1da9be;
 }
 table.table td a.delete {
-    color: #1da9be;
+  color: #1da9be;
 }
 
 /* ========================= */
 /* Estilo para la tabla  FIN    */
+/* ========================= */
+
+/* ========================= */
+/* Estilo para LeerCodigoQR   */
+/* ========================= */
+#btnmanual {
+  margin-top: 10px;
+}
+
+#result {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f8f9fa; /* Fondo claro para el resultado */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+.text-title {
+  color: black !important; /* Color del texto del título */
+}
+.input-result {
+  color: black !important ; /* Color del texto del título */
+}
+/* ========================= */
+/* FIN Estilo para LeerCodigoQR   */
+/* ========================= */
+
+/* ========================= */
+/* INICIO ESTILO MODAL  CONSULTAR COMPONENTE QR   */
+/* ========================= */
+.modal {
+  background-color: transparent !important; /* Fondo transparente para el modal */
+}
+.modal-content {
+ background-color: rgba(255, 255, 255); /* Fondo blanco con opacidad */
+  backdrop-filter: blur(5px); /* Efecto de desenfoque en el fondo */
+  border-radius: 10px; /* Bordes redondeados para el modal */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+}
+
+.modal-header {
+  background-color: #002852; /* Color de fondo del encabezado */
+  color: #e9ecef; /* Color del texto del encabezado */
+}
+.modal-body {
+  background-image: url("/resources/prueba_fondo.png");
+  background-size: cover; /* Cubre todo el div */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* No repite la imagen */
+  padding: 20px;
+  color: #002852; /* Color del texto */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Sombra para mejorar la legibilidad */
+}
+
+.btn-close-custom {
+  background-color: transparent; /* Fondo transparente para el botón de cerrar */
+    border: none; /* Sin borde */
+    color: white; /* Color del icono de cerrar */
+   
+}
+
+.list-group .list-group-item {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6; /* Borde gris claro */
+  border-radius: 5px; /* Bordes redondeados */
+  font-size: 15px;
+  color: #002852;
+  margin: 5px;
+}
+.modal-title {
+  display: flex;
+  color: #dee2e6;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+/* ========================= */
+/* fi ESTILO MODAL CONSULTAR COMPONENTE QR   */
 /* ========================= */

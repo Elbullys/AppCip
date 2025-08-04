@@ -18,8 +18,6 @@ app.use(express.static(__dirname + "/public"))
 
 //RUTAS WEB(RUTAS API)
 app.use('/',require('./router/RouterWeb'));
-app.use('/',require('./router/componentes_router'));
-app.use('/',require('./router/comodatoCheckList'));
 
 
 //body parser permite acceder y procesar lods datos que se envian desde el formulario html
