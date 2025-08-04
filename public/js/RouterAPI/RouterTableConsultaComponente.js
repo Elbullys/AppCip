@@ -1,6 +1,6 @@
 async function cargarDetallesUsuario(idusuario, modal) {
     
-    const url = `http://localhost:7000/api/Usuarios/ConsultaUsuarioId/${idusuario}`; // Ajusta la URL si es necesario
+    const url = `https://apirestcip.onrender.com/api/Usuarios/ConsultaUsuarioId/${idusuario}`; // Ajusta la URL si es necesario
 
     try {
         const response = await fetch(url);

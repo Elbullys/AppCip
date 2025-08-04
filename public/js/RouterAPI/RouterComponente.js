@@ -57,7 +57,7 @@ async function cargarComponenteQR(databusqueda,modal) {
     });
 
     try {
-        const response = await fetch(`http://localhost:7000/api/componentes/BusquedaComponenteCodigoTINumSerie?${queryParams}`, {
+        const response = await fetch(`https://apirestcip.onrender.com/api/componentes/BusquedaComponenteCodigoTINumSerie?${queryParams}`, {
             method: 'POST', // Cambiado a GET
             headers: { 'Content-Type': 'application/json' } // Este encabezado no es necesario para GET
         });
@@ -174,7 +174,7 @@ async function Verificacion_Componente() {
 
     try {
         // Usar comillas invertidas para la interpolación de cadenas
-        const response = await fetch(`http://localhost:7000/api/componentes/VerificarExistenciaComponente?${queryParams}`, {
+        const response = await fetch(`https://apirestcip.onrender.com/api/componentes/VerificarExistenciaComponente?${queryParams}`, {
             method: 'POST', // Cambiar a GET
             headers: { 'Content-Type': 'application/json' } // Este encabezado no es necesario para GET, pero no causa problemas
         });
