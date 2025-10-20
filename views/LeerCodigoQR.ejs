@@ -1,7 +1,7 @@
 <%- include("template/cabecera",{tituloweb:'Visualizador QR'}) %>
 <div class="row justify-content-center mt-5">
   <div class="col-sm-4 shadow p-3">
-    <h5 class="text-center">Escanear codigo QR</h5>
+    <h5 class="text-center"><%= pageTitle %></h5>
       <div class="row text-center">
         <video id="qr-video" width="400" height="300"></video>
       </div>
@@ -26,9 +26,12 @@
             required
           />
           </div>
-           <button class="btn btn-primary btn-sm rounded-3" onclick="verDetallesComponenteQR()">
-        Verificar QR
-      </button>
+           
+      <button id="action-button" class="btn <%= mode === 'search' ? 'btn-primary' : 'btn-warning' %>" 
+                <% if(mode === 'search') { %>onclick="Search()"<% } else { %>onclick="Edit()"<% } %>>
+                <%= mode === 'search' ? 'Consulta' : 'Editar' %>
+            </button>
+       
       <button id="btnmanual" type="button" class="btn btn-outline-primary" onclick="BusquedaManual()">
         Introducir código TI Manual
       </button>

@@ -1,0 +1,60 @@
+<%- include("../template/cabecera",{tituloweb:'Editar Componentes'}) %>
+  <h5 class="text-center" id="databusqueda" style="display: none;">
+    codigo_TI: <span id="codigoTIValue"><%= codigo_TI %></span>
+</h5>
+<div id="content">
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <div class="container-fluid">
+             <div class="card shadow mb-4">
+ 
+ <div class="card-header-edit">
+    <button id="toggleColumns" class="btn btn-primary">
+        <i class="fa-solid fa-up-right-and-down-left-from-center mr-2"></i> <span class="whitespace-nowrap">Minimizar/Máximizar</span>
+    </button>
+    <button id="btnEditar" class="btn btn-warning" onclick="EnviarFormEditarComponente()">
+        <i class="fas fa-edit mr-2"></i> Editar
+    </button>
+    <button id="btnVisualizar" class="btn btn-success" onclick="verDetallesComponente()">
+        <i class="fas fa-eye mr-2"></i> Visualizar
+    </button>
+</div>
+
+
+        
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="table_componentes" class="table table-striped">
+        <thead>
+            <tr>
+               <th scope="col">#</th>
+                <th scope="col">Código TI</th>
+                <th scope="col">Dispositivo</th>
+                <th scope="col">Marca</th>
+                <th scope="col">Modelo</th>
+                <th scope="col">Número de Serie</th>
+                <th scope="col">Unidad</th>
+                <th scope="col">Área</th>
+                 <th scope="col">Responsable</th>
+                <th scope="col">Observación</th>
+                <th scope="col">Informe de Condición</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+        
+    </table>
+            </div>
+        </div>
+             </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="/js/RouterAPI/Componentes/RouterTablaEComponente.js"></script>
+
+<%- include('../LectorConsultaQR/modal/Mostrar_Info_Componente') %>
+<%- include('../template/footer') %>

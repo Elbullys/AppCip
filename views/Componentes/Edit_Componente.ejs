@@ -1,0 +1,441 @@
+<%- include("../template/cabecera",{tituloweb:'Visualizador QR'}) %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="form-container">
+        <!-- Header del formulario -->
+
+        <div class="form-header text-center">
+          <h1><i class="fa-solid fa-computer"></i> Modificar Componente</h1>
+          <p class="mb-0">Complete todos los campos requeridos (*)</p>
+        </div>
+
+        <!-- DATOS PRINCIPALES DE COMPONENTE -->
+        <h5 class="text-center" id="databusqueda" style="display: none">
+          id componente: <span id="idcomponenteValue"><%= idcomponente %></span>
+        </h5>
+        <div class="row g-3 m-2">
+          <div class="col-md-6">
+            <label for="componenteID" class="form-label">ID Componente</label>
+            <div class="input-icon">
+              <i class="fa-solid fa-hashtag"></i>
+              <input
+                type="text"
+                class="form-control"
+                id="txtidcomponente"
+                placeholder="ID Componente"
+                disabled="false"
+                value=""
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="componentCodigoTI" class="form-label">Código TI</label>
+            <div class="input-icon">
+              <i class="fa-solid fa-tag"></i>
+              <input
+                type="text"
+                class="form-control"
+                id="txtcodigoti"
+                placeholder="Código TI"
+                disabled="false"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <form
+          class="p-4 p-md-5"
+          id="FormEditComponente"
+          onsubmit="EditarLavador(event)"
+          autocomplete="off"
+        >
+          <input type="hidden" name="id" id="idcomponenteHidden" />
+          <!-- Sección de ubicacion del equipo-->
+          <div class="mb-5">
+            <h3 class="section-title">
+              <i class="fa-solid fa-location-dot"></i> Ubicación del Equipo
+            </h3>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="unidad" class="form-label">Id Unidad</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-hashtag"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtIdUnidad"
+                    placeholder="Id Unidad"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="unidad" class="form-label">Nombre de Unidad</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-building"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtnombreunidad"
+                    placeholder="Unidad"
+                    disabled="false"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="unidad" class="form-label">Operación</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-briefcase"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtoperacion"
+                    placeholder="Operación"
+                    disabled="false"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="ubicacion" class="form-label"
+                  >Ubicacion de Equipo</label
+                >
+                <div class="input-icon">
+                  <i class="fa-solid fa-thumbtack"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtarea"
+                    placeholder="Ubicación"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sección de caracteristicas del equipo -->
+          <div class="mb-5">
+            <h3 class="section-title">
+              <i class="fas fa-info-circle"></i> Características del Equipo
+            </h3>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="unidad" class="form-label">Id Dispositivo</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-hashtag"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtIddispositivo"
+                    placeholder="Id Dispositivo"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="dispositivo" class="form-label">Dispositivo</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-desktop"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtdispositivo"
+                    placeholder="Nombre del Dispositivo"
+                    disabled="false"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="unidad" class="form-label">Id Catálogo</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-hashtag"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtIdCatalogo"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-8">
+                <label for="unidad" class="form-label">Catálogo</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-list-ol"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtnombrecatalogo"
+                    placeholder="Nombre del Catálogo"
+                    disabled="false"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-12">
+                <label for="unidad" class="form-label">Descripción</label>
+                <div class="input-icon">
+                  <textarea
+                    type="text"
+                    class="form-control"
+                    id="txtdescripcioncatalogo"
+                    placeholder="Descripción del Catálogo"
+                    disabled="false"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sección Informacion del componente -->
+          <div class="mb-5">
+            <h3 class="section-title">
+              <i class="fa-solid fa-circle-question"></i> Información del
+              Componente
+            </h3>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="numeroserie" class="form-label"
+                  >Número de serie</label
+                >
+                <div class="input-icon">
+                  <i class="fas fa-building"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtnumeroserie"
+                    placeholder="Número de Serie"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="statusequipo" class="form-label"
+                  >Estado del Equipo</label
+                >
+                <div class="input-icon">
+                  <i class="fa-solid fa-circle-check"></i>
+                  <select class="form-select" id="statusequiposelect" required>
+                    <option value="" selected disabled>
+                      Codición del Equipo
+                    </option>
+                    <option value="BUENAS CONDICIONES">
+                      BUENAS CONDICIONES
+                    </option>
+                    <option value="MEDIA VIDA">MEDIA VIDA</option>
+                    <option value="MAL ESTADO">MAL ESTADO</option>
+                    <option value="EN REPARACION">EN REPARACION</option>
+                    <option value="EXTRAVIADO">EXTRAVIADO</option>
+                    <option value="EN REVISION">EN REVISION</option>
+                    <option value="PARA PIEZAS">PARA PIEZAS</option>
+                    <option value="DESCONTINUADO">DESCONTINUADO</option>
+                    <option value="DESECHADO">DESECHADO</option>
+                    <option value="SIN INFORMACION">SIN INFORMACION</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="lbfechadecompra" class="form-label"
+                  >Fecha de compra</label
+                >
+                <div class="input-icon">
+                  <i class="fas fa-calendar-alt"></i>
+                  <input type="date" class="form-control" id="datefechacompra" />
+                </div>
+              </div>
+              <div class="group-servidorCliente col-md-6">
+                <label class="form-label">¿Es Servidor ó Cliente?</label>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    name="servidorcliente"
+                    type="radio"
+                    id="chbxservidor"
+                    value="SERVIDOR"
+                  />
+                  <label class="form-label" for="lbservidor">
+                    SERVIDOR
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    name="servidorcliente"
+                    type="radio"
+                    id="chbxcliente"
+                    value="CLIENTE"
+                  />
+                  <label class="form-label" for="lbcliente">
+                    CLIENTE
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    name="servidorcliente"
+                    type="radio"
+                    id="chbxna"
+                    value="N/A"
+                    checked
+                  />
+                  <label class="form-label" for="lbna" >
+                    N/A
+                  </label>
+                </div>
+              </div>
+               <div class="col-md-12">
+                <label for="observaciones" class="form-label">Observaciones</label>
+                <div class="input-icon">
+                  <textarea
+                    type="text"
+                    class="form-control"
+                    id="txtobservaciones"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Sección de Factura -->
+          <div class="mb-5">
+            <h3 class="section-title">
+              <i class="fas fa-info-circle"></i> Factura
+            </h3>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="unidad" class="form-label">Id Factura</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-hashtag"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txidfactura"
+                    placeholder="Id Factura"
+                     disabled="false"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="numerofactura" class="form-label">Número de Factura</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-file-lines"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtnumerofactura"
+                    placeholder="Número de Factura"
+                     disabled="false"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="nombreproveedor" class="form-label">Nombre del Proveedor</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-users"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtnombreprovedor"
+                     disabled="false"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="lugarcompra" class="form-label">Lugar de Compra</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-store"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtlugarcompra"
+                    placeholder="Lugar de Compra"
+                    disabled="false"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="fechafactura" class="form-label">Fecha de Factura</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-calendar-days"></i>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="txtfechafactura"
+                    disabled="false"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="input-icon">
+                  <button type="button" class="btn btn-success" id="btnguardarfactura" style="margin-top: 30px;">
+                    Guardar Factura
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="input-icon">
+                  <button type="button" class="btn btn-warning" id="btneditarfactura" style="margin-top: 30px;">
+                     Editar Factura
+                </div>
+              </div>
+               <div class="col-md-2">
+                <div class="input-icon">
+                  <button type="button" class="btn btn-danger" id="btnnuevafactura" style="margin-top: 30px;">
+                    Nueva Factura
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <label for="observaciondefactura" class="form-label">Observaciones de Factura</label>
+                <div class="input-icon">
+                  <textarea
+                    type="date"
+                    class="form-control"
+                    id="txtobservacionfactura"
+                    disabled="false"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botones de envío -->
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-outline-secondary">
+              <i class="fas fa-arrow-left me-2"></i>Volver
+            </button>
+            <button type="submit" class="btn btn-primary btn-submit">
+              <i class="fa-solid fa-floppy-disk"></i> Modificar Componente
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/RouterAPI/Componentes/RouterEditarComponente.js"></script>
+
+<%- include("../template/footer") %>
+<%- include("../Unidades/modal/ModalConsultarUnidades") %>
+<%- include("../Dispositivos/modal/ModalConsultarDispositivos") %>
+<%- include("../Areas/modal/ModalConsultarAreas") %>
+<%- include("../Catalogos/modal/ModalConsultarCatalogosComponentes") %>
+
+

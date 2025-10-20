@@ -1,0 +1,68 @@
+<!-- Modal para mostrar los detalles del componente -->
+<div
+  class="modal fade"
+  id="consultaCatalogoComponenteModal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="true"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title titulo_modal">Selecciona el Cátalogo</h5>
+        <button
+          type="button"
+          class="btn-close-custom btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          <i class="fas fa-times"></i>
+          <!-- Icono de cierre de Font Awesome -->
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="progressBarContainer" style="display: none;">
+         
+        </div>
+        <div class="card-body"> 
+                    <div class="input-group mb-3">
+                        <input type="text" id="inputBusquedaCatalogo" class="form-control" placeholder="Buscar Cátalogo...">
+                        <button id="btnBuscarcatalogo" class="btn btn-primary" onclick="BuscarCatalogoComponente()">Buscar</button>
+                    </div>
+                </div>
+                 
+      </div><!-- Cierre de modal-body -->
+        <div class="table-responsive mb-5">
+          <table
+            id="table_Modal_ConsultaCatalogoComponente"
+            class="table tableModalConsulta table-striped table-hover table-sm"
+            style="width: 100%"
+          >
+            <thead>
+              <tr>
+                <th scope="col">Nombre Cátalogo</th>
+                <th scope="col">Tipo Dispositivo</th>
+                <th scope="col">Marca</th>
+                <th scope="col">Modelo</th>
+                <th scope="col">Procesador</th>
+                <th scope="col">Memoria Ram</th>
+                <th scope="col">Disco Duro</th>
+                <th scope="col">Sistema Operativo</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div class="text-center mb-1 mt-2">
+            <button
+              type="button"
+              id="btnSeleccionarCatalogo"
+              class="btn btn-primary"
+            >
+              Seleccionar
+            </button>
+          </div>
+        </div>
+       
+    </div>
+  </div>
+</div>

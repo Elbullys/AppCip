@@ -1,8 +1,8 @@
-
-  const btonmanual=document.getElementById('btnmanual');
+ //const api='https://apirestcip.onrender.com'; 
+ const api='http://localhost:7000'; 
+ const btonmanual=document.getElementById('btnmanual');
   const queryParams = new URLSearchParams(); // Inicializar queryParams
   const componenteoData = {};
- // Asegúrate de que la ruta sea correcta
 
 //PARA ALERTAS TOAST SWEETALERT2
 var Toast = Swal.mixin({
@@ -18,7 +18,16 @@ var Toast = Swal.mixin({
           });
 
 
-
+function Search()
+{
+    accion="buscar_componente";
+    Verificacion_Componente();
+}
+function Edit()
+{
+    accion="editar_componente";
+    Verificacion_Componente();
+}
 
  function verDetallesComponenteQR() {
      const databusqueda = document.getElementById('qr-result').value;
@@ -57,7 +66,7 @@ async function cargarComponenteQR(databusqueda,modal) {
     });
 
     try {
-        const response = await fetch(`https://apirestcip.onrender.com/api/componentes/BusquedaComponenteCodigoTINumSerie?${queryParams}`, {
+        const response = await fetch(`${api}/api/componentes/BusquedaComponenteCodigoTINumSerie?${queryParams}`, {
             method: 'POST', // Cambiado a GET
             headers: { 'Content-Type': 'application/json' } // Este encabezado no es necesario para GET
         });
@@ -67,28 +76,6 @@ async function cargarComponenteQR(databusqueda,modal) {
         }
 
         const data = await response.json();
-
-      
-/*
-        // Agregar filas a la tabla
-        data.body.forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${row.nombre_responsable}</td>
-                <td>${row.nombre_unidad}</td>
-                <td>${row.tipo_equipo}</td>
-                <td>${row.marca}</td>
-                <td>${row.modelo}</td>
-                <td>${row.numero_serie}</td>
-                <td>${row.codigo_TI}</td>
-                <td>${row.operacion}</td>
-                <td>${row.observaciones}</td>
-                <td>${row.status_componente}</td>
-                <td>${row.area}</td>
-                <td>${row.status_inventario === 1 ? '<span class="text-success">Activo</span>' : '<span class="text-danger">Inactivo</span>'}</td>
-            `;
-            tableBody.appendChild(tr);
-        });*/
 
         const idUnidad = String(data.body[0].id_unidad);
        
@@ -132,6 +119,7 @@ async function cargarComponenteQR(databusqueda,modal) {
         document.getElementById('codigoTI').innerText = data.body[0].codigo_TI;
         document.getElementById('operacion').innerText = data.body[0].operacion;
         document.getElementById('statusComponente').innerText = data.body[0].status_componente;
+        document.getElementById('observaciones').innerText = data.body[0].observaciones;
         document.getElementById('area').innerText = data.body[0].area;
         document.getElementById('statusInventario').innerText = data.body[0].status_inventario === 1 ? 'ACTIVO' : 'INACTIVO';
         // Mostrar el modal con Bootstrap 5
@@ -174,13 +162,13 @@ async function Verificacion_Componente() {
 
     try {
         // Usar comillas invertidas para la interpolación de cadenas
-        const response = await fetch(`https://apirestcip.onrender.com/api/componentes/VerificarExistenciaComponente?${queryParams}`, {
-            method: 'POST', // Cambiar a GET
+        const response = await fetch(`${api}/api/componentes/VerificarExistenciaComponente?${queryParams}`, {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' } // Este encabezado no es necesario para GET, pero no causa problemas
         });
 
         const result = await response.json(); // Obtener la respuesta JSON
-console.log("Resultado de la búsqueda:", result.error);
+console.log("Resultado de la búsqueda:", result.body.icon);//
          if (!response.ok) {
             // Si hay un error en la respuesta
             Swal.fire({
@@ -202,16 +190,32 @@ console.log("Resultado de la búsqueda:", result.error);
      
         if (result.body.error === false) {
             console.log("si existe:");
-             Swal.fire({
+             /*Swal.fire({
             icon: result.body.icon || "success",
             title: result.body.message || "Búsqueda realizada con éxito",
             showConfirmButton: true
+        });*/
+        
+        if (accion === 'editar_componente') {
+         
+            Swal.fire({
+            icon: "success",
+            title: "Componente encontrado",
+            text: "Redirigiendo a la edición...",
+            showConfirmButton: false,
+            timer: 1500 // Espera 1.5 segundos antes de redirigir
+        }).then(() => {
+            //window.location.href = '/EditarComponente?id=${dataBusqueda}'; // 
+     
+           window.location.href = `/EditarComponente/${componenteoData.databusqueda}`; // 
+        //Mostrar_Info_Componente/codigoti
         });
 
-        localStorage.setItem('databusqueda', componenteoData.databusqueda);
-        window.location.href = '/Mostrar_Info_Componente';
-            // Enviar los datos obtenidos a otra ruta
-            // Enviar los datos obtenidos a otra ruta
+        }
+        else if (accion === 'buscar_componente') {
+            verDetallesComponenteQR();
+        }
+        
        
        
             
@@ -235,16 +239,8 @@ console.log("Resultado de la búsqueda:", result.error);
     }
 }
 
-function close()
-{
-    const modal = $('#detallecomponenteQR');
-    if (modal.hasClass('show')) {
-        modal.modal('hide');
-        modal.one('hidden.bs.modal', function () {
-            console.log("Modal cerrado");
-        });
-    }
-}
+
+
 
 class General {
   static ConversionFecha(fecha) {

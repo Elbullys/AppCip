@@ -1,0 +1,46 @@
+<!-- Modal para mostrar los detalles del componente -->
+<div class="modal fade" id="consultaDispositivosModal" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title titulo_modal">Selecciona un Dispositivo</h5>
+                <button type="button" class="btn-close-custom btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i></button> 
+            </div>
+            
+            <div class="modal-body">  <!-- ¡AGREGADO: Esto es esencial para el contenido! -->
+                <div class="card-body">  <!-- Mantengo tu card-body si lo usas para estilos -->
+                    <div class="input-group mb-3">
+                        <input type="text" id="inputBusquedadispositivo" class="form-control" placeholder="Buscar dispositivo..." autocomplete="off">
+                        <button id="btnBuscar" class="btn btn-primary" onclick="BuscarDispositivo()">Buscar</button>
+                    </div>
+                </div>
+            </div>  <!-- Cierre de modal-body -->
+                <div class="table-responsive mb-3">  <!-- Cambié mb-5 a mb-3 para mejor espaciado -->
+                    <table id="table_Modal_ConsultaDispositivos" class="table tableModalConsulta table-striped table-hover table-sm" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id Dispositivo</th>
+                                <th scope="col">Dispositivo</th>
+                                <th scope="col">Abreviatura</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- DataTable llenará aquí dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="text-center mt-2 mb-2">  <!-- Botón de selección al final del body -->
+                    <button type="button" id="btnSeleccionardispositivo" class="btn btn-primary">Seleccionar</button>
+                    <!-- Agregué 'disabled' por defecto; actívalo con JS al seleccionar fila -->
+                </div>
+            
+            
+            <!-- Opcional: modal-footer para botones adicionales -->
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+

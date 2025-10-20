@@ -1,0 +1,64 @@
+<!-- Modal para mostrar los detalles del componente -->
+<div
+  class="modal fade"
+  id="consultaAreasModal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="true"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title titulo_modal">Selecciona La Ubicación</h5>
+        <button
+          type="button"
+          class="btn-close-custom btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          <i class="fas fa-times"></i>
+          <!-- Icono de cierre de Font Awesome -->
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="progressBarContainer" style="display: none;">
+         
+        </div>
+        <div class="card-body"> 
+                    <div class="input-group mb-3">
+                        <input type="text" id="inputBusquedaArea" class="form-control" placeholder="Buscar Área...">
+                        <button id="btnBuscar" class="btn btn-primary" onclick="BuscarArea()">Buscar</button>
+                    </div>
+                </div>
+                 
+      </div><!-- Cierre de modal-body -->
+        <div class="table-responsive mb-5">
+          <table
+            id="table_Modal_ConsultaArea"
+            class="table tableModalConsulta table-striped table-hover table-sm"
+            style="width: 100%"
+          >
+            <thead>
+              <tr>
+                <th scope="col">Id Área</th>
+                <th scope="col">Área</th>
+                <th scope="col">Tipo de Unidad</th>
+                <th scope="col">Descripción</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div class="text-center mb-1 mt-2">
+            <button
+              type="button"
+              id="btnSeleccionarArea"
+              class="btn btn-primary"
+            >
+              Seleccionar
+            </button>
+          </div>
+        </div>
+       
+    </div>
+  </div>
+</div>

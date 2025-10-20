@@ -1,0 +1,214 @@
+        :root {
+            --primary-color: #002852;
+            --secondary-color: #002852;
+            --accent-color: #0b57ae;
+            --light-color: #f8f9fa;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+        }
+        
+        .form-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .form-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+        }
+        
+        .section-title {
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #002852;
+        }
+        
+        .btn-submit {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.5rem 2rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: var(--accent-color);
+        }
+        
+        .input-icon input,
+        .input-icon select,
+        .input-icon textarea {
+            padding-left: 40px;
+        }
+        
+        .progress-indicator {
+            position: relative;
+            height: 3px;
+            background-color: #e9ecef;
+            margin-bottom: 2rem;
+        }
+        
+        .progress-bar {
+            background-color: var(--accent-color);
+            transition: width 0.5s ease;
+        }
+
+    /*PARA CAMPOS NO DESABILITADOS*/
+   #FormEditComponente .form-control {
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+#FormEditComponente .form-control:disabled {
+    background-color: #e9ecef; /* Color de fondo para campos deshabilitados */
+    color: #6c757d; /* Color de texto para campos deshabilitados */
+}
+
+#FormEditComponente .form-control:not(:disabled) {
+    border: 2px solid #4361ee; /* Borde azul para campos habilitados */
+    background-color: #ffffff; /* Fondo blanco para campos habilitados */
+}
+
+#FormEditComponente .form-control:not(:disabled):focus {
+    border-color: #3f37c9; /* Borde más oscuro al enfocar */
+    box-shadow: 0 0 0 0.2rem rgba(72, 149, 239, 0.25); /* Sombra al enfocar */
+}
+
+#FormEditComponente .input-icon {
+    position: relative;
+}
+
+#FormEditComponente .input-icon i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #4361ee; /* Color del ícono */
+}
+/*RADIO BUTTON*/
+#FormEditComponente .form-check-input {
+    border: 2px solid #4361ee; /* Borde azul para campos habilitados */
+    background-color: #ffffff; /* Fondo blanco para campos habilitados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el checkbox */
+}
+/* Estilo para el checkbox cuando está seleccionado */
+#FormEditComponente .form-check-input:checked {
+    background-color: #004ab1; /* Fondo azul cuando está seleccionado */
+    border-color: #004ab1; /* Cambia el borde a azul cuando está seleccionado */
+}
+/* Estilo para el checkbox cuando está seleccionado y en foco */
+#FormEditComponente .form-check-input:checked:focus {
+    outline: none; /* Elimina el contorno por defecto */
+    box-shadow: 0 0 0 2px rgba(0, 74, 177, 0.5); /* Sombra azul alrededor del checkbox */
+}
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+   /*FIN PARA CAMPOS NO DESABILITADOS*/
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+/*ESTILOS PARA SELECCION DE FILA MODALES CONSULTA*/
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+/* Estilos para resaltar fila seleccionada en DataTable - COLOR FIJO Y PERMANENTE */
+.tableModalConsulta tbody tr.selected-row {
+    background-color: #85d2ff !important;  /* COLOR FIJO: Azul claro para toda la fila - NUNCA CAMBIA */
+    color: #000 !important;  /* Texto negro para contraste */
+    border-left: 4px solid #85d2ff !important;  /* Borde izquierdo azul para énfasis */
+    font-weight: bold !important;  /* Negrita en toda la fila */
+    border-bottom: 2px solid #85d2ff !important;  /* Borde inferior fijo */
+}
+
+/* COLOR FIJO en las celdas individuales de la fila seleccionada - Sobrescribe TODO de DataTables */
+.tableModalConsulta tbody tr.selected-row td,
+.tableModalConsulta tbody .selected-cell {
+    background-color: #85d2ff !important;  /* COLOR FIJO: Fondo uniforme en cada celda */
+    border-color: #85d2ff !important;  /* Bordes azules sutiles */
+    color: #000000 !important;  /* Color de texto fijo */
+    border-top: none !important;  /* Elimina bordes que interfieran */
+    border-bottom: none !important;
+}
+
+/* Sobrescribe EXPLÍCITAMENTE las clases odd/even de DataTables en la fila seleccionada - MANTIENE COLOR FIJO */
+.tableModalConsulta tbody tr.selected-row.odd,
+.tableModalConsulta tbody tr.selected-row.even {
+    background-color: #85d2ff !important;  /* Ignora odd/even - COLOR FIJO */
+}
+
+.tableModalConsulta tbody tr.selected-row.odd td,
+.tableModalConsulta tbody tr.selected-row.even td,
+.tableModalConsulta tbody tr.selected-row.odd .selected-cell,
+.tableModalConsulta tbody tr.selected-row.even .selected-cell {
+    background-color: #85d2ff !important;  /* COLOR FIJO en celdas, ignora odd/even */
+}
+
+/* ELIMINA COMPLETAMENTE el hover en la fila seleccionada - COLOR SIEMPRE FIJO, SIN CAMBIOS AL MOVER CURSOR */
+.tableModalConsulta tbody tr.selected-row:hover,
+.tableModalConsulta tbody tr.selected-row:hover td,
+.tableModalConsulta tbody tr.selected-row:hover .selected-cell {
+    background-color: #85d2ff !important;  /* COLOR FIJO: No cambia NADA en hover */
+    color: #000 !important;
+}
+
+/* Hover SOLO en filas NO seleccionadas (para contraste, pero no afecta la seleccionada) */
+.tableModalConsulta tbody tr:not(.selected-row):hover td {
+    background-color: #f5f5f5 !important;  /* Gris claro temporal solo en no-seleccionadas */
+}
+
+/* Sobrescribe cualquier hover de DataTables que intente cambiar la seleccionada */
+.tableModalConsulta tbody tr.selected-row td:hover,
+.tableModalConsulta tbody .selected-cell:hover {
+    background-color: #e3f2fd !important;  /* COLOR FIJO: Ignora hover en celdas individuales */
+}
+
+/* Soporte para modo responsive de DataTables - COLOR FIJO en móvil */
+@media (max-width: 768px) {
+    .tableModalConsulta tbody tr.selected-row,
+    .tableModalConsulta tbody tr.selected-row td,
+    .tableModalConsulta tbody .selected-cell {
+        background-color: #e3f2fd !important;  /* COLOR FIJO en responsive */
+    }
+    .tableModalConsulta tbody tr.selected-row td {
+        border-top: 1px solid #2196f3 !important;  /* Línea superior en colapsadas */
+    }
+}
+
+/* Tema dark opcional - COLOR FIJO también aquí */
+@media (prefers-color-scheme: dark) {
+    .tableModalConsulta tbody tr.selected-row,
+    .tableModalConsulta tbody tr.selected-row td,
+    .tableModalConsulta tbody .selected-cell {
+        background-color: #0d6efd !important;  /* Azul oscuro FIJO */
+        color: #fff !important;
+    }
+    .tableModalConsulta tbody tr.selected-row:hover,
+    .tableModalConsulta tbody tr.selected-row:hover td,
+    .tableModalConsulta tbody tr.selected-row:hover .selected-cell {
+        background-color: #0d6efd !important;  /* COLOR FIJO: No cambia en hover */
+    }
+}
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+/*FIN ESTILOS PARA SELECCION DE FILA MODALES CONSULTA*/
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
