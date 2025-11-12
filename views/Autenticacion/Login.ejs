@@ -1,0 +1,97 @@
+<%- include("../template/cabecera", { tituloweb: 'Login de Técnicos' }) %>
+
+<div class="container py-2">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="form-container">
+        <!-- Header del formulario -->
+        <div class="form-header text-center">
+          <h1><i class="fa-solid fa-user-lock"></i> Iniciar Sesión</h1>
+          <p class="mb-0">Ingresa tus credenciales para acceder al sistema</p>
+        </div>
+
+        <!-- Formulario de Login -->
+        <form
+          class="p-4 p-md-5"
+          id="FormLogin"
+          autocomplete="off"
+        >
+          <!-- Sección de Credenciales -->
+          <div class="mb-5">
+            <h3 class="section-title">
+              <i class="fa-solid fa-key"></i> Credenciales de Acceso
+            </h3>
+            <div class="row g-3">
+              <div class="col-md-12">
+                <label for="username" class="form-label">Usuario</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-user"></i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="inputusername"
+                    placeholder="Ingresa tu usuario"
+                    autocomplete="usuario"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-12">
+                <label for="tipousuario" class="form-label">Tipo de Usuario</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-user"></i>
+                  <select class="form-select" id="selecttipousuario" required>
+                    <option value="" selected disabled>
+                      Tipo Usuario
+                    </option>
+                    <option value="TECNICO">
+                      Técnico
+                    </option>
+                    <option value="RESPONSABLE">Responsable</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <label for="password" class="form-label">Contraseña</label>
+                <div class="input-icon">
+                  <i class="fa-solid fa-lock"></i>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="inputpassword"
+                    placeholder="Ingresa tu contraseña"
+                    autocomplete="current-password"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="chkrecordar"
+                  />
+                  <label class="form-check-label" for="chkrecordar">
+                    Recordar sesión
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Boton de envío -->
+          <div class="d-flex justify-content-center">
+            <button type="submit" id="btnlogin" class="btn btn-primary btn-submit">
+              <i class="fa-solid fa-sign-in-alt"></i> Iniciar Sesión
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/RouterAPI/Autenticacion/RouterLogin.js" type="module"></script>
+
+<%- include("../template/footer") %>

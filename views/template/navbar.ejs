@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="/inicio">
       <img
         class="img-check d-inline-block align-top"
         src="/resources/logo_pharmajal_SF.png"
@@ -19,13 +19,13 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <!-- Menú principal a la izquierda -->
+      <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Escanear QR</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="/leercodigoQR">Buscar Componente</a></li>
             <li><a class="dropdown-item" href="/EditarDatos">Editar Datos</a></li>
-            
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -42,15 +42,26 @@
           <a class="nav-link disabled" aria-disabled="true">Disabled</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-        <button class="btn btn-outline-primary" type="submit">Search</button>
-      </form>
+      <!-- Perfil separado al costado derecho -->
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle profile-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="/resources/avatar.jpg" alt="Avatar" class="profile-avatar" width="200" height="200"> 
+             <!-- Aquí está la verificación. Si 'username' no está definido, muestra "Invitado". -->
+         <% if (typeof username !== 'undefined' && username) { %>
+             <%= username %>
+         <% } else { %>
+             Invitado
+         <% } %>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/editar-perfil">Editar Perfil</a></li>
+            <li><a class="dropdown-item" href="#" id="logout">Cerrar Sesión</a></li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>
+
+<script src="/js/RouterAPI/Autenticacion/RouterNavBar.js" type="module"></script>

@@ -1,0 +1,47 @@
+/* Estilos generales del navbar */
+.custom-navbar {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important; /* Gradiente sutil */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
+  border-bottom: 1px solid #dee2e6; /* Borde inferior */
+  transition: all 0.3s ease; /* Transiciones suaves */
+}
+
+/* Estilos para el dropdown */
+.custom-navbar .dropdown-menu {
+  border: none; /* Sin borde */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+  border-radius: 0.5rem; /* Bordes redondeados */
+}
+
+.custom-navbar .dropdown-item {
+  padding: 0.5rem 1rem; /* Padding interno */
+  transition: background-color 0.3s ease; /* Transición */
+}
+
+.custom-navbar .dropdown-item:hover {
+  background-color: #f8f9fa; /* Fondo al hover */
+}
+
+/* Estilos específicos para el perfil */
+.profile-link {
+  display: flex !important; /* Flex para alinear imagen y texto */
+  align-items: center; /* Centrar verticalmente */
+  gap: 0.5rem; /* Espacio entre imagen y texto */
+}
+.profile-avatar {
+  width: 35px; /* Ancho de la imagen */
+  height: 35px; /* Alto de la imagen */
+  border-radius: 50%; /* Redonda */
+  object-fit: cover; /* Ajuste de imagen */
+  border: 2px solid #dee2e6; /* Borde sutil */
+  transition: border-color 0.3s ease; /* Transición en el borde */
+}
+.profile-link:hover .profile-avatar {
+  border-color: #007bff; /* Cambio de borde al hover */
+}
+/* Responsive: En móviles, el perfil se alinea normalmente */
+@media (max-width: 991.98px) {
+  .custom-navbar .navbar-nav .ms-auto {
+    margin-left: 0 !important; /* Reset en móviles */
+  }
+}

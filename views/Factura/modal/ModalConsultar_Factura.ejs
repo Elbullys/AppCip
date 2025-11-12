@@ -1,7 +1,7 @@
 <!-- Modal para mostrar los detalles del componente -->
 <div
   class="modal fade"
-  id="consultaAreasModal"
+  id="consultaFacturaModal"
   data-bs-backdrop="static"
   data-bs-keyboard="true"
   tabindex="-1"
@@ -10,12 +10,12 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title titulo_modal">Selecciona La Ubicación</h5>
+        <h5 class="modal-title titulo_modal">Selecciona la Factura</h5>
         <button
           type="button"
           class="btn-close-custom btn-secondary"
           data-bs-dismiss="modal"
-           tabindex="-1"
+          tabindex="-1"
         >
           <i class="fas fa-times"></i>
           <!-- Icono de cierre de Font Awesome -->
@@ -27,24 +27,26 @@
         </div>
         <div class="card-body"> 
                     <div class="input-group mb-3">
-                        <input type="text" id="inputBusquedaArea" class="form-control" placeholder="Buscar Área..." autocomplete="off"  tabindex="1">
-                        <button id="btnBuscar" class="btn btn-primary" onclick="BuscarArea()">Buscar</button>
+                        <input type="text" id="inputBusquedafactura" class="form-control" placeholder="Buscar Factura..." autocomplete="off" tabindex="1">
+                        <button id="btnBuscarfactura" class="btn btn-primary" onclick="BuscarCatalogoComponente()">Buscar</button>
                     </div>
                 </div>
                  
       </div><!-- Cierre de modal-body -->
         <div class="table-responsive mb-5">
           <table
-            id="table_Modal_ConsultaArea"
+            id="table_Modal_ConsultaFactura"
             class="table tableModalConsulta table-striped table-hover table-sm"
             style="width: 100%"
           >
             <thead>
               <tr>
-                <th scope="col">Id Área</th>
-                <th scope="col">Área</th>
-                <th scope="col">Tipo de Unidad</th>
-                <th scope="col">Descripción</th>
+                <th scope="col">Id Factura</th>
+                <th scope="col">Número de Factura</th>
+                <th scope="col">Nombre del Proveedor</th>
+                <th scope="col">Lugar de Compra</th>
+                <th scope="col">Fecha de Factura</th>
+                <th scope="col">Observación</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -52,7 +54,7 @@
           <div class="text-center mb-1 mt-2">
             <button
               type="button"
-              id="btnSeleccionarArea"
+              id="btnSeleccionarFactura"
               class="btn btn-primary"
             >
               Seleccionar

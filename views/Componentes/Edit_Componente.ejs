@@ -1,4 +1,5 @@
 <%- include("../template/cabecera",{tituloweb:'Visualizador QR'}) %>
+<%- include("../template/navbar") %>
 
 <div class="container py-5">
   <div class="row justify-content-center">
@@ -191,6 +192,7 @@
                     id="txtdescripcioncatalogo"
                     placeholder="Descripción del Catálogo"
                     disabled="false"
+                    required
                   ></textarea>
                 </div>
               </div>
@@ -301,6 +303,7 @@
                     type="text"
                     class="form-control"
                     id="txtobservaciones"
+                    required
                   ></textarea>
                 </div>
               </div>
@@ -350,6 +353,7 @@
                     type="text"
                     class="form-control"
                     id="txtnombreprovedor"
+                    placeholder="Nombre de Proveedor"
                      disabled="false"
                     required
                   />
@@ -376,7 +380,7 @@
                   <input
                     type="date"
                     class="form-control"
-                    id="txtfechafactura"
+                    id="datefechafactura"
                     disabled="false"
                     required
                   />
@@ -396,8 +400,14 @@
               </div>
                <div class="col-md-2">
                 <div class="input-icon">
-                  <button type="button" class="btn btn-danger" id="btnnuevafactura" style="margin-top: 30px;">
+                  <button type="button" class="btn btn-primary" id="btnnuevafactura" style="margin-top: 30px;" >
                     Nueva Factura
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="input-icon">
+                  <button type="button" class="btn btn-danger" id="btncancnuevafactura" style="margin-top: 30px;" hidden="true">
+                    Cancelar Factura
                 </div>
               </div>
 
@@ -409,6 +419,8 @@
                     class="form-control"
                     id="txtobservacionfactura"
                     disabled="false"
+                    placeholder="Observaciones de Factura"
+                    required
                   ></textarea>
                 </div>
               </div>
@@ -420,7 +432,7 @@
             <button type="button" class="btn btn-outline-secondary">
               <i class="fas fa-arrow-left me-2"></i>Volver
             </button>
-            <button type="submit" class="btn btn-primary btn-submit">
+            <button type="submit" id="btnmodificar" class="btn btn-primary btn-submit" >
               <i class="fa-solid fa-floppy-disk"></i> Modificar Componente
             </button>
           </div>
@@ -430,12 +442,13 @@
   </div>
 </div>
 
-<script src="/js/RouterAPI/Componentes/RouterEditarComponente.js"></script>
+<script src="/js/RouterAPI/Componentes/RouterEditarComponente.js" type="module"></script>
+
 
 <%- include("../template/footer") %>
 <%- include("../Unidades/modal/ModalConsultarUnidades") %>
 <%- include("../Dispositivos/modal/ModalConsultarDispositivos") %>
 <%- include("../Areas/modal/ModalConsultarAreas") %>
 <%- include("../Catalogos/modal/ModalConsultarCatalogosComponentes") %>
-
+<%- include("../Factura/modal/ModalConsultar_Factura") %>
 

@@ -15,6 +15,7 @@
           type="button"
           class="btn-close-custom btn-secondary"
           data-bs-dismiss="modal"
+          tabindex="-1"
         >
           <i class="fas fa-times"></i>
           <!-- Icono de cierre de Font Awesome -->
@@ -26,7 +27,7 @@
         </div>
         <div class="card-body"> 
                     <div class="input-group mb-3">
-                        <input type="text" id="inputBusquedaCatalogo" class="form-control" placeholder="Buscar Cátalogo...">
+                        <input type="text" id="inputBusquedaCatalogo" class="form-control" placeholder="Buscar Cátalogo..." autocomplete="off" tabindex="1">
                         <button id="btnBuscarcatalogo" class="btn btn-primary" onclick="BuscarCatalogoComponente()">Buscar</button>
                     </div>
                 </div>

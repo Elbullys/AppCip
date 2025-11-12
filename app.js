@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
+const session = require('express-session');
+// Importa el middleware
+const { loadUserData } = require('./controllers/authMiddleware');
 //variable de entorno numero 1
 const port =process.env.PORT || 3000;
 require('dotenv').config()
@@ -8,6 +11,10 @@ require('dotenv').config()
 app.use(express.urlencoded({extended:false}));
 //app.use(express(json));
  
+
+//Aplica loadUserData GLOBALMENTE a TODAS las rutas de la app 
+app.use(loadUserData); 
+
 //MOTOR DE PLANTILLAS
 app.set('view engine','ejs');
 app.set('views',__dirname + '/views')
@@ -16,8 +23,10 @@ app.set('views',__dirname + '/views')
 app.use(express.static(__dirname + "/public"))
 
 
-//RUTAS WEB(RUTAS API)
-app.use('/',require('./router/RouterWeb'));
+//RUTAS WEB Views
+app.use('/',require('./router/RouterViewWeb'));
+app.use('/',require('./router/RouterViewLogin'));
+app.use('/',require('./router/RouterViewComponente'));
 
 
 //body parser permite acceder y procesar lods datos que se envian desde el formulario html
