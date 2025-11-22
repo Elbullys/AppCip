@@ -1,4 +1,4 @@
-import { General, handlePOST,handleGETHiddenCookie } from '../Utils.js';  // Agregado handlePOST para consistencia; removido textInputs si no lo usas
+import { General, handlePOST } from '../Utils.js';  // Agregado handlePOST para consistencia; removido textInputs si no lo usas
 const api = 'http://localhost:7000';
 
 // Espera a que el DOM cargue completamente
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();  // Previene recargar la página
 
+        
         // Recopila los datos del formulario
         const username = document.getElementById('inputusername');
         const password = document.getElementById('inputpassword');
@@ -79,11 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const response = await handlePOST(config);
               
-
+console.log("response", response.data.data)
                 
                  // Corrección: Verifica éxito correctamente
-               if (response && response.success && response.data ) {
-                   sessionStorage.setItem('user_id_tecnico', response.data.Idusuario);
+               if (response && response.success && response.data.data ) {
+                 
                 // Éxito: Muestra mensaje y redirige
                    Swal.fire({
                        icon: 'success',
@@ -119,24 +120,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-async function redirectToLogin() {
-
-  const config = {
-                    url: `${api}/api/logintecnicos/protected`,
-                    successTitle: `Inicio de sesión exitoso ¡Bienvenido!`,
-                    loadingTitle: 'Iniciando sesión',
-                    loadingText: 'Verificando credenciales...',
-                    errorTitle: 'Error en login',
-                };
-
-                
-
-                const response = await handleGETHiddenCookie(config);
-                if (response && response.success && response.data ) {
-            
-                       window.location.href = '/inicio';
-                   
-               }
-              console.log("es lo que obtuve",response);
-  //window.location.href = '/logintecnico';
-}

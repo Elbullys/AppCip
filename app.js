@@ -3,17 +3,28 @@ const app = express();
 const bodyParser = require('body-parser');
 const session = require('express-session');
 // Importa el middleware
-const { loadUserData } = require('./controllers/authMiddleware');
+const { loadUserData } = require('./controllers/Middleware/authMiddleware');
 //variable de entorno numero 1
 const port =process.env.PORT || 3000;
 require('dotenv').config()
 
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'tu-secreto-aqui',  // Usa una variable de entorno
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    secure: false,  // Cambia a true si usas HTTPS
+    maxAge: 24 * 60 * 60 * 1000  // 24 horas, ajusta según necesites
+  }
+}));
+
+//Aplica loadUserData GLOBALMENTE a TODAS las rutas de la app 
+app.use(loadUserData); 
 app.use(express.urlencoded({extended:false}));
 //app.use(express(json));
  
 
-//Aplica loadUserData GLOBALMENTE a TODAS las rutas de la app 
-app.use(loadUserData); 
+
 
 //MOTOR DE PLANTILLAS
 app.set('view engine','ejs');

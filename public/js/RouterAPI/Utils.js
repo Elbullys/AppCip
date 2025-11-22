@@ -201,81 +201,198 @@ export class General {
       return contratoid + idunidad;
     }
   }
-  static verificacion_numerica_entero(dato) {
-    const num = parseInt(dato, 10);
-    if (isNaN(num) || num <= 0 || !Number.isInteger(num)) {
-      return false;
-    } else {
-      return true;
+  static verificacion_numerica_entero(ValidarDato, campo) {
+
+    // Verificar si el campo está vacío o nulo
+    if (ValidarDato.toString().trim() === "") {
+      return { icon: "warning", error: true, message: "" + campo + " no puede estar vacio o no es Válido" };
     }
+
+    // Verificar si NO es un número (isNaN devuelve true si no es numérico)
+    if (isNaN(ValidarDato)) {
+      return { icon: "warning", error: true, message: "" + campo + " no es válido, solo números." };
+    }
+
+    // Si pasa ambas verificaciones, es válido
+    return { icon: "check", error: false, message: "Datos válidos" };
   }
 
-    // Función para detectar si es dispositivo móvil/tablet (pantalla <= 767px)
-static esDispositivoMovil() {
-  const ancho = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-  if (ancho <= 1024) return true; // Tablets grandes
-  return false; // Desktop
+  // Función para detectar si es dispositivo móvil/tablet (pantalla <= 767px)
+  static esDispositivoMovil() {
+    const ancho = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    if (ancho <= 1024) return true; // Tablets grandes
+    return false; // Desktop
+  }
+
+  static username(username) {
+    // Verificar si username está definido
+    if (typeof username === "undefined") {
+
+      return {
+        icon: "warning",
+        error: true,
+        message: "El nombre de usuario no está definido.",
+      };
+    }
+
+    else if (!username || username.length < 3) {
+
+      return {
+        icon: "warning",
+        error: true,
+        message: "El Usuario es Incorrecto",
+      };
+      // return { icon:"warning",error: true, message: "El nombre de usuario ya está en uso." };
+    }
+    return { icon: "check", error: false, message: "Datos válidos" };
+  }
+
+  static password(Password) {
+    if (typeof Password === "undefined") {
+      console.log("password desconocido");
+      return {
+        icon: "warning",
+        error: true,
+        message: "La contraseña no está definida.",
+      };
+    }
+
+    const password = Password;
+    // Expresión regular para validar la contraseña
+    //const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/; // Al menos una mayúscula, un número y longitud mínima de 6 caracteres
+    if (Password.length < 3) {
+      console.log("password tamaño");
+      return {
+        icon: "warning",
+        error: true,
+        message: "La contraseña debe tener al menos 3 caracteres.",
+      };
+    }
+    return { icon: "check", error: false, message: "Datos válidos" };
+  }
+
+  static validar_Campos_Select(ValidarDato, campo) {
+    // Verifica si el dato es null, undefined, o una cadena vacía (después de trim)
+    if (!ValidarDato || ValidarDato.toString().trim() === "" || ValidarDato === "Selecciona") {
+      return { icon: "warning", error: true, message: "Selecciona " + campo + " válido." };
+    }
+    // Si pasa la validación, retorna éxito
+    return { icon: "success", error: false, message: "Campo válido." };
+  }
+
+  static validar_Campos_String(ValidarDato, campo) {
+
+    if (!ValidarDato || ValidarDato.toString().trim() === "" || ValidarDato.toString() === "unfined") {
+      return { icon: "warning", error: true, message: "" + campo + " no puede estar vacío." };
+    }
+
+
+    return { icon: "check", error: false, message: "Datos válidos" };
+  }
+
 }
 
-static username(username) {
-        // Verificar si username está definido
-        if (typeof username === "undefined") {
 
-            return {
-                icon: "warning",
-                error: true,
-                message: "El nombre de usuario no está definido.",
-            };
-        }
+//funcion para obtener el Get
+export async function handleGET(config) {
+  const {
+    url,
+    data = {}, // Opcional: objeto para query params (si no se pasa, no se agregan)
+    timeoutDuration = 3000,
+    loadingTitle = 'Cargando datos...', // Título del modal de carga
+    loadingText = 'Por favor, espera mientras se obtienen los datos. Conectando...', // Texto del modal de carga
+    errorTitle = 'Error al obtener datos', // Solo para errores
+  } = config;
 
-        else if (!username || username.length < 3) {
+  // Validaciones iniciales
+  if (!url) {
+    console.error('Error: URL es requerida.');
+    Swal.fire({
+      title: 'Error',
+      text: 'No se proporcionó una URL válida.',
+      icon: 'error',
+      confirmButtonText: 'Aceptar'
+    });
+    return false;
+  }
 
-            return {
-                icon: "warning",
-                error: true,
-                message: "El Usuario es Incorrecto",
-            };
-            // return { icon:"warning",error: true, message: "El nombre de usuario ya está en uso." };
-        }
-        return { icon: "check", error: false, message: "Datos válidos" };
+  let progress = 0;
+  const swalInstance = Swal.fire({
+    title: `${loadingTitle} (0%)`,
+    text: loadingText,
+    icon: 'info',
+    allowOutsideClick: false,
+    backdrop: true,
+    didOpen: () => {
+      Swal.showLoading();
+      const progressInterval = setInterval(() => {
+        progress += 5;
+        if (progress > 100) progress = 100;
+        Swal.getTitle().textContent = `${loadingTitle} (${progress}%)`;
+      }, 300);
+      swalInstance._progressInterval = progressInterval;
+    },
+  });
+
+  try {
+    // Construir URL con query params si data está presente
+    let fullUrl = url;
+    if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+      const params = new URLSearchParams(data);
+      fullUrl += `?${params.toString()}`;
     }
 
-    static password(Password) {
-        if (typeof Password === "undefined") {
-            console.log("password desconocido");
-            return {
-                icon: "warning",
-                error: true,
-                message: "La contraseña no está definida.",
-            };
-        }
+    const response = await fetch(fullUrl, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(timeoutDuration),
+      credentials: 'include',
+    });
 
-        const password = Password;
-        // Expresión regular para validar la contraseña
-        //const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/; // Al menos una mayúscula, un número y longitud mínima de 6 caracteres
-        if (Password.length < 3) {
-            console.log("password tamaño");
-            return {
-                icon: "warning",
-                error: true,
-                message: "La contraseña debe tener al menos 3 caracteres.",
-            };
-        }
-        return { icon: "check", error: false, message: "Datos válidos" };
+    if (!response.ok) {
+      // Maneja respuestas no-JSON usando text() con try-catch
+      let errorMessage;
+      try {
+        const errorData = await response.text();
+        const parsed = JSON.parse(errorData);
+        errorMessage = parsed.message || `Error al obtener: ${response.status}`;
+      } catch {
+        errorMessage = `Error al obtener: ${response.status} ${response.statusText}`;
+      }
+      throw new Error(errorMessage);
     }
 
-    static validar_Campos_Select(ValidarDato, campo) {
-        // Verifica si el dato es null, undefined, o una cadena vacía (después de trim)
-        if (!ValidarDato || ValidarDato.toString().trim() === "" || ValidarDato === "Selecciona") {
-            return { icon: "warning", error: true, message: "Selecciona " + campo + " válido." };
-        }
-        // Si pasa la validación, retorna éxito
-        return { icon: "success", error: false, message: "Campo válido." };
-    }
+    const result = await response.json();
+    clearInterval(swalInstance._progressInterval);
+    // Agrega un retraso mínimo antes de cerrar la alerta
+    await new Promise(resolve => setTimeout(resolve, 1000));  // Espera 1 segundo
+    Swal.close();  // Cierra inmediatamente sin retraso
+    // Retorna un objeto con success y data (sin mensajes de éxito)
+    return {
+      success: true,
+      data: result,
+    };
+  } catch (error) {
+    clearInterval(swalInstance._progressInterval);
+    Swal.close();  // Cierra inmediatamente en caso de error
 
+    if (error.name === 'TimeoutError') {
+      Swal.fire({
+        title: 'Tiempo de espera agotado',
+        text: 'Intenta de nuevo más tarde.',
+        icon: 'warning',
+      });
+    } else {
+      Swal.fire({
+        title: 'Error inesperado',
+        text: 'Ocurrió un problema al obtener los datos.',
+        icon: 'error',
+      });
+    }
+    console.error('Error completo:', error);
+    return false;
+  }
 }
-
-
 
 
 
@@ -386,7 +503,7 @@ export async function handlePUT(config) {
         icon: 'warning',
       });
     } else {
-  
+
       if (typeof Toast !== 'undefined') {
         Toast.fire({
           icon: "error",
@@ -416,7 +533,7 @@ export async function handlePOST(config) {
     errorTitle = 'Error al agregar datos',
   } = config;
 
-  
+
 
   // Validaciones iniciales
   if (!url || !data) {
@@ -461,7 +578,7 @@ export async function handlePOST(config) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
       signal: AbortSignal.timeout(timeoutDuration),
-      credentials: 'include' ,
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -549,10 +666,10 @@ export async function handleGETHiddenCookie(config) {
 
   let progress = 0;
   let swalInstance;
- 
+
 
   try {
-   
+
     const response = await fetch(fullUrl, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -574,9 +691,9 @@ export async function handleGETHiddenCookie(config) {
     }
 
     const result = await response.json();
-    
+
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     // Retorna un objeto con success y data (sin id, ya que GET no crea recursos típicamente)
     return {
       success: true,
@@ -588,7 +705,7 @@ export async function handleGETHiddenCookie(config) {
       console.error('Error de timeout:', error);
     } else {
       if (typeof Toast !== 'undefined') {
-       console.error('Error general:', error);
+        console.error('Error general:', error);
       } else {
         console.error('Toast no definido:', error.message);
       }
@@ -600,26 +717,47 @@ export async function handleGETHiddenCookie(config) {
 
 
 export const textInputs = document.querySelectorAll('input[type="text"], input[type="email"], textarea');
-  textInputs.forEach(input => {
-    input.addEventListener('input', function() {
-      this.value = this.value.toUpperCase();
-    });
+textInputs.forEach(input => {
+  input.addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
   });
+});
+
+// Función para cambiar el texto del label del switch
+export function cambiarLabelSwitch(idSwitch, nuevoTexto) {
+  const labelElement = document.querySelector(`label[for="${idSwitch}"]`);
+  if (labelElement) {
+    labelElement.textContent = nuevoTexto;
+  }
+}
+
+export function obtenerValorRadioSeleccionado(nombreGrupo) {
+  const radios = document.getElementsByName(nombreGrupo);
+  for (let radio of radios) {
+    if (radio.checked) {
+      return radio.value;  // Retorna el valor del radio seleccionado
+    }
+  }
+  return null;  // Si ninguno está seleccionado
+}
+
+export function obtenerEstadoSwitch(idSwitch) {
+  const switchElement = document.getElementById(idSwitch);
+  if (switchElement) {
+    return switchElement.checked ? 1 : 0;  // Retorna 1 si activado, 0 si no (como números)
+  }
+  console.warn(`Switch con ID "${idSwitch}" no encontrado.`);
+  return 0;  // Valor por defecto si no se encuentra
+}
 
 
 
 
 
 
-//VARIABLES GLOBALES
-export const VariablesFactura = {
-idfactura: "",
-numerofactura: "",
-nombreproveedor: "",
-lugarcompra: "",
-fechafactura: "",
-observacionfactura: "",
-};
+
+
+
 
 
 
