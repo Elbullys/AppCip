@@ -1,5 +1,6 @@
  //const api='https://apirestcip.onrender.com'; 
- const api='http://localhost:7000'; 
+ //const api='http://localhost:7000'; 
+ const api =process.env.API;
  const btonmanual=document.getElementById('btnmanual');
   const queryParams = new URLSearchParams(); // Inicializar queryParams
   const componenteoData = {};

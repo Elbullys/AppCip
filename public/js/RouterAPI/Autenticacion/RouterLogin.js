@@ -1,5 +1,6 @@
 import { General, handlePOST } from '../Utils.js';  // Agregado handlePOST para consistencia; removido textInputs si no lo usas
-const api = 'http://localhost:7000';
+//const api = 'http://localhost:7000';
+const api =process.env.API;
 
 // Espera a que el DOM cargue completamente
 document.addEventListener('DOMContentLoaded', () => {
@@ -90,6 +91,9 @@ console.log("response", response.data.data)
                        icon: 'success',
                        title: config.successTitle,
                        text: response.data.message || 'Login exitoso.',
+                          timer: 2000,
+                            showConfirmButton: false,
+                       
                    }).then(() => {
                        window.location.href = '/inicio';
                    });

@@ -4,7 +4,8 @@ import {
   obtenerValorRadioSeleccionado, obtenerEstadoSwitch, handleGET
 } from '../Utils.js';
 
-const api = 'http://localhost:7000';
+//const api = 'http://localhost:7000';
+const api =process.env.API;
 const idcomponente = document.getElementById('idcomponenteValue').textContent;
 
 // Objeto para almacenar el estado del formulario (centraliza variables globales)

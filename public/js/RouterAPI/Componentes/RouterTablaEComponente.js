@@ -1,4 +1,5 @@
-const api = 'http://localhost:7000';
+//const api = 'http://localhost:7000';
+const api =process.env.API;
 const databusqueda = document.getElementById('codigoTIValue').textContent;
 
 const queryParams = new URLSearchParams(); // Inicializar queryParams

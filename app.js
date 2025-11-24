@@ -9,7 +9,7 @@ const port =process.env.PORT || 3000;
 require('dotenv').config()
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'tu-secreto-aqui',  // Usa una variable de entorno
+  secret: process.env.SESSION_SECRET || 'tu-secreto-aqui', 
   resave: false,
   saveUninitialized: false,
   cookie: { 
