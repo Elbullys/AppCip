@@ -1,6 +1,6 @@
-// middleware/authMiddleware.js
-// middleware/authMiddleware.js
+//const api = 'https://apirestcip.onrender.com';
 const api = 'http://localhost:7000';
+
 const axios = require('axios');
 
 const loadUserData = async (req, res, next) => {
@@ -14,7 +14,7 @@ const loadUserData = async (req, res, next) => {
     if (req.session && req.session.userData) {
         console.log('Datos de usuario ya cargados en sesión.');
         // Copia la data al req para que requireAuth y las rutas puedan usarla fácilmente
-        req.userSessionData = req.session.userData; 
+        req.userSessionData = req.session.userData;
         return next();
     }
 
@@ -36,7 +36,7 @@ const loadUserData = async (req, res, next) => {
     } catch (error) {
         console.log('Error o sesión no válida desde API. Limpiando datos de sesión.');
         req.session.userData = null; // Limpia si hay un error (ej. 401 Unauthorized)
-        req.userSessionData = null; 
+        req.userSessionData = null;
     }
     next();
 };
@@ -46,10 +46,10 @@ const loadUserData = async (req, res, next) => {
 
 function requireAuth(req, res, next) {
     // Usamos la data cargada por loadUserData, que ahora está en req.userSessionData
-    const data = req.userSessionData; 
+    const data = req.userSessionData;
 
     // Opcional: si usaste solo req.session.userData: const data = req.session?.userData;
-    
+
     // El campo de usuario debe ser 'usuario' basado en tu código
     if (data && data.usuario) {
         console.log("Sesión de usuario válida:", data.usuario);

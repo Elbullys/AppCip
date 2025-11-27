@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const componentescontroller = require('../controllers/componentesController');
-const { requireAuth } = require('../controllers/Middleware/authMiddleware');
+
 
 
 //RUTA WEB PARA LEER CODIGO QR
-router.get("/leercodigoQR",requireAuth, (req, res) => {
+router.get("/leercodigoQR", (req, res) => {
 const data = req.session;
 
   res.render("LeerCodigoQR", { pageTitle: "Buscar Componente", mode: 'search', username: req.username  })
@@ -13,7 +13,7 @@ const data = req.session;
 })
 
 //PERMITE CONSULTAR LOS DATOS DE LA TABLA COMPONENTES mediante un filtro
-router.get("/Consultar_Componentes",requireAuth, (req, res) => {
+router.get("/Consultar_Componentes",(req, res) => {
  
 
     res.render("Consultar_Componentes.ejs",{username:req.username});
@@ -23,7 +23,7 @@ router.get("/Consultar_Componentes",requireAuth, (req, res) => {
 
 //RUTA WEB COMPONENTES
 
-router.get('/Mostrar_Info_Componente',requireAuth, (req, res) => {
+router.get('/Mostrar_Info_Componente', (req, res) => {
 
     res.render("Mostrar_Info_Componente",{ username: req.username});
 
@@ -31,7 +31,7 @@ router.get('/Mostrar_Info_Componente',requireAuth, (req, res) => {
 
 
 //ruta para editar datos por medio de QR
-router.get("/EditarDatos", requireAuth,(req, res) => {
+router.get("/EditarDatos",(req, res) => {
 
     res.render("LeerCodigoQR", { pageTitle: "Editar Componente", mode: 'edit', username: req.username })
   
@@ -39,7 +39,7 @@ router.get("/EditarDatos", requireAuth,(req, res) => {
 })
 
 //RUTA DONDE MUESTRA TABLA PARA EDITAR COMPONENTE 
-router.get('/EditarComponente/:databusqueda', requireAuth, (req, res) => {
+router.get('/EditarComponente/:databusqueda', (req, res) => {
 
     const codigo_TI = req.params.databusqueda;
    
@@ -50,7 +50,7 @@ router.get('/EditarComponente/:databusqueda', requireAuth, (req, res) => {
 });
 
 //PERMITE CONSULTAR LOS DATOS DE LA TABLA COMPONENTES mediante un filtro
-router.get("/FormularioEditarComponente/:idcomponente", requireAuth, (req, res) => {
+router.get("/FormularioEditarComponente/:idcomponente", (req, res) => {
  
     //console.log(__dirname)
     //con EJS se renderiza en index.ejs

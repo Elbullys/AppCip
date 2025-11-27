@@ -1,3 +1,16 @@
+//PERMITE EXPORTAR LA RUTA DE LA API
+ export const URLAPI= 'https://apirestcip.onrender.com';
+  //export const URLAPI= 'http://localhost:7000';
+
+   const logoutAndRedirect = (errorMessage) => {
+ 
+    // 3. Redirigir al login después de un breve momento
+    setTimeout(() => {
+        window.location.href = '/logintecnico';
+    }, 1500); // 1.5 segundos para que el usuario vea el mensaje
+
+   
+};
 // utils.js - Archivo para funciones y utilidades globales reutilizables
 
 //FUNCION PARA CONVERTIR FECHA A FORMATO ACEPTADO POR INPUT DATE
@@ -51,7 +64,30 @@ export async function handleDataTableLoadingPOST(config) {
       },
       body: JSON.stringify(data),  // Agregado: Envía data como cuerpo JSON
       signal: AbortSignal.timeout(timeoutDuration),
+      credentials: 'include',
     });
+
+    //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
+    if (response.status === 401) {
+            // Si el servidor devuelve 401, forzamos el logout y la redirección
+            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
+            
+            try {
+                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+                const errorResponse = await response.json(); 
+                errorMessage = errorResponse.message || errorMessage;
+            } catch (e) {
+                // Si el cuerpo no es JSON, usamos el mensaje por defecto
+            }
+            
+            // Cerrar el modal de carga y redirigir
+            Swal.close(); 
+            clearInterval(swalInstance._progressInterval);
+            logoutAndRedirect(errorMessage);
+
+            // Devolvemos un array vacío ya que la operación falló.
+            return [];
+        }
     if (!response.ok) {
       throw new Error(`Error en la respuesta: ${response.statusText}`);
     }
@@ -92,19 +128,11 @@ export async function handleDataTableLoadingPOST(config) {
 /*GET*/
 // Función GET PARA DATATABLE OBTECION DE DATOS
 export async function handleDataTableLoadingGET(config) {
+
+ 
   const { url, data, timeoutDuration = 3000 } = config;
 
-  // Validaciones iniciales
-  if (!url) {
-    console.error('Error: URL es requerida.');
-    Swal.fire({
-      title: 'Error',
-      text: 'No se proporcionó una URL válida.',
-      icon: 'error',
-      confirmButtonText: 'Aceptar'
-    });
-    return [];
-  }
+
 
   let progress = 0;
   const swalInstance = Swal.fire({
@@ -135,7 +163,31 @@ export async function handleDataTableLoadingGET(config) {
     const response = await fetch(fullUrl, {
       method: 'GET',
       signal: AbortSignal.timeout(timeoutDuration),
+      credentials: 'include',
+
     });
+//VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
+    if (response.status === 401) {
+            // Si el servidor devuelve 401, forzamos el logout y la redirección
+            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
+            
+            try {
+                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+                const errorResponse = await response.json(); 
+                errorMessage = errorResponse.message || errorMessage;
+            } catch (e) {
+                // Si el cuerpo no es JSON, usamos el mensaje por defecto
+            }
+            
+            // Cerrar el modal de carga y redirigir
+            Swal.close(); 
+            clearInterval(swalInstance._progressInterval);
+            logoutAndRedirect(errorMessage);
+
+            // Devolvemos un array vacío ya que la operación falló.
+            return [];
+        }
+//SI NO HAY ERROR 401, SIGUE CORRRIENDO EL CODIGO
 
     if (!response.ok) {
       throw new Error(`Error en la respuesta: ${response.statusText}`);
@@ -348,6 +400,27 @@ export async function handleGET(config) {
       signal: AbortSignal.timeout(timeoutDuration),
       credentials: 'include',
     });
+    //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
+    if (response.status === 401) {
+            // Si el servidor devuelve 401, forzamos el logout y la redirección
+            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
+            
+            try {
+                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+                const errorResponse = await response.json(); 
+                errorMessage = errorResponse.message || errorMessage;
+            } catch (e) {
+                // Si el cuerpo no es JSON, usamos el mensaje por defecto
+            }
+            
+            // Cerrar el modal de carga y redirigir
+            Swal.close(); 
+            clearInterval(swalInstance._progressInterval);
+            logoutAndRedirect(errorMessage);
+
+            // Devolvemos un array vacío ya que la operación falló.
+            return [];
+        }
 
     if (!response.ok) {
       // Maneja respuestas no-JSON usando text() con try-catch
@@ -460,7 +533,30 @@ export async function handlePUT(config) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
       signal: AbortSignal.timeout(timeoutDuration),
+      credentials: 'include',
     });
+
+    //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
+    if (response.status === 401) {
+            // Si el servidor devuelve 401, forzamos el logout y la redirección
+            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
+            
+            try {
+                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+                const errorResponse = await response.json(); 
+                errorMessage = errorResponse.message || errorMessage;
+            } catch (e) {
+                // Si el cuerpo no es JSON, usamos el mensaje por defecto
+            }
+            
+            // Cerrar el modal de carga y redirigir
+            Swal.close(); 
+            clearInterval(swalInstance._progressInterval);
+            logoutAndRedirect(errorMessage);
+
+            // Devolvemos un array vacío ya que la operación falló.
+            return [];
+        }
 
     if (!response.ok) {
       // CORRECCIÓN: Maneja respuestas no-JSON usando text() con try-catch
@@ -581,6 +677,28 @@ export async function handlePOST(config) {
       credentials: 'include',
     });
 
+    //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
+    if (response.status === 401) {
+            // Si el servidor devuelve 401, forzamos el logout y la redirección
+            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
+            
+            try {
+                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+                const errorResponse = await response.json(); 
+                errorMessage = errorResponse.message || errorMessage;
+            } catch (e) {
+                // Si el cuerpo no es JSON, usamos el mensaje por defecto
+            }
+            
+            // Cerrar el modal de carga y redirigir
+            Swal.close(); 
+            clearInterval(swalInstance._progressInterval);
+            logoutAndRedirect(errorMessage);
+
+            // Devolvemos un array vacío ya que la operación falló.
+            return [];
+        }
+
     if (!response.ok) {
       // Maneja respuestas no-JSON usando text() con try-catch
       let errorMessage;
@@ -677,6 +795,30 @@ export async function handleGETHiddenCookie(config) {
       credentials: 'include',
     });
 
+    //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
+    if (response.status === 401) {
+            // Si el servidor devuelve 401, forzamos el logout y la redirección
+            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
+            
+            try {
+                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+                const errorResponse = await response.json(); 
+                errorMessage = errorResponse.message || errorMessage;
+            } catch (e) {
+                // Si el cuerpo no es JSON, usamos el mensaje por defecto
+            }
+            
+            // Cerrar el modal de carga y redirigir
+            Swal.close(); 
+            clearInterval(swalInstance._progressInterval);
+            logoutAndRedirect(errorMessage);
+
+            // Devolvemos un array vacío ya que la operación falló.
+            return [];
+        }
+
+        
+
     if (!response.ok) {
       // Maneja respuestas no-JSON usando text() con try-catch
       let errorMessage;
@@ -749,17 +891,6 @@ export function obtenerEstadoSwitch(idSwitch) {
   console.warn(`Switch con ID "${idSwitch}" no encontrado.`);
   return 0;  // Valor por defecto si no se encuentra
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

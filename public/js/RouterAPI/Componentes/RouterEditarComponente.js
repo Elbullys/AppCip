@@ -1,11 +1,11 @@
 import {
   conversionFecha, handleDataTableLoadingGET, General,
   handleDataTableLoadingPOST, handlePOST, handlePUT, cambiarLabelSwitch,
-  obtenerValorRadioSeleccionado, obtenerEstadoSwitch, handleGET
+  obtenerValorRadioSeleccionado, obtenerEstadoSwitch, handleGET,URLAPI
 } from '../Utils.js';
 
-//const api = 'http://localhost:7000';
-const api =process.env.API;
+
+const api =URLAPI;
 const idcomponente = document.getElementById('idcomponenteValue').textContent;
 
 // Objeto para almacenar el estado del formulario (centraliza variables globales)
@@ -123,6 +123,7 @@ var Toast = Swal.mixin({
 
 // AL ABRIR LA PAGINA - TODO DENTRO DE DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
+
 
     let cambiosPendientes = true; // Bandera para saber si hay cambios no guardados
    window.onbeforeunload = (event) => {

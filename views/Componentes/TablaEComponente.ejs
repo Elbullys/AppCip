@@ -13,10 +13,10 @@
     <button id="toggleColumns" class="btn btn-primary">
         <i class="fa-solid fa-up-right-and-down-left-from-center mr-2"></i> <span class="whitespace-nowrap">Minimizar/Máximizar</span>
     </button>
-    <button id="btnEditar" class="btn btn-warning" onclick="EnviarFormEditarComponente()">
+    <button id="btnEditar" class="btn btn-warning">
         <i class="fas fa-edit mr-2"></i> Editar
     </button>
-    <button id="btnVisualizar" class="btn btn-success" onclick="verDetallesComponente()">
+    <button id="btnVisualizar" class="btn btn-success">
         <i class="fas fa-eye mr-2"></i> Visualizar
     </button>
 </div>
@@ -55,7 +55,7 @@
 </div>
 </div>
 
-<script src="/js/RouterAPI/Componentes/RouterTablaEComponente.js"></script>
+<script src="/js/RouterAPI/Componentes/RouterTablaEComponente.js" type="module"></script>
 
 <%- include('../LectorConsultaQR/modal/Mostrar_Info_Componente') %>
 <%- include('../template/footer') %>

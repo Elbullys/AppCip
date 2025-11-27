@@ -8,3 +8,4 @@ exports.capturaridcomponente =(req,res) =>{
      const idcomponente = req.body.idcomponente; 
     console.log(idcomponente);
 }
+

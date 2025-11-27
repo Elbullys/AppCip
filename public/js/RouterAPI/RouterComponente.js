@@ -1,6 +1,5 @@
- //const api='https://apirestcip.onrender.com'; 
- //const api='http://localhost:7000'; 
- const api =process.env.API;
+ const api ='https://apirestcip.onrender.com';
+//const api = 'http://localhost:7000';
  const btonmanual=document.getElementById('btnmanual');
   const queryParams = new URLSearchParams(); // Inicializar queryParams
   const componenteoData = {};
@@ -165,7 +164,8 @@ async function Verificacion_Componente() {
         // Usar comillas invertidas para la interpolación de cadenas
         const response = await fetch(`${api}/api/componentes/VerificarExistenciaComponente?${queryParams}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' } // Este encabezado no es necesario para GET, pero no causa problemas
+            headers: { 'Content-Type': 'application/json' },// Este encabezado no es necesario para GET, pero no causa problemas
+            credentials: 'include' // Incluir cookies si es necesario
         });
 
         const result = await response.json(); // Obtener la respuesta JSON

@@ -1,6 +1,6 @@
-import { General, handleGETHiddenCookie } from '../Utils.js';  // Agregado handlePOST para consistencia; removido textInputs si no lo usas
-//const api = 'http://localhost:7000';
-const api =process.env.API;
+import { General, handleGETHiddenCookie,URLAPI } from '../Utils.js';  // Agregado handlePOST para consistencia; removido textInputs si no lo usas
+
+const api =URLAPI;
 
 document.addEventListener('DOMContentLoaded', () => {
   const btnlogout = document.getElementById('logout');
@@ -58,7 +58,7 @@ async function redirectToLogin() {
                        //window.location.href = '/inicio';
                    
                }
-              console.log("es lo que obtuve",response);
+           
   //window.location.href = '/logintecnico';
 }
 

@@ -1,6 +1,6 @@
-//const api='https://apirestcip.onrender.com'; 
+const api='https://apirestcip.onrender.com'; 
 //const api='http://localhost:7000'; 
-const api =process.env.API;
+//const api ='https://apirestcip.onrender.com';
 async function cargarDetallesUsuario(idusuario, modal) {
     
     const url = `${api}/api/Usuarios/ConsultaUsuarioId/${idusuario}`; // Ajusta la URL si es necesario
