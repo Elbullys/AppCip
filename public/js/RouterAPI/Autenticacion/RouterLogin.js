@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await handlePOST(config);
 
 
+
                 // Verifica éxito: response.success y response.data.data existen
                 if (response && response.success && response.data && response.data.data) {
                     const userDataFromResponse = response.data.data;
@@ -80,25 +81,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     const token = userDataFromResponse.token;
                     const verifyResponse = await fetch(`${api}/api/logintecnicos/protected`, {
                         method: 'GET',
-                        credentials: 'include'  // Fuera de headers, en el objeto principal
+                        credentials: 'include',  // Fuera de headers, en el objeto principal
                         // Quita headers si usas cookies; si usas localStorage, agrega:
-                        // headers: { 'Authorization': `Bearer ${token}` }
+
                     });
                     console.log('verifyResponse', verifyResponse.body);
                     if (verifyResponse.ok) {
 
-                       const responseData = await verifyResponse.json();
-                        
-
-                        const customMessage = `Bienvenido, ${responseData.data.usuario}! Tu ID es ${responseData.data.id_tecnico}.`;
-                        Swal.fire({
-                            icon: 'success',
-                            title: config.successTitle,
-                            text: customMessage,  // Mensaje personalizado con datos de localStorage
-                        }).then(() => {
-                            // Redirige con datos en la URL si necesitas (opcional)
-                            window.location.href = `/inicio?user=${encodeURIComponent(responseData.data.usuario)}`;
-                        });
+                        const responseData = await verifyResponse.json();
+                        if (responseData.success && responseData.data) {
+                            const customMessage = `Bienvenido, ${responseData.data.usuario}! Tu ID es ${responseData.data.id_tecnico}.`;
+                            Swal.fire({
+                                icon: 'success',
+                                title: config.successTitle,
+                                text: customMessage,
+                            }).then(() => {
+                                // Redirige con datos en la URL si necesitas
+                                window.location.href = `/inicio?user=${encodeURIComponent(responseData.data.usuario)}`;
+                            });
+                        }
                     } else {
                         // Si falla la carga, muestra error
                         Swal.fire({
