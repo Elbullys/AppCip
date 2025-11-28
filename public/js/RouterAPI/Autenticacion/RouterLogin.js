@@ -77,45 +77,63 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Verifica éxito: response.success y response.data.data existen
                 if (response && response.success && response.data && response.data.data) {
                     const userDataFromResponse = response.data.data;
-
                     const token = userDataFromResponse.token;
-                    const verifyResponse = await fetch(`${api}/api/logintecnicos/protected`, {
-                        method: 'GET',
-                        credentials: 'include',  // Fuera de headers, en el objeto principal
-                        // Quita headers si usas cookies; si usas localStorage, agrega:
 
-                    });
-                    console.log('verifyResponse', verifyResponse.body);
-                  
-                    if (verifyResponse.ok) {
-                        
-                        const responseData = await verifyResponse.json();
-                        console.log("responseData", responseData);
-                        if (responseData.success && responseData.data) {
-                            const customMessage = `Bienvenido, ${responseData.data.usuario}! Tu ID es ${responseData.data.id_tecnico}.`;
+                    // Guarda el token en localStorage (en lugar de depender de cookies)
+                    localStorage.setItem('access_token', token);
+
+                    try {
+                        // Fetch a /protected con el token en headers
+                        const verifyResponse = await fetch(`${api}/api/logintecnicos/protected`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,  // Envía el token aquí
+                            },
+                            // Quita credentials: 'include' si usas headers
+                        });
+
+                        if (verifyResponse.ok) {
+                            const responseData = await verifyResponse.json();
+                            console.log("responseData", responseData);
+
+                            if (responseData.success && responseData.data) {
+                                const customMessage = `Bienvenido, ${responseData.data.usuario}! Tu ID es ${responseData.data.id_tecnico}.`;
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: config.successTitle,
+                                    text: customMessage,
+                                }).then(() => {
+                                    window.location.href = `/inicio?user=${encodeURIComponent(responseData.data.usuario)}`;
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Respuesta inesperada.',
+                                });
+                            }
+                        } else {
+                            const errorData = await verifyResponse.json().catch(() => ({}));
+                            console.error('Error:', verifyResponse.status, errorData);
                             Swal.fire({
-                                icon: 'success',
-                                title: config.successTitle,
-                                text: customMessage,
-                            }).then(() => {
-                                // Redirige con datos en la URL si necesitas
-                                window.location.href = `/inicio?user=${encodeURIComponent(responseData.data.usuario)}`;
+                                icon: 'error',
+                                title: 'Acceso denegado',
+                                text: errorData.error || 'No autorizado.',
                             });
                         }
-                    } else {
-                        // Si falla la carga, muestra error
+                    } catch (error) {
+                        console.error('Error en fetch:', error);
                         Swal.fire({
-                            icon: 'warning',
-                            title: 'Login exitoso, pero error cargando datos',
-                            text: 'Inténtalo de nuevo.',
+                            icon: 'error',
+                            title: 'Error de conexión',
+                            text: 'No se pudo verificar.',
                         });
                     }
                 } else {
-                    // Error de autenticación
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error de autenticación',
-                        text: response?.data?.message || 'Credenciales incorrectas.',
+                        title: 'Login fallido',
+                        text: 'Credenciales inválidas.',
                     });
                 }
             } catch (error) {
