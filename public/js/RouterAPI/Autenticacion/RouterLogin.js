@@ -87,7 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         const verifyResponse = await fetch(`${api}/api/logintecnicos/protected`, {
                             method: 'GET',
                             headers: {
-                                'Authorization': `Bearer ${token}`,  // Envía el token aquí
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'  // Envía el token aquí
                             },
                             // Quita credentials: 'include' si usas headers
                         });
