@@ -79,18 +79,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const userDataFromResponse = response.data.data;
                     const token = userDataFromResponse.token;
 
-                    // Guarda el token en localStorage (en lugar de depender de cookies)
+                    // Guarda el token en localStorage
                     localStorage.setItem('access_token', token);
 
                     try {
-                        // Fetch a /protected con el token en headers
-                        const verifyResponse = await fetch(`${api}/api/logintecnicos/protected`, {
-                            method: 'GET',
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'  // Envía el token aquí
-                            },
-                            // Quita credentials: 'include' si usas headers
+                        // DEBUG: Confirma que el token existe antes de llamar a fetchProtected
+                        console.log('Token disponible para verificación:', token ? 'Presente' : 'Ausente');
+
+                        // *** CAMBIO CLAVE: Usamos fetchProtected, que inyecta el token de localStorage ***
+                        // Ojo: En este caso, ya tienes el token en la variable 'token',
+                        // pero usar fetchProtected asegura que el flujo de verificación es el mismo
+                        // que el de cualquier otra ruta protegida.
+                        const verifyResponse = await fetchProtected('/api/logintecnicos/protected', {
+                            method: 'GET'
                         });
 
                         if (verifyResponse.ok) {
@@ -114,8 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 });
                             }
                         } else {
+                            // Manejo de error 401/403 de la ruta protegida
                             const errorData = await verifyResponse.json().catch(() => ({}));
-                            console.error('Error:', verifyResponse.status, errorData);
+                            console.error('Error al verificar token:', verifyResponse.status, errorData);
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Acceso denegado',
