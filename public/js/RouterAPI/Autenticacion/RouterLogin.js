@@ -86,9 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     });
                     console.log('verifyResponse', verifyResponse.body);
+                  
                     if (verifyResponse.ok) {
-
+                        
                         const responseData = await verifyResponse.json();
+                        console.log("responseData", responseData);
                         if (responseData.success && responseData.data) {
                             const customMessage = `Bienvenido, ${responseData.data.usuario}! Tu ID es ${responseData.data.id_tecnico}.`;
                             Swal.fire({
