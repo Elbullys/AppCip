@@ -797,7 +797,7 @@ document.addEventListener('DOMContentLoaded', () => {
             estadoFormulario.Estado = data.Estado;
             estadoFormulario.nombre_unidad = data.nombre_unidad;
             estadoFormulario.tipo_unidad = data.tipo_unidad;
-            estadoFormulario.AbrevEstado = data.AbrevEstado;
+            estadoFormulario.AbrevEstado = data.abreviatura_estado;
 
 
             if (selectedRow && selectedRow.length > 0) {
