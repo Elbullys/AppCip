@@ -1,5 +1,5 @@
 // const api ='https://apirestcip.onrender.com';
-import { General, handlePOST, URLAPI } from '../Utils.js';  // Importa tus utilidades
+import { General, handlePOST, URLAPI } from '../RouterAPI/Utils.js';  // Importa tus utilidades
 const api = URLAPI;
 
 // Declaraciones de alcance global que son necesarias
