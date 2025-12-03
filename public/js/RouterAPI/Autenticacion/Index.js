@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const nombreperfil = document.getElementById('username');//username
 
     // Uso en tu dashboard
-    fetchComponentes().then(data => {
+    /*fetchComponentes().then(data => {
         // Renderiza datos (ej. en un div)
         console.log("data", data);
         const contadorElementoEnTransito = document.getElementById('equiposEnTransitoContador');
         contadorElementoEnTransito.textContent=data;
     
         //document.getElementById('dashboard').innerHTML = data.map(item => `<p>${item.area}: ${item.count}</p>`).join('');
-    });
+    });*/
     // Verifica con la API solo si quieres "refrescar" o validar (no en cada carga)
     //  solo en la página de inicio o si el token podría expirar pronto
     const shouldVerify = window.location.pathname === '/inicio';  // O tu lógica

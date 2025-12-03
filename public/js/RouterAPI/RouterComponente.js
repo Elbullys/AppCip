@@ -152,9 +152,9 @@ async function cargarComponenteQR(databusqueda, modal) {
         }
         
         // Conversión de fechas
-        const Fechafactura = General.ConversionFecha(componente.FechaFactura);
-        const fecharegistro = General.ConversionFecha(componente.FechaRegistro);
-        const fechacompra = General.ConversionFecha(componente.FechaCompra);
+        const Fechafactura = General.conversionFecha(componente.FechaFactura);
+        const fecharegistro = General.conversionFecha(componente.FechaRegistro);
+        const fechacompra = General.conversionFecha(componente.FechaCompra);
 
         // Actualizar el DOM
         document.getElementById('idunidad').innerText = String(componente.num_contrato_actual) + textoFormateado;
