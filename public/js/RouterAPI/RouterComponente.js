@@ -6,19 +6,7 @@ const api = URLAPI;
 let accion = ""; // Se usará para diferenciar entre buscar y editar
 
 // Clase de utilidades para la conversión de fecha
-class General {
-    static ConversionFecha(fecha) {
-        const date = new Date(fecha);
-        // Verificar si la fecha es inválida
-        if (isNaN(date.getTime())) {
-            return "Fecha inválida"; 
-        }
-        const dia = String(date.getDate()).padStart(2, '0');
-        const mes = String(date.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
-        const anio = date.getFullYear();
-        return `${dia}-${mes}-${anio}`;
-    }
-}
+
 
 // PARA ALERTAS TOAST SWEETALERT2
 const Toast = Swal.mixin({
