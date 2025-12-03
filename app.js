@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
-const session = require('express-session');
 //variable de entorno numero 1
 const port =process.env.PORT || 3000;
 require('dotenv').config()
