@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const nombreperfil = document.getElementById('username');//username
 
     // Uso en tu dashboard
-    /*fetchComponentes().then(data => {
+    fetchComponentes().then(data => {
         // Renderiza datos (ej. en un div)
-        console.log("data", data);
+        console.log("data", data.body);
         const contadorElementoEnTransito = document.getElementById('equiposEnTransitoContador');
-        contadorElementoEnTransito.textContent=data;
+        contadorElementoEnTransito.textContent=data.body;
     
         //document.getElementById('dashboard').innerHTML = data.map(item => `<p>${item.area}: ${item.count}</p>`).join('');
-    });*/
+    });
     // Verifica con la API solo si quieres "refrescar" o validar (no en cada carga)
     //  solo en la página de inicio o si el token podría expirar pronto
     const shouldVerify = window.location.pathname === '/inicio';  // O tu lógica
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log("response.ok", response);
             if (response.ok) {
                 // 1. Redirige solo si la respuesta del servidor fue exitosa (código 200-299)
-                // window.location.href = '/logintecnico';
+                 window.location.href = '/logintecnico';
             } else {
                 console.error('Error del servidor al cerrar sesión.');
                 // Puedes mostrar un SweetAlert si tienes uno
@@ -95,12 +95,12 @@ async function fetchComponentes() {
             method: 'GET',
             //credentials: 'include',
         });
-        const data = await response.json();
+      
  console.log("response", data);
         if (data) {
-           
+             const data = await response.json();
             // Guarda en localStorage
-            localStorage.setItem(cacheKey, data);
+            localStorage.setItem(cacheKey, JSON.stringify(data));
             localStorage.setItem(cacheKey + '_time', now.toString());
 
             return data;
