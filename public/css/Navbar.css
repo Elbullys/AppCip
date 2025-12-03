@@ -36,9 +36,14 @@
   border: 2px solid #dee2e6; /* Borde sutil */
   transition: border-color 0.3s ease; /* Transición en el borde */
 }
+.hidden-until-loaded {
+    display: none;  /* Oculta inicialmente */
+}
 .profile-link:hover .profile-avatar {
   border-color: #007bff; /* Cambio de borde al hover */
+  
 }
+
 /* Responsive: En móviles, el perfil se alinea normalmente */
 @media (max-width: 991.98px) {
   .custom-navbar .navbar-nav .ms-auto {

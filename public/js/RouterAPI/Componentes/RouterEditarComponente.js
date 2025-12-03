@@ -1,11 +1,11 @@
 import {
   conversionFecha, handleDataTableLoadingGET, General,
   handleDataTableLoadingPOST, handlePOST, handlePUT, cambiarLabelSwitch,
-  obtenerValorRadioSeleccionado, obtenerEstadoSwitch, handleGET,URLAPI
+  obtenerValorRadioSeleccionado, obtenerEstadoSwitch, handleGET, URLAPI
 } from '../Utils.js';
 
 
-const api =URLAPI;
+const api = URLAPI;
 const idcomponente = document.getElementById('idcomponenteValue').textContent;
 
 // Objeto para almacenar el estado del formulario (centraliza variables globales)
@@ -125,15 +125,15 @@ var Toast = Swal.mixin({
 document.addEventListener('DOMContentLoaded', () => {
 
 
-    let cambiosPendientes = true; // Bandera para saber si hay cambios no guardados
-   window.onbeforeunload = (event) => {
-       if (cambiosPendientes) {
-           event.preventDefault();
-           event.returnValue = '¡Atención! No se guardarán los cambios si sale de esta página.';
-           return '¡Atención! No se guardarán los cambios si sale de esta página.';
-       }
-       // Si no hay cambios pendientes, no hace nada (no muestra advertencia)
-   };
+  let cambiosPendientes = true; // Bandera para saber si hay cambios no guardados
+  window.onbeforeunload = (event) => {
+    if (cambiosPendientes) {
+      event.preventDefault();
+      event.returnValue = '¡Atención! No se guardarán los cambios si sale de esta página.';
+      return '¡Atención! No se guardarán los cambios si sale de esta página.';
+    }
+    // Si no hay cambios pendientes, no hace nada (no muestra advertencia)
+  };
 
 
   // OBTIENE DATOS 
@@ -144,18 +144,18 @@ document.addEventListener('DOMContentLoaded', () => {
   InicializarFormulario();
   const switchElement = document.getElementById('switchinventario');
   // Event listener para cambios manuales 
-switchElement.addEventListener('change', function () {
-  if (this.checked) {
-    cambiarLabelSwitch('switchinventario', 'ACTIVO');
-    estadoFormulario.EstatusInventario = 1;
-  } else {
-    cambiarLabelSwitch('switchinventario', 'CANCELADO');
-    estadoFormulario.EstatusInventario = 0;
-  }
+  switchElement.addEventListener('change', function () {
+    if (this.checked) {
+      cambiarLabelSwitch('switchinventario', 'ACTIVO');
+      estadoFormulario.EstatusInventario = 1;
+    } else {
+      cambiarLabelSwitch('switchinventario', 'CANCELADO');
+      estadoFormulario.EstatusInventario = 0;
+    }
 
- 
 
-});
+
+  });
 
   // ENVIO DE FORMULARIO 
   editComponenteForm.addEventListener('submit', async (e) => {
@@ -210,16 +210,12 @@ switchElement.addEventListener('change', function () {
       estadoFormulario.NumeroSerie = numeroserie.value;
       estadoFormulario.Observaciones = observaciones.value;
       estadoFormulario.EstatusComponente = status_equipo.value;
-      
+
       estadoFormulario.EsClienteServidor = radioServidorCliente;
       estadoFormulario.FechaCompra = fecha_compra.value;
       estadoFormulario.EstatusInventario = activoEnInventario;
 
-      Toast.fire({
-        icon: "success",
-        title: "puedes continuar",
 
-      });
 
       const dataComponenteActualizado = {
         //UNIDADES
@@ -249,42 +245,65 @@ switchElement.addEventListener('change', function () {
         EsClienteServidor: estadoFormulario.EsClienteServidor,
         FechaCompra: estadoFormulario.FechaCompra,
         //TECNICO
-        
+
         FK_IdTecnico: document.getElementById('idtecnicoValue').textContent,
         //contrato 
-         numero_contrato_actual:estadoFormulario.contratoid,
-            
-      };
- 
-      const config = {
-        url: `${api}/api/componentes/EditarComponentePorID`,
-        id: idcomponente,
-        data: {  // Combina ambos en un solo objeto
-          data: dataComponenteActualizado,  // Tu data actualizada
-          data_componentes_anteriores: ComponentesAnteriores  // Los datos anteriores
-        },
-        successTitle: `La Factura del Componente de ha Modificado Exitosamente`,
+        numero_contrato_actual: estadoFormulario.contratoid,
+
       };
 
-      const response = await handlePUT(config);
-      
-      if (response.error === false && response.status == 200) {
+     let responseData;
+      const verifyResponse = await fetch(`${api}/api/logintecnicos/protected`, {
+        method: 'GET',
+        credentials: 'include',
+
+      });
+      if (!verifyResponse.ok) {
+        console.error(`Error de verificación HTTP: ${verifyResponse.status}`);
+        cambiosPendientes = false;
+        setTimeout(() => {
+          window.location.href = '/logintecnico';
+        }, 1500);
+        return; // Retorno temprano: detiene la ejecución
+      }
+
+      responseData = await verifyResponse.json();
+      if (!responseData.success || !responseData.data) {
+        return;
+      }
+
+      if (verifyResponse.ok) {
+
+        //*Preparar la Petición de Actualización (PUT)
+        dataComponenteActualizado.FK_IdTecnico = responseData.data.id_tecnico;
+
+
+        const config = {
+          url: `${api}/api/componentes/EditarComponentePorID`,
+          id: idcomponente,
+          data: {  // Combina ambos en un solo objeto
+            data: dataComponenteActualizado,  // Tu data actualizada
+            data_componentes_anteriores: ComponentesAnteriores  // Los datos anteriores
+          },
+          successTitle: `La Factura del Componente de ha Modificado Exitosamente`,
+        };
+
+        const response = await handlePUT(config);
+
+        if (response.error === false && response.status == 200) {
           setTimeout(() => {
             cambiosPendientes = false;
-      window.location.href = `/EditarComponente/${response.body.codigo_TI}`;
-    }, 1000);
-
+            window.location.href = `/EditarComponente/${response.body.codigo_TI}`;
+          }, 1000);
+        }
+        else {
+          Swal.fire({
+            icon: response.icon,
+            title: "Error en la edicion",
+            text: response.message || 'Datos no Válidos',
+          })
+        }
       }
-      else{
-        Swal.fire({
-        icon: response.icon,
-        title: "Error en la edicion",
-        text: response.message || 'Datos no Válidos',
-      })
-      }
-      // Encontrar la primera validación que falló
-     
-      
     }
   });
 
@@ -307,7 +326,7 @@ switchElement.addEventListener('change', function () {
     btnBuscarUnidad.addEventListener('click', BuscarUnidad);
   }
 
- 
+
   const inputBusqueda = document.getElementById('inputBusqueda');
   if (inputBusqueda) {
     inputBusqueda.addEventListener('keydown', function (event) {
@@ -334,7 +353,7 @@ switchElement.addEventListener('change', function () {
   }
 
   //*FUNCION RESPONSABLES
-function BuscarResponsable() {
+  function BuscarResponsable() {
     let searchTerm = $('#inputBusquedaResponsable').val().trim();
     if (searchTerm) {
       inicializarDataTableResponsablePorIdUnidad(searchTerm, estadoFormulario.IdUnidadValue);
@@ -473,7 +492,7 @@ function BuscarResponsable() {
   } else {
     console.error("No se encuentra tu búsqueda del Área");
   }
-//* INICIO EVENTO TECLADO PARA ABRIR MODAL RESPONSABLE
+  //* INICIO EVENTO TECLADO PARA ABRIR MODAL RESPONSABLE
   document.getElementById('txtidresponsable').addEventListener('keydown', function (event) {
     if (event.key === 'F1' || event.key === 'F2') {
       event.preventDefault();
@@ -656,10 +675,10 @@ function BuscarResponsable() {
       }
 
     }
-// Función para detectar si hay cambios no guardados (implementa según tu formulario)
+    // Función para detectar si hay cambios no guardados (implementa según tu formulario)
 
-  // Código del formulario aquí (ej. event listeners para switches, toasts, etc.)
-  // Función y event listener para advertencia de navegación atrás
+    // Código del formulario aquí (ej. event listeners para switches, toasts, etc.)
+    // Función y event listener para advertencia de navegación atrás
 
 
 
@@ -747,7 +766,7 @@ function BuscarResponsable() {
             if (estadoFormulario.operacion === 'GUANAJUATO') {
               document.getElementById('txtIdUnidad').value = General.concatenar_contrato_unidad(estadoFormulario.IdUnidadValue, estadoFormulario.contratoid);
             } else {
-              estadoFormulario.contratoid="0";
+              estadoFormulario.contratoid = "0";
               document.getElementById('txtIdUnidad').value = General.concatenar_contrato_unidad(estadoFormulario.IdUnidadValue, estadoFormulario.contratoid);
             }
             document.getElementById('txtnombreunidad').value = data.nombre_unidad;
@@ -757,8 +776,8 @@ function BuscarResponsable() {
             document.getElementById('txtnombreresponsable').value = "";
             document.getElementById('txtcargoresponsable').value = "";
             document.getElementById('txtarea').value = "";
-                document.getElementById('txtarearesponsable').value = "";
-            
+            document.getElementById('txtarearesponsable').value = "";
+
             searchTerm = '';
             $('#consultaUnidadesModal').modal('hide');
           } else {
@@ -804,19 +823,19 @@ function BuscarResponsable() {
           if (selectedId) {
             if (estadoFormulario.operacion === 'GUANAJUATO') {
               document.getElementById('txtIdUnidad').value = General.concatenar_contrato_unidad(estadoFormulario.IdUnidadValue, estadoFormulario.contratoid);
-            }else {
-              estadoFormulario.contratoid="0";
+            } else {
+              estadoFormulario.contratoid = "0";
               document.getElementById('txtIdUnidad').value = General.concatenar_contrato_unidad(estadoFormulario.IdUnidadValue, estadoFormulario.contratoid);
             }
             document.getElementById('txtnombreunidad').value = estadoFormulario.nombre_unidad;
             document.getElementById('txtoperacion').value = estadoFormulario.operacion;
-             //LIMPIAR CASILLAS YA QUE CAMBIO DE UNIDAD Y TIENE QUE ELEGIR OTRA UNIDAD Y AREA
+            //LIMPIAR CASILLAS YA QUE CAMBIO DE UNIDAD Y TIENE QUE ELEGIR OTRA UNIDAD Y AREA
             document.getElementById('txtidresponsable').value = "";
             document.getElementById('txtnombreresponsable').value = "";
             document.getElementById('txtcargoresponsable').value = "";
             document.getElementById('txtarea').value = "";
             document.getElementById('txtarearesponsable').value = "";
-            
+
 
             searchTerm = '';
             $('#consultaUnidadesModal').modal('hide');
@@ -1108,7 +1127,7 @@ function BuscarResponsable() {
         data: { id_unidad: estadoFormulario.IdUnidadValue },
         timeoutDuration: 60000,
       }).then((data) => {
-       
+
         if (data && Array.isArray(data) && data.length > 0) {  // Verificación de éxito
           table = $('#table_Modal_ConsultaResponsable').DataTable({
             ...configBase,
@@ -1122,9 +1141,9 @@ function BuscarResponsable() {
             if (rowData && rowData.id_responsable) {
               estadoFormulario.IdResponsable = rowData.id_responsable;
               document.getElementById('txtidresponsable').value = rowData.id_responsable;
-               document.getElementById('txtnombreresponsable').value = rowData.nombre_responsable;
+              document.getElementById('txtnombreresponsable').value = rowData.nombre_responsable;
               document.getElementById('txtcargoresponsable').value = rowData.cargo;
-               document.getElementById('txtarearesponsable').value = rowData.Area;
+              document.getElementById('txtarearesponsable').value = rowData.Area;
               $('#consultaResponsableModal').modal('hide');
             } else {
               Swal.fire({
@@ -1139,9 +1158,9 @@ function BuscarResponsable() {
             var rowData = table.row(this).data();
             if (rowData && rowData.id_responsable) {
               estadoFormulario.IdResponsable = rowData.id_responsable;
-               estadoFormulario.nombre_responsable = rowData.nombre_responsable;
-                estadoFormulario.cargo = rowData.cargo;
-                estadoFormulario.areaResponsable = rowData.Area;
+              estadoFormulario.nombre_responsable = rowData.nombre_responsable;
+              estadoFormulario.cargo = rowData.cargo;
+              estadoFormulario.areaResponsable = rowData.Area;
 
               if (selectedRow && selectedRow.length > 0) {
                 selectedRow.removeClass('selected-row table-active');
@@ -1165,9 +1184,9 @@ function BuscarResponsable() {
             e.preventDefault();
             if (selectedId) {
               document.getElementById('txtidresponsable').value = estadoFormulario.IdResponsable;
-               document.getElementById('txtnombreresponsable').value = estadoFormulario.nombre_responsable;
+              document.getElementById('txtnombreresponsable').value = estadoFormulario.nombre_responsable;
               document.getElementById('txtcargoresponsable').value = estadoFormulario.cargo;
-               document.getElementById('txtarearesponsable').value = estadoFormulario.areaResponsable;
+              document.getElementById('txtarearesponsable').value = estadoFormulario.areaResponsable;
               $('#consultaResponsableModal').modal('hide');
             } else {
               Swal.fire({
@@ -1193,7 +1212,7 @@ function BuscarResponsable() {
         data: { id_unidad: estadoFormulario.IdUnidadValue, searchTerm: searchTerm },
         timeoutDuration: 60000,
       }).then((data) => {
-     
+
         if (data && Array.isArray(data) && data.length > 0) {
           table = $('#table_Modal_ConsultaResponsable').DataTable({
             ...configBase,
@@ -1207,9 +1226,9 @@ function BuscarResponsable() {
             if (rowData && rowData.id_responsable) {
               estadoFormulario.IdResponsable = rowData.id_responsable;
               document.getElementById('txtidresponsable').value = rowData.id_responsable;
-               document.getElementById('txtnombreresponsable').value = rowData.nombre_responsable;
+              document.getElementById('txtnombreresponsable').value = rowData.nombre_responsable;
               document.getElementById('txtcargoresponsable').value = rowData.cargo;
-               document.getElementById('txtarearesponsable').value = rowData.Area;
+              document.getElementById('txtarearesponsable').value = rowData.Area;
               $('#consultaResponsableModal').modal('hide');
             } else {
               Swal.fire({
@@ -1224,10 +1243,10 @@ function BuscarResponsable() {
             var rowData = table.row(this).data();
             if (rowData && rowData.id_responsable) {
               estadoFormulario.IdResponsable = rowData.id_responsable;
-               estadoFormulario.nombre_responsable = rowData.nombre_responsable;
-                estadoFormulario.cargo = rowData.cargo;
-                estadoFormulario.areaResponsable = rowData.Area;
-              
+              estadoFormulario.nombre_responsable = rowData.nombre_responsable;
+              estadoFormulario.cargo = rowData.cargo;
+              estadoFormulario.areaResponsable = rowData.Area;
+
 
               if (selectedRow && selectedRow.length > 0) {
                 selectedRow.removeClass('selected-row table-active');
@@ -1251,9 +1270,9 @@ function BuscarResponsable() {
             e.preventDefault();
             if (selectedId) {
               document.getElementById('txtidresponsable').value = estadoFormulario.IdResponsable;
-               document.getElementById('txtnombreresponsable').value = estadoFormulario.nombre_responsable;
+              document.getElementById('txtnombreresponsable').value = estadoFormulario.nombre_responsable;
               document.getElementById('txtcargoresponsable').value = estadoFormulario.cargo;
-               document.getElementById('txtarearesponsable').value = estadoFormulario.areaResponsable;
+              document.getElementById('txtarearesponsable').value = estadoFormulario.areaResponsable;
               $('#consultaResponsableModal').modal('hide');
             } else {
               Swal.fire({
@@ -1350,8 +1369,8 @@ function BuscarResponsable() {
               estadoFormulario.AbrDispositivo = rowData.abreviatura_tipo;
               document.getElementById('txtIddispositivo').value = estadoFormulario.IdDispositivo;
               document.getElementById('txtdispositivo').value = estadoFormulario.Dispositivo;
-               document.getElementById('txtIdCatalogo').value = "";
-              document.getElementById('txtnombrecatalogo').value ="";
+              document.getElementById('txtIdCatalogo').value = "";
+              document.getElementById('txtnombrecatalogo').value = "";
               document.getElementById('txtdescripcioncatalogo').value = "";
               $('#consultaDispositivosModal').modal('hide');
             } else {
@@ -1394,7 +1413,7 @@ function BuscarResponsable() {
               document.getElementById('txtdispositivo').value = estadoFormulario.Dispositivo;
               //LIMPIAR CAMPOS PORQUE SE CAMBIO DISPOSITIVO
               document.getElementById('txtIdCatalogo').value = "";
-              document.getElementById('txtnombrecatalogo').value ="";
+              document.getElementById('txtnombrecatalogo').value = "";
               document.getElementById('txtdescripcioncatalogo').value = "";
               $('#consultaDispositivosModal').modal('hide');
             } else {
@@ -2200,7 +2219,7 @@ function BuscarResponsable() {
         estadoFormulario.IdDispositivo = componente.id_dispositivo;
         estadoFormulario.EsClienteServidor = componente.EsClienteServidor;
         estadoFormulario.IdArea = componente.FK_id_area;
-        console.log("IdArea",estadoFormulario.IdArea);
+        console.log("IdArea", estadoFormulario.IdArea);
         estadoFormulario.AbrevEstado = componente.abreviatura_estado;
         estadoFormulario.AbrDispositivo = componente.abreviatura_tipo;
         estadoFormulario.IdCatalogoComponente = componente.id_catalogo_componente;
@@ -2215,10 +2234,10 @@ function BuscarResponsable() {
         estadoFormulario.IdResponsable = componente.id_responsable;
         estadoFormulario.IdTecnico = componente.FK_IdTecnico;
         estadoFormulario.IdFactura = componente.IdFactura;
-        
-        
-      
-       
+
+
+
+
         //FACTURAS
         VariablesFactura.idfactura = componente.IdFactura;
         VariablesFactura.numerofactura = componente.NumeroFactura;
@@ -2251,9 +2270,9 @@ function BuscarResponsable() {
 
         //*SWITCH QUE PERMITE DAR UN ACTIVO O CANCELADO 
         const switchElement = document.getElementById('switchinventario');
-        console.log("EstatusInventario inicial formulario",estadoFormulario.EstatusInventario);
+        console.log("EstatusInventario inicial formulario", estadoFormulario.EstatusInventario);
         if (estadoFormulario.EstatusInventario.toString() == "1") {
-          
+
           switchElement.checked = true;  // Activar switch si activo
           cambiarLabelSwitch('switchinventario', 'ACTIVO');
           //*error por aqui 
@@ -2275,7 +2294,7 @@ function BuscarResponsable() {
 
         document.getElementById('datefechacompra').value = conversionFecha(estadoFormulario.FechaCompra);
         let clienteservidor = estadoFormulario.EsClienteServidor.toString();
-        console.log("clienteservidor",clienteservidor);
+        console.log("clienteservidor", clienteservidor);
         if (clienteservidor === 'SERVIDOR') {
           document.getElementById('chbxservidor').checked = true;
         }

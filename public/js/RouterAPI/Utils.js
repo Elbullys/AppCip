@@ -1,11 +1,12 @@
 //PERMITE EXPORTAR LA RUTA DE LA API
- export const URLAPI= 'https://apirestcip.onrender.com';
-  //export const URLAPI= 'http://localhost:7000';
-
+ //export const URLAPI= 'https://apirestcip.onrender.com';
+  export const URLAPI= 'http://localhost:7000';
+//PERMITE REDIRIGIR A LA PAGINA DE LOGIN
    const logoutAndRedirect = (errorMessage) => {
  
     // 3. Redirigir al login después de un breve momento
     setTimeout(() => {
+      localStorage.removeItem('username');
         window.location.href = '/logintecnico';
     }, 1500); // 1.5 segundos para que el usuario vea el mensaje
 

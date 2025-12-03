@@ -1,13 +1,13 @@
-<%- include("template/cabecera",{tituloweb:'Visualizador QR'}) %>
-<%- include("template/navbar") %>
+<%- include("template/cabecera",{tituloweb:'Visualizador QR'}) %> <%-
+include("template/navbar") %>
 <div class="row justify-content-center mt-5">
   <div class="col-sm-4 shadow p-3">
     <h5 class="text-center"><%= pageTitle %></h5>
-      <div class="row text-center">
-        <video id="qr-video" width="400" height="300"></video>
-      </div>
-       <div class="row mx-5 my-3">
-        <button
+    <div class="row text-center">
+      <video id="qr-video" width="400" height="300"></video>
+    </div>
+    <div class="row mx-5 my-3">
+      <button
         class="btn btn-success btn-sm rounded-3 mb-2"
         onclick="startCamera()"
       >
@@ -16,34 +16,42 @@
       <button class="btn btn-danger btn-sm rounded-3" onclick="stopCamera()">
         Detener camara
       </button>
-       <div id="result" class="hidden">
-      <label for="codigoti" class="text-title form-label text-center"> Código TI</label>
-      <input
-            type="text"
-            class="form-control text-center "
-            oninput="this.value = this.value.toUpperCase();"
-            id="qr-result"
-            name="codigoti"
-            required
-          />
-          </div>
-           
-      <button id="action-button" class="btn <%= mode === 'search' ? 'btn-primary' : 'btn-warning' %>" 
-                <% if(mode === 'search') { %>onclick="Search()"<% } else { %>onclick="Edit()"<% } %>>
-                <%= mode === 'search' ? 'Consulta' : 'Editar' %>
-            </button>
-       
-      <button id="btnmanual" type="button" class="btn btn-outline-primary" onclick="BusquedaManual()">
+
+      <div id="result" class="hidden">
+        <label for="qr-result" class="text-title form-label text-center">
+          Código TI / Num. Serie</label
+        >
+        <input
+          type="text"
+          class="form-control text-center"
+          oninput="this.value = this.value.toUpperCase();"
+          id="qr-result"
+          name="codigoti"
+          required
+        />
+      </div>
+
+      <button
+        id="action-button"
+        class="btn <%= mode === 'search' ? 'btn-primary' : 'btn-warning' %>"
+      >
+        <%= mode === 'search' ? 'Consulta' : 'Editar' %>
+      </button>
+
+      <button
+        id="btnmanual"
+        type="button"
+        class="btn btn-outline-primary mt-2"
+        onclick="BusquedaManual()"
+      >
         Introducir código TI Manual
       </button>
-       </div>
     </div>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-<script src="/js/scanner.js" ></script>
+<script src="/js/scanner.js"></script>
 <script src="/js/RouterAPI/RouterComponente.js"></script>
 
-  <!-- Aquí se incluye el modal, inyectando su contenido -->
-<%- include('LectorConsultaQR/modal/Mostrar_Info_Componente') %>
-<%- include("template/footer") %>
+<%- include('LectorConsultaQR/modal/Mostrar_Info_Componente') %> <%-
+include("template/footer") %>

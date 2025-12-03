@@ -78,32 +78,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response && response.success && response.data && response.data.data) {
                     const userDataFromResponse = response.data.data;
                     const token = userDataFromResponse.token;
-                    
+
                     // Guarda el token en localStorage (en lugar de depender de cookies)
-                    localStorage.setItem('access_token', token);
-                
+                    //localStorage.setItem('access_token', token);
+
                     try {
-                        console.log('Token disponible para verificación:', token ? 'Presente' : 'Ausente');
+
                         // Fetch a /protected con el token en headers
                         const verifyResponse = await fetch(`${api}/api/logintecnicos/protected`, {
                             method: 'GET',
                             credentials: 'include',
                             headers: {
-                                
+
                             },
                             // Quita credentials: 'include' si usas headers
                         });
 
                         if (verifyResponse.ok) {
                             const responseData = await verifyResponse.json();
-                            console.log("responseData", responseData);
+
 
                             if (responseData.success && responseData.data) {
-                                const customMessage = `Bienvenido, ${responseData.data.usuario}! Tu ID es ${responseData.data.id_tecnico}.`;
+                                // Guarda el nombre en localStorage (persistente hasta logout)
+                                localStorage.setItem('username', responseData.data.usuario);
+                                //localStorage.setItem('id_tecnico', responseData.data.id_tecnico);
+                                const customMessage = `Bienvenido, ${responseData.data.usuario}!.`;
                                 Swal.fire({
                                     icon: 'success',
                                     title: config.successTitle,
                                     text: customMessage,
+                                    showConfirmButton: false, // Oculta el botón
+                                    timer: 1000              // Cierra automáticamente después de 2 segundos (2000 ms)
+
+
                                 }).then(() => {
                                     window.location.href = `/inicio?user=${encodeURIComponent(responseData.data.usuario)}`;
                                 });
