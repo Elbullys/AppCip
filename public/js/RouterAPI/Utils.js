@@ -1,6 +1,6 @@
 //PERMITE EXPORTAR LA RUTA DE LA API
- //export const URLAPI= 'https://apirestcip.onrender.com';
-  export const URLAPI= 'http://localhost:7000';
+ export const URLAPI= 'https://apirestcip.onrender.com';
+ // export const URLAPI= 'http://localhost:7000';
 //PERMITE REDIRIGIR A LA PAGINA DE LOGIN
    const logoutAndRedirect = (errorMessage) => {
  

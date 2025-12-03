@@ -1,5 +1,7 @@
 // const api ='https://apirestcip.onrender.com';
-const api = 'http://localhost:7000';
+import { General, handlePOST, URLAPI } from '../Utils.js';  // Importa tus utilidades
+const api = URLAPI;
+
 // Declaraciones de alcance global que son necesarias
 let accion = ""; // Se usará para diferenciar entre buscar y editar
 
