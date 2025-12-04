@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const nombreperfil = document.getElementById('username');//username
 
     // Uso en tu dashboard
-    fetchComponentes().then(data => {
+    /*fetchComponentes().then(data => {
         // Renderiza datos (ej. en un div)
         console.log("data", data.body);
         const contadorElementoEnTransito = document.getElementById('equiposEnTransitoContador');
         contadorElementoEnTransito.textContent=data.body;
     
         //document.getElementById('dashboard').innerHTML = data.map(item => `<p>${item.area}: ${item.count}</p>`).join('');
-    });
+    });*/
     // Verifica con la API solo si quieres "refrescar" o validar (no en cada carga)
     //  solo en la página de inicio o si el token podría expirar pronto
     const shouldVerify = window.location.pathname === '/inicio';  // O tu lógica
@@ -89,7 +89,7 @@ async function fetchComponentes() {
         console.log('Datos desde localStorage');
         return JSON.parse(cached);
     }
-    const url = `${api}/api/reportes/reporteretiro/ConsultaTotalRetirosEnTransito`;
+    const url = `${api}/api/reportes/reporte/ConsultaTotalRetirosEnTransito`;
     try {
         const response = await fetch(url, {
             method: 'GET',
@@ -97,15 +97,15 @@ async function fetchComponentes() {
         });
       
  console.log("response", data);
-        if (data) {
-             const data = await response.json();
+       /* if (data) {
+             //const data = await response.json();
             // Guarda en localStorage
-            localStorage.setItem(cacheKey, JSON.stringify(data));
-            localStorage.setItem(cacheKey + '_time', now.toString());
+            //localStorage.setItem(cacheKey, JSON.stringify(data));
+            //localStorage.setItem(cacheKey + '_time', now.toString());
 
-            return data;
+            //return data;
             
-        }
+        }*/
     } catch (error) {
         console.error('Error de conexión:', error);
     }
