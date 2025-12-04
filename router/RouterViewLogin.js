@@ -4,14 +4,7 @@ const componentescontroller = require('../controllers/componentesController');
 
 
 
-// Ruta web para / (página principal protegida)
-router.get('/', (req, res) => {
-  res.render("index", {
-    tituloweb: "Inicio",
-    titulo: 'hoa',//`HOLA, ${req.username || 'Usuario'}`,  // Corregido: Agregado ${ antes de req.username
-    username: 'invitado'
-  });
-});
+
 
 // RUTA WEB PARA INICIO (¿Es necesaria? Parece duplicada con /. Si no, elimínala)
 router.get("/inicio", (req, res) => {
