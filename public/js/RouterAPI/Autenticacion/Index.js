@@ -1,4 +1,4 @@
-import { General, handleGETHiddenCookie, URLAPI } from '../Utils.js';  // Agregado handlePOST para consistencia; removido textInputs si no lo usas
+import { General,handleGET, handleGETHiddenCookie, URLAPI } from '../Utils.js';  // Agregado handlePOST para consistencia; removido textInputs si no lo usas
 
 const api = URLAPI;
 const cacheKey = 'cacheConsRetTransito';
@@ -7,6 +7,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const btnlogout = document.getElementById('logout');
     const titulo = document.getElementById('titulo');
     const nombreperfil = document.getElementById('username');//username
+    const contadortransito= document.getElementById('equiposEnTransitoContador');
+
+    const config = {
+        url: `${api}/api/reportes/reporteDashboard/consultaretirostransito`, // URL específica
+        timeoutDuration: 5000, // Opcional: ajusta el timeout si es necesario
+        // data: {} // Opcional: no se pasa si no hay query params
+      };
+    
+ const response = await handleGET(config);
+const data = response.data;
+if (data.body.length > 0) {
+        const dashboard = data.body[0]; // Accede al primer elemento del array
+  //* Llenar el variables globales con los datos del componente traigo desde la API
+console.log("dashboard.EquiposEnTransito",dashboard.EquiposEnTransito);
+        contadortransito.textContent = dashboard.EquiposEnTransito;
+       //titulo.textContent = data.data.usuario;
+
+      }
 
     // Uso en tu dashboard
     /*fetchComponentes().then(data => {
