@@ -1,4 +1,4 @@
-import { General,handleGET, handleGETHiddenCookie, URLAPI } from '../Utils.js';  // Agregado handlePOST para consistencia; removido textInputs si no lo usas
+import { handleGET, URLAPI } from '../Utils.js';  // Agregado handlePOST para consistencia; removido textInputs si no lo usas
 
 const api = URLAPI;
 const cacheKey = 'cacheConsRetTransito';
