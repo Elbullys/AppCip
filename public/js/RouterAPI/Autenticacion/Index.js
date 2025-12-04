@@ -4,18 +4,22 @@ const api = URLAPI;
 const cacheKey = 'cacheConsRetTransito';
 
 document.addEventListener('DOMContentLoaded', async () => {
+        console.log("primer paso");
     const btnlogout = document.getElementById('logout');
     const titulo = document.getElementById('titulo');
     const nombreperfil = document.getElementById('username');//username
     const contadortransito= document.getElementById('equiposEnTransitoContador');
+    console.log("se ejecuto el index");
 
     const config = {
         url: `${api}/api/reportes/reporteDashboard/consultaretirostransito`, // URL específica
         timeoutDuration: 5000, // Opcional: ajusta el timeout si es necesario
         // data: {} // Opcional: no se pasa si no hay query params
       };
+      console.log(config);
     
  const response = await handleGET(config);
+ console.log("response",response);
 const data = response.data;
 if (data.body.length > 0) {
         const dashboard = data.body[0]; // Accede al primer elemento del array
