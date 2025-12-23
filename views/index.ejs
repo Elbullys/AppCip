@@ -1,18 +1,14 @@
 <%- include("template/cabecera",{tituloweb:'Pagina de Inicio'}) %> <%-
 include("template/navbar") %>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- Begin Page Content -->
 <div class="container-fluid">
-  <!-- Page Heading -->
-  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 mt-3 text-gray-800 " >BIENVENIDO  <span id="titulo"> </span></h1>
-    <a
-      href="#"
-      class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-       hidden="false"
-      ><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a
-    >
-  </div>
+ <!-- Contenido Principal (agrega tu contenido aquí, ej. tablas) -->
+    <main class="container-fluid mt-5 pt-4">  <!-- Padding para navbar fijo -->
+      <!-- Inserta aquí el contenido de la página (ej. <div class="row"> ... </div>) -->
+      <h1 class="text-center mb-4">Administración de Inventarios</h1>
+      <!-- Ejemplo: <table id="dataTable" class="table table-striped"> ... </table> -->
+    </main>
 
   <!-- Content Row -->
   <div class="row">
@@ -46,9 +42,9 @@ include("template/navbar") %>
               <div
                 class="text-xs font-weight-bold text-success text-uppercase mb-1"
               >
-                PENDIENTES POR CONFIRMAR INGRESO
+                MOVIMIENTOS DE COMPONENTES POR DIA
               </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">5000</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800" id="MovComponentesContador"></div>
             </div>
             <div class="col-auto">
               <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -71,8 +67,8 @@ include("template/navbar") %>
               </div>
               <div class="row no-gutters align-items-center">
                 <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                    4000
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="MantCorrectivoContador">
+                    
                   </div>
                 </div>
               </div>
@@ -103,8 +99,8 @@ include("template/navbar") %>
               </div>
               <div class="row no-gutters align-items-center">
                 <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                    4000
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="MantPreventivoContador">
+                    
                   </div>
                 </div>
               </div>
@@ -156,8 +152,9 @@ include("template/navbar") %>
         <!-- Card Body -->
         <div class="card-body">
           <div class="chart-area">
-            <canvas id="myAreaChart"></canvas>
+           <canvas id="chartConteoPorTipoUnidad" ></canvas>
           </div>
+      
         </div>
       </div>
     </div>
@@ -197,7 +194,7 @@ include("template/navbar") %>
         <!-- Card Body -->
         <div class="card-body">
           <div class="chart-pie pt-4 pb-2">
-            <canvas id="myPieChart"></canvas>
+            <canvas id="chartActivoPasivo"></canvas>
           </div>
           <div class="mt-4 text-center small">
             <span class="mr-2">

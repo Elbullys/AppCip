@@ -1,7 +1,6 @@
 import {
-    conversionFecha, handleDataTableLoadingGET, General,
-    handleDataTableLoadingPOST, handlePOST, handlePUT, cambiarLabelSwitch,
-    obtenerValorRadioSeleccionado, obtenerEstadoSwitch, handleGET, URLAPI
+    conversionFecha, handleDataTableLoadingGET, 
+     handleGET, URLAPI,ConfigTable,obtenerUsuarioLocalStorage
 } from '../Utils.js';
 
 const api = URLAPI;
@@ -41,11 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- VARIABLES DE ÁMBITO CORREGIDO ---
     let table; // Declarada aquí para ser accesible por los listeners
-    let columnsVisible = false; // Declarada aquí para manejar el estado de las columnas
+    let visibleState = false; // Declarada aquí para manejar el estado de las columnas
     // ------------------------------------
 
     inicializarDataTableComponentes(databusqueda);
 
+    //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
+        obtenerUsuarioLocalStorage();
 
     // DATATABLES INICIARLIZAR COMPONENTE
     function inicializarDataTableComponentes(databusqueda) {
@@ -137,9 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     data: data,  // Usa los datos retornados
                 });
                 
-                ocultarColumnas(table);
+                ConfigTable.ocultarColumnas(table, [0, 6, 7, 8, 9, 10, 11]);
                 // Establece el estado inicial después de ocultarlas
-                columnsVisible = false;
+                visibleState = false;
             }
 
         });
@@ -155,16 +156,28 @@ document.addEventListener('DOMContentLoaded', () => {
         btnVisualizar.addEventListener('click', verDetallesComponente);
     }
 
-    if (btnmaximizarColumnas) {
-        btnmaximizarColumnas.addEventListener('click', () => {
-            // Se llama a la función externa y se le pasa el callback para actualizar el estado
-            maximizarColumnas(
-                table,
-                columnsVisible,
-                (newState) => { columnsVisible = newState; }
-            );
-        });
-    }
+  // Variable para rastrear el estado de visibilidad (inicialmente false = ocultas)
+ visibleState = false;
+
+// Función callback para actualizar el estado
+const setVisibleState = (newValue) => {
+    visibleState = newValue; // Actualiza la variable
+ 
+};
+
+// Tu código existente, pero corregido
+if (btnmaximizarColumnas) {
+    btnmaximizarColumnas.addEventListener('click', () => {
+        // Llama al método con los parámetros correctos
+        ConfigTable.maximizarColumnas(
+            table,              // Instancia de la tabla
+            visibleState,       // Estado actual (boolean dinámico)
+            setVisibleState,    // Función callback para actualizar el estado
+            [6, 7, 8, 9, 10, 11]  // Columnas a alternar
+        );
+    });
+}
+
 
     // --- FUNCIONES LÓGICAS ---
 
@@ -309,45 +322,3 @@ document.addEventListener('DOMContentLoaded', () => {
 // FUNCIONES DE UTILIDAD PARA VISIBILIDAD DE COLUMNAS (MANTENIENDO EL ESTADO)
 // ----------------------------------------------------------------------
 
-function ocultarColumnas(tableInstance) {
-    if (!tableInstance) {
-      
-        return;
-    }
-
-    // 1. Ocultar la primera columna (id_componente) - Índice 0.
-    tableInstance.column(0).visible(false); 
-    
-    // 2. Ocultar las columnas 6 a 11.
-    for (let i = 6; i <= 11; i++) {
-        tableInstance.column(i).visible(false); 
-    }
-    
-
-}
-
-
-function maximizarColumnas(tableInstance, currentVisibleState, setVisibleStateCallback) {
-    if (!tableInstance) {
-     
-        return;
-    }
-    
-    // Alternar la visibilidad de las columnas 6 a 11
-    if (currentVisibleState) {
-      
-        // Ocultar columnas 6-11
-        for (let i = 6; i <= 11; i++) {
-            tableInstance.column(i).visible(false);
-        }
-    } else {
-     
-        // Mostrar columnas 6-11
-        for (let i = 6; i <= 11; i++) {
-            tableInstance.column(i).visible(true);
-        }
-    }
-    
-    // Llamar al callback para cambiar el estado en el archivo principal
-    setVisibleStateCallback(!currentVisibleState);
-}

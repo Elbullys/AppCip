@@ -343,9 +343,117 @@ export class General {
 
     return { icon: "check", error: false, message: "Datos válidos" };
   }
+  static resetearCampos(contenedorSelector)
+
+  {
+    const contenedor = document.querySelector(contenedorSelector);
+
+    if (!contenedor) {
+        console.error(`Error: No se encontró el contenedor: ${contenedorSelector}`);
+        return;
+    }
+    
+    // Si el contenedor es un <form>, el método reset() es el más eficiente.
+    if (contenedor.tagName === 'FORM') {
+        contenedor.reset();
+    } 
+    
+    // Si es cualquier otro contenedor (DIV, SECTION, etc.), limpiamos manualmente:
+    
+    // Buscar y limpiar inputs, textareas y selects
+    contenedor.querySelectorAll('input, textarea, select').forEach(campo => {
+        const type = campo.type ? campo.type.toLowerCase() : '';
+
+        // Limpiar el valor (text, number, email, password, textarea)
+        if (type !== 'submit' && type !== 'button' && type !== 'reset' && type !== 'hidden') {
+            campo.value = '';
+        }
+        
+        // Desmarcar checkboxes y radio buttons
+        if (type === 'checkbox' || type === 'radio') {
+            campo.checked = false;
+        }
+        
+        // Resetear select a la primera opción
+        if (campo.tagName === 'SELECT') {
+             campo.selectedIndex = 0;
+        }
+        
+    });
+
+    // Opcional: Remover clases de validación (ej. Bootstrap .is-invalid/.is-valid)
+    contenedor.querySelectorAll('.is-invalid, .is-valid').forEach(campo => {
+        campo.classList.remove('is-invalid', 'is-valid');
+        // Esto también quita las clases de los elementos padre que Bootstrap usa
+        if (campo.closest('.form-group')) {
+             campo.closest('.form-group').classList.remove('is-invalid', 'is-valid');
+        }
+    });
+  }
 
 }
 
+export class ConfigTable {
+
+  // Método para ocultar columnas específicas (ahora configurable)
+  static ocultarColumnas(tableInstance, columnasAOcultar = []) {
+    if (!tableInstance) {
+      return;
+    }
+
+    // Validar que columnasAOcultar sea un array de números válidos
+    if (!Array.isArray(columnasAOcultar) || columnasAOcultar.some(col => typeof col !== 'number' || col < 0)) {
+      console.warn('ConfigTable.ocultarColumnas: Se esperaba un array de índices numéricos válidos.');
+      return;
+    }
+
+    // Ocultar las columnas especificadas
+    columnasAOcultar.forEach(indice => {
+      if (tableInstance.column(indice)) {
+        tableInstance.column(indice).visible(false);
+      } else {
+        console.warn(`ConfigTable.ocultarColumnas: La columna con índice ${indice} no existe.`);
+      }
+    });
+  }
+
+  // Método para alternar la visibilidad de columnas específicas (ahora configurable)
+  static maximizarColumnas(tableInstance, currentVisibleState, setVisibleStateCallback, columnasAAternar = []) {
+    if (!tableInstance) {
+      return;
+    }
+
+    // Validar que columnasAAternar sea un array de números válidos
+    if (!Array.isArray(columnasAAternar) || columnasAAternar.some(col => typeof col !== 'number' || col < 0)) {
+      console.warn('ConfigTable.maximizarColumnas: Se esperaba un array de índices numéricos válidos.');
+      return;
+    }
+
+    // Alternar la visibilidad de las columnas especificadas
+    if (currentVisibleState) {
+      // Ocultar las columnas
+      columnasAAternar.forEach(indice => {
+        if (tableInstance.column(indice)) {
+          tableInstance.column(indice).visible(false);
+        } else {
+          console.warn(`ConfigTable.maximizarColumnas: La columna con índice ${indice} no existe.`);
+        }
+      });
+    } else {
+      // Mostrar las columnas
+      columnasAAternar.forEach(indice => {
+        if (tableInstance.column(indice)) {
+          tableInstance.column(indice).visible(true);
+        } else {
+          console.warn(`ConfigTable.maximizarColumnas: La columna con índice ${indice} no existe.`);
+        }
+      });
+    }
+
+    // Llamar al callback para cambiar el estado en el archivo principal
+    setVisibleStateCallback(!currentVisibleState);
+  }
+}
 
 //funcion para obtener el Get
 export async function handleGET(config) {
@@ -469,6 +577,98 @@ export async function handleGET(config) {
   }
 }
 
+export async function handleGETSinProgressBar(config) {
+  const {
+    url,
+    data = {}, // Opcional: objeto para query params (si no se pasa, no se agregan)
+    
+    errorTitle = 'Error al obtener datos', // Solo para errores
+  } = config;
+
+  // Validaciones iniciales
+  if (!url) {
+    console.error('Error: URL es requerida.');
+    Swal.fire({
+      title: 'Error',
+      text: 'No se proporcionó una URL válida.',
+      icon: 'error'
+    });
+    return false;
+  }
+
+ 
+
+  try {
+    // Construir URL con query params si data está presente
+    let fullUrl = url;
+    if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+      const params = new URLSearchParams(data);
+      fullUrl += `?${params.toString()}`;
+    }
+
+    const response = await fetch(fullUrl, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+    //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
+    if (response.status === 401) {
+            // Si el servidor devuelve 401, forzamos el logout y la redirección
+            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
+            
+            try {
+                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+                const errorResponse = await response.json(); 
+                errorMessage = errorResponse.message || errorMessage;
+            } catch (e) {
+                // Si el cuerpo no es JSON, usamos el mensaje por defecto
+            }
+
+            logoutAndRedirect(errorMessage);
+
+            // Devolvemos un array vacío ya que la operación falló.
+            return [];
+        }
+
+    if (!response.ok) {
+      // Maneja respuestas no-JSON usando text() con try-catch
+      let errorMessage;
+      try {
+        const errorData = await response.text();
+        const parsed = JSON.parse(errorData);
+        errorMessage = parsed.message || `Error al obtener: ${response.status}`;
+      } catch {
+        errorMessage = `Error al obtener: ${response.status} ${response.statusText}`;
+      }
+      throw new Error(errorMessage);
+    }
+
+    const result = await response.json();
+
+    // Retorna un objeto con success y data (sin mensajes de éxito)
+    return {
+      success: true,
+      data: result,
+    };
+  } catch (error) {
+
+    if (error.name === 'TimeoutError') {
+      Swal.fire({
+        title: 'Tiempo de espera agotado',
+        text: 'Intenta de nuevo más tarde.',
+        icon: 'warning',
+      });
+    } else {
+      Swal.fire({
+        title: 'Error inesperado',
+        text: 'Ocurrió un problema al obtener los datos.',
+        icon: 'error',
+      });
+    }
+    console.error('Error completo:', error);
+    return false;
+  }
+}
 
 
 
@@ -670,7 +870,7 @@ export async function handlePOST(config) {
   }
 
   try {
-    console.log("URL completa:", url);
+    
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -715,19 +915,11 @@ export async function handlePOST(config) {
     }
 
     const result = await response.json();
+
     clearInterval(swalInstance._progressInterval);
     await new Promise(resolve => setTimeout(resolve, 1000));
     Swal.close();
 
-    Swal.fire({
-      icon: "success",
-      title: successTitle,
-      text: successMessage,
-      showConfirmButton: false,
-      timer: 1500
-    });
-
-    // AJUSTE: Retorna un objeto con success, data y id (si existe)
     return {
       success: true,
       data: result,
@@ -858,6 +1050,105 @@ export async function handleGETHiddenCookie(config) {
     return false;
   }
 }
+export async function handlePOSTbatch(config) {
+  const {
+    url,
+    data,
+    timeoutDuration = 5000,
+    successTitle = 'Datos agregados exitosamente',
+    successMessage = 'Los datos han sido agregados exitosamente.',
+    loadingTitle = 'Procesando...',
+    loadingText = 'Por favor, espera mientras se procesan los datos.',
+    errorTitle = 'Error al agregar datos',
+    disableAlerts = false,
+  } = config;
+
+  // Validaciones iniciales
+  if (!url || !data) {
+    console.error('Error: URL y data son requeridos.');
+    if (!disableAlerts) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Faltan parámetros obligatorios.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar'
+      });
+    }
+    return false;
+  }
+
+  // Logging del payload antes de enviar
+  console.log('URL:', url);
+  console.log('Data a enviar:', data);
+  console.log('Data serializada:', JSON.stringify(data));  // Verifica si se serializa bien
+  console.log('Es data un array?', Array.isArray(data.series));  // Específico para tu caso
+
+  if (!disableAlerts) {
+    console.log(`${loadingTitle}: ${loadingText}`);
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      signal: AbortSignal.timeout(timeoutDuration),
+      credentials: 'include',
+    });
+
+    // Logging de la respuesta
+    console.log('Status de respuesta:', response.status);
+    console.log('Headers de respuesta:', response.headers);
+
+    // Manejo de 401 (logout)
+    if (response.status === 401) {
+      let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
+      try {
+        const errorResponse = await response.json();
+        errorMessage = errorResponse.message || errorMessage;
+      } catch (e) {
+        console.error('Error al parsear 401:', e);
+      }
+      console.error('Sesión expirada:', errorMessage);
+      logoutAndRedirect(errorMessage);
+      return [];
+    }
+
+    if (!response.ok) {
+      let errorMessage;
+      try {
+        const errorData = await response.text();
+        console.log('Cuerpo de error crudo:', errorData);  // Agrega esto para ver el mensaje exacto del backend
+        const parsed = JSON.parse(errorData);
+        errorMessage = parsed.message || `Error al agregar: ${response.status}`;
+      } catch {
+        errorMessage = `Error al agregar: ${response.status} ${response.statusText}`;
+      }
+      throw new Error(errorMessage);
+    }
+
+    const result = await response.json();
+    console.log('Resultado exitoso:', result);
+
+    return {
+      success: true,
+      data: result,
+      id: result.id || null,
+    };
+  } catch (error) {
+    console.error('Error en fetch/handlePOSTbatch:', error.message);
+    console.error('Detalles del error:', error);  // Agrega stack trace
+
+    if (!disableAlerts) {
+      if (error.name === 'TimeoutError') {
+        console.warn('Timeout en request.');
+      } else {
+        console.error(`${errorTitle}: ${error.message}`);
+      }
+    }
+    return false;
+  }
+}
 
 
 export const textInputs = document.querySelectorAll('input[type="text"], input[type="email"], textarea');
@@ -893,6 +1184,49 @@ export function obtenerEstadoSwitch(idSwitch) {
   console.warn(`Switch con ID "${idSwitch}" no encontrado.`);
   return 0;  // Valor por defecto si no se encuentra
 }
+
+export async function ObtenerIdTecnicoSesion()
+{
+try{
+ const verifyResponse = await fetch(`${URLAPI}/api/logintecnicos/protected`, {
+        method: 'GET',
+        credentials: 'include',
+
+      });
+      if (!verifyResponse.ok) {
+        console.error(`Error de verificación HTTP: ${verifyResponse.status}`);
+        setTimeout(() => {
+          window.location.href = '/logintecnico';
+        }, 1500);
+        return null; // Retorno temprano: detiene la ejecución
+      }
+
+     const data = await verifyResponse.json();
+
+     // Validamos si el JSON tiene contenido real (por ejemplo, si tiene un ID)
+        if (!data || Object.keys(data).length === 0) {
+            console.warn("La respuesta del servidor está vacía.");
+            return null;
+        }
+
+        return data;
+}
+  catch (error) {
+        console.error("Error de red o parsing:", error);
+        return null;
+    }
+     
+}
+
+export function obtenerUsuarioLocalStorage()
+{
+    //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
+    const nombreperfil = document.getElementById('username');//username
+     nombreperfil.classList.remove('hidden-until-loaded');
+ nombreperfil.textContent = localStorage.getItem('username');
+}
+
+
 
 
 

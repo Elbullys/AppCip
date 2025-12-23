@@ -1,5 +1,5 @@
 // const api ='https://apirestcip.onrender.com';
-import { General, handlePOST, URLAPI } from '../RouterAPI/Utils.js';  // Importa tus utilidades
+import { General, handlePOST,conversionFecha, URLAPI,obtenerUsuarioLocalStorage } from '../RouterAPI/Utils.js';  // Importa tus utilidades
 const api = URLAPI;
 
 // Declaraciones de alcance global que son necesarias
@@ -24,6 +24,9 @@ const Toast = Swal.mixin({
 // --- Funciones del DOMContentLoaded ---
 
 document.addEventListener('DOMContentLoaded', () => {
+    //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
+           obtenerUsuarioLocalStorage();
+   
     // 1. Obtención de Elementos del DOM
     // Asumiendo que existen estos IDs en tu HTML
     const btonmanual = document.getElementById('btnmanual'); 
@@ -152,9 +155,9 @@ async function cargarComponenteQR(databusqueda, modal) {
         }
         
         // Conversión de fechas
-        const Fechafactura = General.conversionFecha(componente.FechaFactura);
-        const fecharegistro = General.conversionFecha(componente.FechaRegistro);
-        const fechacompra = General.conversionFecha(componente.FechaCompra);
+        const Fechafactura = conversionFecha(componente.FechaFactura);
+        const fecharegistro = conversionFecha(componente.FechaRegistro);
+        const fechacompra = conversionFecha(componente.FechaCompra);
 
         // Actualizar el DOM
         document.getElementById('idunidad').innerText = String(componente.num_contrato_actual) + textoFormateado;

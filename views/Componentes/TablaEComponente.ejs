@@ -1,6 +1,8 @@
 <%- include("../template/cabecera",{tituloweb:'Editar Componentes'}) %>
 <%- include("../template/navbar") %>
-  <h5 class="text-center" id="databusqueda" style="display: none;">
+ 
+<div class="container py-5">
+<h5 class="text-center" id="databusqueda" style="display: none; padding: auto;">
     codigo_TI: <span id="codigoTIValue"><%= codigo_TI %></span>
 </h5>
 <div id="content">
@@ -9,7 +11,7 @@
         <div class="container-fluid">
              <div class="card shadow mb-4">
  
- <div class="card-header-edit">
+ <div class="card-header-edit mt-5">
     <button id="toggleColumns" class="btn btn-primary">
         <i class="fa-solid fa-up-right-and-down-left-from-center mr-2"></i> <span class="whitespace-nowrap">Minimizar/Máximizar</span>
     </button>
@@ -54,7 +56,7 @@
     </div>
 </div>
 </div>
-
+</div>
 <script src="/js/RouterAPI/Componentes/RouterTablaEComponente.js" type="module"></script>
 
 <%- include('../LectorConsultaQR/modal/Mostrar_Info_Componente') %>

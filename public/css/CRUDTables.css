@@ -1,0 +1,29 @@
+/* Contenedor fijo para los botones (se queda en la parte superior al hacer scroll) */
+.fixed-buttons {
+    position: sticky;
+    top: 0; /* Fija en la parte superior de la ventana */
+    background-color: white; /* Fondo blanco para que no se vea transparente */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    border-bottom: 1px solid #ddd; /* Línea separadora opcional */
+    padding-bottom: 10px; /* Espacio extra */
+}
+
+/* Contenedor de la tabla con alto fijo */
+.table-container {
+    max-height: 60vh; /* Alto máximo de la tabla (ajusta según necesites, ej. 60% de la altura de la ventana) */
+    overflow-y: auto; /* Scroll vertical solo en este contenedor */
+    overflow-x: auto; /* Evita scroll horizontal si no es necesario */
+}
+
+/* Header fijo de la tabla (no se mueve) */
+.table-header-fixed {
+    position: sticky;
+    top: 0; /* Fija el header en la parte superior del contenedor de la tabla */
+    background-color: #f8f9fa; /* Color de fondo igual al de Bootstrap para consistencia */
+    z-index: 10; /* Por encima del tbody */
+    /* Si usas Bootstrap, agrega box-shadow para un borde sutil */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+}
+
+
+

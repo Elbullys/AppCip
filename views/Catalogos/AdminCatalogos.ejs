@@ -1,0 +1,92 @@
+<%- include("../template/cabecera",{tituloweb:'Panel Administrador Catálogos de Componentes'}) %>
+<%- include("../template/navbar") %>
+
+
+<div class="container py-5">
+     <main class="container-fluid mt-5">  <!-- Padding para navbar fijo -->
+      <h3 class="text-center mb-4">Catálogo de Componentes</h3>
+    </main>
+    <!-- Contenedor único para botones (responsive sin duplicar) -->
+    <div class="row align-items-center py-3 flex-column flex-md-row fixed-buttons">
+        <!-- Búsqueda: En móviles ocupa todo el ancho y va arriba; en desktop col-4 izquierda -->
+        <div class="col-12 col-md-4">
+            <div class="py-3"> 
+                <div class="input-group">
+                    <input
+                        type="text"
+                        id="inputBusquedaCatalogo"
+                        class="form-control"
+                        placeholder="Buscar Catálogo..."
+                        autocomplete="off"
+                        tabindex="1"
+                    />
+                    <button id="btnBuscarCatalogo" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones: En móviles ocupa todo el ancho y va abajo (distribuidos horizontalmente); en desktop col-8 derecha -->
+        <div class="col-12 col-md-8 text-end d-flex d-md-block justify-content-around flex-wrap">
+            <a
+                type="button"
+                id="btnMaximizartblCatalogo" 
+                class="btn btn-primary me-2 mb-2 mb-md-0" 
+                title="Maximizar Tabla Catálogos de Componentes"
+            >
+                <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+            </a>
+            
+            <a
+                type="button"
+                id="btnAbriragregarCatalogo" 
+                class="btn btn-success me-2 mb-2 mb-md-0"
+                title="Registrar Nuevo Cátalogo de Componente"
+            >
+                <i class="fa-solid fa-person-circle-plus"></i>
+            </a>
+            
+            <a
+                type="button"
+                id="btnAbrirEditarCatalogo" 
+                class="btn btn-warning me-2 mb-2 mb-md-0" 
+                title="Editar Catálogo de Componente"
+            >
+                <i class="fas fa-edit"></i>
+            </a>
+            
+            <a
+                type="button"
+                id="btnVisualizarCatalogo" 
+                class="btn btn-info me-2 mb-2 mb-md-0" 
+                title="Visualizar Catálogo de Componente"
+            >
+                <i class="fa-solid fa-eye"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Contenedor de la tabla (igual para todos los tamaños) -->
+    <div class="table-container">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table id="table_Catalogo" class="table  table-hover tableModalConsulta table-striped  table-sm">
+                <thead class="table-header-fixed">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre catálogo</th>
+                        <th scope="col">Descripción del Modelo</th>
+                        <th scope="col">Dispositivo</th>
+                        <th scope="col">Marca</th>
+                        <th scope="col">Modelo</th>
+                        <th scope="col">Procesador</th>
+                        <th scope="col">Memoria Ram</th>
+                        <th scope="col">Sistema Operativo</th>
+                    </tr>
+                </thead>
+                <tbody class="table-body-scroll"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="/js/RouterAPI/Catalogos/RouterPanelCatalogo.js" type="module"></script>
+<%- include("../template/footer") %>

@@ -1,0 +1,92 @@
+<%- include("../template/cabecera",{tituloweb:'Panel Administrador Técnico'}) %>
+<%- include("../template/navbar") %>
+
+
+<div class="container py-5">
+     <main class="container-fluid mt-5">  <!-- Padding para navbar fijo -->
+      <h3 class="text-center mb-4">Técnicos</h3>
+    </main>
+    <!-- Contenedor único para botones (responsive sin duplicar) -->
+    <div class="row align-items-center py-3 flex-column flex-md-row fixed-buttons">
+        <!-- Búsqueda: En móviles ocupa todo el ancho y va arriba; en desktop col-4 izquierda -->
+        <div class="col-12 col-md-4">
+            <div class="py-3"> 
+                <div class="input-group">
+                    <input
+                        type="text"
+                        id="inputBusquedatecnico"
+                        class="form-control"
+                        placeholder="Buscar Técnico..."
+                        autocomplete="off"
+                        tabindex="1"
+                    />
+                    <button id="btnBuscartecnico" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones: En móviles ocupa todo el ancho y va abajo (distribuidos horizontalmente); en desktop col-8 derecha -->
+        <div class="col-12 col-md-8 text-end d-flex d-md-block justify-content-around flex-wrap">
+            <a
+                type="button"
+                id="btnMaximizartblTecnicos" 
+                class="btn btn-primary me-2 mb-2 mb-md-0" 
+                title="Maximizar Tabla Tecnicos"
+            >
+                <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+            </a>
+            
+            <a
+                type="button"
+                id="btnagregartecnico" 
+                class="btn btn-success me-2 mb-2 mb-md-0"
+                title="Registrar Nuevo Tecnico"
+            >
+                <i class="fa-solid fa-person-circle-plus"></i>
+            </a>
+            
+            <a
+                type="button"
+                id="btnAbrirEditarTecnico" 
+                class="btn btn-warning me-2 mb-2 mb-md-0" 
+                title="Editar Tecnico"
+            >
+                <i class="fas fa-edit"></i>
+            </a>
+            
+            <a
+                type="button"
+                id="btnEditarVisualizarTecnico" 
+                class="btn btn-info me-2 mb-2 mb-md-0" 
+                title="Visualizar Tecnico"
+            >
+                <i class="fa-solid fa-eye"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Contenedor de la tabla (igual para todos los tamaños) -->
+    <div class="table-container">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table id="table_tecnicos" class="table  table-hover tableModalConsulta table-striped  table-sm">
+                <thead class="table-header-fixed">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Cargo</th>
+                        <th scope="col">Estatus</th>
+                        <th scope="col">Es Administrador</th>
+                    </tr>
+                </thead>
+                <tbody class="table-body-scroll"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="/js/RouterAPI/Tecnicos/RouterPanelTecnico.js" type="module"></script>
+<%- include("../template/footer") %>
+<%- include("./modal/ModalAgregarTecnico") %>
+<%- include("./modal/ModalEditarTecnico") %>
+<%- include("./modal/ModalConsultarTecnico") %>

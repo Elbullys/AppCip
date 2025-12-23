@@ -1,8 +1,45 @@
-<%- include("template/cabecera",{tituloweb:'Pagina de 404'}) %>
-<%- include("template/navbar") %>
+<%- include("template/cabecera", { tituloweb: 'Acceso No Autorizado' }) %>
 
-    <h1><%= titulo %></h1>
-    <h1><%= descripcion %></h1>
+<div class="container-fluid">
+  <!-- Fila centrada para el contenido -->
+  <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <div class="text-center">
+        <!-- Ícono grande con Bootstrap y FontAwesome -->
+        <div class="mb-4">
+          <i class="fas fa-lock fa-6x text-warning"></i>  <!-- Ícono de candado en amarillo (Bootstrap text-warning) -->
+        </div>
+        
+        <!-- Número de error y título -->
+        <h1 class="display-1 text-warning font-weight-bold">401</h1>
+        <h2 class="h3 mb-4 text-gray-800">Acceso No Autorizado</h2>
+        
+        <!-- Mensaje descriptivo -->
+        <p class="lead text-muted mb-5">
+          Lo sentimos, no tienes permisos para acceder a esta página. 
+          Por favor, inicia sesión o contacta al administrador si crees que es un error.
+        </p>
+        
+        <!-- Botones de acción con Bootstrap -->
+        <div class="d-flex justify-content-center flex-wrap">
+          <a href="/logintecnico" class="btn btn-primary btn-lg mr-3 mb-2">
+            <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
+          </a>
+          <a href="/" class="btn btn-outline-secondary btn-lg mb-2">
+            <i class="fas fa-home mr-2"></i>Ir al Inicio
+          </a>
+        </div>
+        
+        <!-- Opcional: Enlace adicional -->
+        <div class="mt-4">
+          <a href="/contacto" class="text-decoration-none">
+            <small class="text-muted">¿Necesitas ayuda? Contáctanos</small>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<%- include("template/footer") %>    
+<%- include("template/footer") %>
    

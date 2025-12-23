@@ -1,64 +1,88 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/inicio">
-      <img
-        class="img-check d-inline-block align-top"
-        src="/resources/logo_pharmajal_SF.png"
-        alt="Logo"
-      />
-    </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!-- Menú principal a la izquierda -->
-      <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Escanear QR</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/leercodigoQR">Buscar Componente</a></li>
-            <li><a class="dropdown-item" href="/EditarDatos">Editar Datos</a></li>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-sm ">  <!-- Azul oscuro como fondo -->
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/inicio">
+          <img src="/resources/logo_pharmajal_SF.png" alt="Logo" class="navbar-logo" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Personal</a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                  <a class="dropdown-item" href="/tecnicos/paneltecnico">Técnico</a>
+                </li>
+                <li class="dropdown-submenu">
+                  <a class="dropdown-item" href="#" data-bs-toggle="dropdown">Responsables</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Unidades</a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                  <a class="dropdown-item" href="#" data-bs-toggle="dropdown">Unidad</a>
+                </li>
+                <li class="dropdown-submenu">
+                  <a class="dropdown-item" href="#" data-bs-toggle="dropdown">Áreas</a>
+                </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dispositivos</a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                  <a class="dropdown-item" href="#" data-bs-toggle="dropdown">Dispositivo</a>
+                </li>
+                <li class="dropdown-submenu">
+                  <a class="dropdown-item" href="#" data-bs-toggle="dropdown">Marca</a>
+                </li>
+                <li class="dropdown-submenu">
+                  <a class="dropdown-item" href="/catalogos/panelcatalogos">Catálogos de componentes</a>
+                </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Componentes</a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                  <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown">QR</a>
+                  <ul class="dropdown-menu submenu">
+                    <li><a class="dropdown-item" href="/leercodigoQR">Consultar Por QR</a></li>
+                    <li><a class="dropdown-item" href="/EditarDatos">Editar Por QR</a></li>
+                    <li><a class="dropdown-item" href="/listar-tecnicos">Consultar Unidad</a></li>
+                  </ul>
+                </li>
+        
+              </ul>
+            </li>
+                 <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Inventarios</a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                  <a class="dropdown-item" href="/inventarios/editarcomponentesporcolectivo">Componente por Colectivo</a>
+                </li>
+              </ul>
+            </li>
           </ul>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Inventario</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Comodato</a></li>
-            <li><a class="dropdown-item" href="/ComodatoRegister">(Check List)</a></li>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="/resources/avatar.jpg" alt="Avatar" class="rounded-circle me-2" width="30" height="30" />
+                <span id="username" class="hidden-until-loaded"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/editar-perfil">Editar Perfil</a></li>
+                <li><a class="dropdown-item" href="#" id="logout">Cerrar Sesión</a></li>
+              </ul>
+            </li>
           </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Otro</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-      <!-- Perfil separado al costado derecho -->
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item dropdown">
-       <a class="nav-link dropdown-toggle profile-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <img src="/resources/avatar.jpg" alt="Avatar" class="profile-avatar hidden-until-loaded" width="200" height="200"> 
-    <span id="username" class="hidden-until-loaded"></span> 
+        </div>
+      </div>
+    </nav>
+
     
-</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/editar-perfil">Editar Perfil</a></li>
-            <li><a class="dropdown-item" href="#" id="logout">Cerrar Sesión</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-
-

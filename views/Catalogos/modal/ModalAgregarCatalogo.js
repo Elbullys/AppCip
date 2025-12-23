@@ -1,0 +1,62 @@
+<div class="modal fade" id="agregarCatalogoModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+             <div class="modal-header">
+                <h5 class="modal-title titulo_modal">Agregar Técnico</h5>
+ <button type="button" id="btoncloseAgregarCatalogomodal" class="btn-close-custom btn-secondary" data-bs-dismiss="modal" tabindex="-1"><i class="fas fa-times"></i></button> 
+            </div>
+            <div class="modal-body">
+                <form id="formularioAgregarCatalogo" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre Completo</label>
+                        <input type="text" value="" id="inputnombre " class="form-control" required/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Usuario</label>
+                        <input type="text" value="" id="inputusuariotecnico" class="form-control" required/>
+                    </div>
+                    <div class="mb-3">
+                             <label class="form-label">Contraseña</label>    
+                                <input type="password" value="" id="inputpassword" class="form-control" required/>
+                    </div>
+                    <div class="mb-3">
+                             <label class="form-label">Repetir Contraseña</label>    
+                               <input type="password" value="" id="inputpasswordrepetir" class="form-control" required/>
+                    </div>
+                    <div class="mb-3">
+                        
+                            <label class="form-label">Cargo</label>
+                            <select class="form-select" name="cargo" id="selectcargo" required>
+                                <option  value="" selected disabled>Seleccione Un Cargo</option>  
+                                <option class="option" value="JEFE DE TI">Jefe de TI</option>
+                                <option class="option" value="ENCARGADO">Encargado</option>
+                                <option class="option" value="AUXILIAR">Auxiliar</option>
+                                
+                            </select>
+                    </div>
+                    <div class="mb-3">
+                             <label class="form-label">Estatus del Técnico</label>    
+                                <select class="form-select" name="asesor" id="selectEstatustecnico" required>
+                                    <option  value="" selected disabled>Seleccione Un Estatus</option>  
+                                    <option class="option" value="ACTIVO">Activo</option>
+                                <option class="option" value="CANCELADO">Cancelado</option>       
+                                </select>
+                    </div>
+                    <div class="mb-3">
+                             <label class="form-label">Es Administrador</label>    
+                                <select class="form-select" name="asesor" id="selectisadmin" required>
+                                    <option  value="" selected disabled>Seleccione</option>  
+                                    <option class="option" value="1">Si</option>
+                                <option class="option" value="0">No</option>       
+                                </select>
+                    </div>
+                    <div class="d-grid gap-2 bton-agregar-modal">
+                        <button type="button" id="btonsavetecnico" class="btn btn-primary btn_add">
+                            Registrar
+                        </button> 
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

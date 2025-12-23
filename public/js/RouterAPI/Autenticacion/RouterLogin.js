@@ -97,20 +97,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (verifyResponse.ok) {
                             const responseData = await verifyResponse.json();
 
-
+                                console.log("responseData",responseData);
                             if (responseData.success && responseData.data) {
                                 // Guarda el nombre en localStorage (persistente hasta logout)
                                 localStorage.setItem('username', responseData.data.usuario);
                                 //localStorage.setItem('id_tecnico', responseData.data.id_tecnico);
-                                const customMessage = `Bienvenido, ${responseData.data.usuario}!.`;
+                                const customMessage = `Bienvenido ${responseData.data.usuario}!`;
                                 Swal.fire({
-                                    icon: 'success',
-                                    title: config.successTitle,
-                                    text: customMessage,
-                                    showConfirmButton: false, // Oculta el botón
-                                    timer: 1000              // Cierra automáticamente después de 2 segundos (2000 ms)
-
-
+                                    icon: responseData.data.icon||'success',
+                                    title: "!Exito!",
+                                    text:customMessage ,
+                                    showConfirmButton: false,
+                                    timer: 1000 
+                                             // Cierra automáticamente después de 2 segundos (2000 ms)
                                 }).then(() => {
                                     window.location.href = `/inicio?user=${encodeURIComponent(responseData.data.usuario)}`;
                                 });

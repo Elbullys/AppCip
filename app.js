@@ -22,6 +22,9 @@ app.use(express.static(__dirname + "/public"))
 app.use('/',require('./router/RouterViewWeb'));
 app.use('/',require('./router/RouterViewLogin'));
 app.use('/',require('./router/RouterViewComponente'));
+app.use('/',require('./router/RouterViewTecnico'));
+app.use('/',require('./router/RouterViewCatalogo'));
+app.use('/',require('./router/RouterViewInventario'));
 
 
 //body parser permite acceder y procesar lods datos que se envian desde el formulario html

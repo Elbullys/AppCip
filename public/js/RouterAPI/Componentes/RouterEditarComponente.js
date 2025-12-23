@@ -1,7 +1,8 @@
 import {
   conversionFecha, handleDataTableLoadingGET, General,
   handleDataTableLoadingPOST, handlePOST, handlePUT, cambiarLabelSwitch,
-  obtenerValorRadioSeleccionado, obtenerEstadoSwitch, handleGET, URLAPI
+  obtenerValorRadioSeleccionado, obtenerEstadoSwitch, handleGET, URLAPI,ObtenerIdTecnicoSesion
+  ,obtenerUsuarioLocalStorage
 } from '../Utils.js';
 
 
@@ -124,7 +125,8 @@ var Toast = Swal.mixin({
 // AL ABRIR LA PAGINA - TODO DENTRO DE DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
 
-
+  //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
+    obtenerUsuarioLocalStorage();
   let cambiosPendientes = true; // Bandera para saber si hay cambios no guardados
   window.onbeforeunload = (event) => {
     if (cambiosPendientes) {
@@ -252,30 +254,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       };
 
-     let responseData;
-      const verifyResponse = await fetch(`${api}/api/logintecnicos/protected`, {
-        method: 'GET',
-        credentials: 'include',
+    const sesionTecnico= await ObtenerIdTecnicoSesion();
+      let IdTecnico=sesionTecnico.data.id_tecnico;
 
-      });
-      if (!verifyResponse.ok) {
-        console.error(`Error de verificación HTTP: ${verifyResponse.status}`);
-        cambiosPendientes = false;
-        setTimeout(() => {
-          window.location.href = '/logintecnico';
-        }, 1500);
-        return; // Retorno temprano: detiene la ejecución
-      }
-
-      responseData = await verifyResponse.json();
-      if (!responseData.success || !responseData.data) {
-        return;
-      }
-
-      if (verifyResponse.ok) {
+      if (sesionTecnico||sesionTecnico.body) {
 
         //*Preparar la Petición de Actualización (PUT)
-        dataComponenteActualizado.FK_IdTecnico = responseData.data.id_tecnico;
+        dataComponenteActualizado.FK_IdTecnico = IdTecnico;
 
 
         const config = {
@@ -285,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
             data: dataComponenteActualizado,  // Tu data actualizada
             data_componentes_anteriores: ComponentesAnteriores  // Los datos anteriores
           },
-          successTitle: `La Factura del Componente de ha Modificado Exitosamente`,
+          successTitle: `El componente se ha Modificado Exitosamente`,
         };
 
         const response = await handlePUT(config);
@@ -382,8 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnBuscarDispositivo) {
     btnBuscarDispositivo.addEventListener('click', BuscarDispositivo);
   }
-
-  //* Función BuscarCatalogoComponente
+//* Función BuscarCatalogoComponente
   function BuscarCatalogoComponente() {
     let searchTerm = $('#inputBusquedaCatalogo').val().trim();
     if (searchTerm) {
@@ -392,6 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
       inicializarDataTableCatalogoComponentePorDispositivo('', estadoFormulario.IdDispositivo);
     }
   }
+
 
   // **CAMBIO: Vincular botón 'btnBuscarCatalogo'**
   const btnBuscarcatalogo = document.getElementById('btnBuscarcatalogo');
@@ -867,7 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // INICIALIZAR DATATABLE AREAS POR TIPO UNIDAD
   function inicializarDataTableAreasPorTipoUnidad(searchTerm = '', tipo_unidad) {
-    console.log("inicializarDataTableAreasPorTipoUnidad ENTRO");
+  
     var urlBusquedaAreaPorTipoUnidad = `${api}/api/areas/ConsultaAreaPorTipoUnidad`;
     var urlBusquedaTodasAreasTipoUnidad = `${api}/api/areas/ConsultaTodasAreasPorTipoUnidad`;
 
@@ -1079,7 +1064,7 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedRow
     };
   }
-  // FINALIZAR DATATABLE AREAS POR TIPO UNIDAD
+  // FINALIZAR DATATABLE RESPONSABLE POR TIPO UNIDAD
 
   //*INICIO DATATABLE RESPONSABLE 
   function inicializarDataTableResponsablePorIdUnidad(searchTerm = '', id_unidad) {
@@ -2043,7 +2028,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputobservacionfactura = document.getElementById('txtobservacionfactura');
     const btneditarfactura = document.getElementById('btneditarfactura');
     const btncancelarfactura = document.getElementById('btncancnuevafactura');
-    const url = `${api}/api/facturas/AgregarNuevaFactura`;
+    
     //VERIFICAR SI SE CREA UNA NUEVA FACTURA O SE EDITA UNA EXISTENTE
     // Crear nueva factura
     if (inputidfactura.value === "*") {
@@ -2072,6 +2057,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const response = await handlePOST(config);
 
+     
 
       if (response && response.success && response.data.body.id) {
         estadoFormulario.StatusFacturaEdit = false;

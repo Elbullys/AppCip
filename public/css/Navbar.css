@@ -1,26 +1,11 @@
-/* Estilos generales del navbar */
-.custom-navbar {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important; /* Gradiente sutil */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
-  border-bottom: 1px solid #dee2e6; /* Borde inferior */
-  transition: all 0.3s ease; /* Transiciones suaves */
+/* Tipografía Moderna */
+.body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;  /* Gris oscuro para texto */
 }
 
-/* Estilos para el dropdown */
-.custom-navbar .dropdown-menu {
-  border: none; /* Sin borde */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
-  border-radius: 0.5rem; /* Bordes redondeados */
-}
-
-.custom-navbar .dropdown-item {
-  padding: 0.5rem 1rem; /* Padding interno */
-  transition: background-color 0.3s ease; /* Transición */
-}
-
-.custom-navbar .dropdown-item:hover {
-  background-color: #f8f9fa; /* Fondo al hover */
-}
 
 /* Estilos específicos para el perfil */
 .profile-link {
@@ -44,9 +29,84 @@
   
 }
 
-/* Responsive: En móviles, el perfil se alinea normalmente */
-@media (max-width: 991.98px) {
-  .custom-navbar .navbar-nav .ms-auto {
-    margin-left: 0 !important; /* Reset en móviles */
+/* Navbar */
+.navbar {
+  background-color: #003366 !important;  /* Azul oscuro */
+  border-bottom: 2px solid #f8f9fa;  /* Gris claro */
+}
+.navbar-brand {
+  color: #ffffff !important;
+}
+.navbar-nav .nav-link {
+  color: #f8f9fa !important;  /* Gris claro */
+  font-weight: 500;
+}
+.navbar-nav .nav-link:hover {
+  color: #ffffff !important;
+}
+.navbar-logo {
+  height: 40px;  /* Ajusta tamaño del logo */
+}
+
+/* Dropdowns */
+.dropdown-menu {
+  background-color: #f8f9fa;  /* Gris claro */
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.dropdown-item {
+  color: #003366;  /* Azul oscuro */
+}
+.dropdown-item:hover {
+  background-color: #e9ecef;  /* Gris más claro */
+}
+
+/* Sub-menús */
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+  display: none;
+}
+.dropdown-submenu:hover .dropdown-menu {
+  display: block;
+}
+
+
+/* Contenido Principal */
+.main {
+  min-height: 70vh;  /* Espacio mínimo */
+  background-color: #ffffff;  /* Blanco */
+}
+/* Footer */
+.footer {
+  background-color: #003366;  /* Azul oscuro */
+  color: #f8f9fa;  /* Gris claro */
+}
+.footer a {
+  text-decoration: none;
+}
+.footer a:hover {
+  color: #ffffff;  /* Blanco al hover */
+}
+.body{
+  padding-top: 80px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .navbar-nav {
+    text-align: left;
+  }
+  .dropdown-menu {
+    position: static;
+    float: none;
+    width: 100%;
+  }
+  .footer .col-md-4 {
+    margin-bottom: 20px;
   }
 }
