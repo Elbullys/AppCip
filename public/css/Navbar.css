@@ -97,7 +97,7 @@
 }
 
 /* Responsivo */
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .navbar-nav {
     text-align: left;
   }
@@ -109,4 +109,11 @@
   .footer .col-md-4 {
     margin-bottom: 20px;
   }
+  .dropdown-submenu .submenu {
+        left: 0; 
+        margin-left: 10px; /* Indentación para que se vea como sub-lista */
+        position: static;
+        float: none;
+    }
 }
+

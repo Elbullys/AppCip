@@ -87,6 +87,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Limpia localStorage y redirige
         localStorage.removeItem('username');
 
+         //CACHE DATOS TRANSITO, MOV DIA, CORRECTIVO Y PREVENTIVO
+         localStorage.removeItem(cacheKey);
+        localStorage.removeItem(cacheKey + '_time');
+        //CACHE DATOS CHARTS
+         localStorage.removeItem(cacheKeyChart);
+        localStorage.removeItem(cacheKeyChart + '_time');
+
         try {//`${api}/api/componentes/BusquedaComponenteCodigoTINumSerie
             // 1. Enviar la solicitud POST al servidor para limpiar la cookie
             const response = await fetch(`${api}/api/logintecnicos/logouttecnico`, {
@@ -118,7 +125,7 @@ async function fetchComponentes() {
     const cached = localStorage.getItem(cacheKey);
     const cacheTime = localStorage.getItem(cacheKey + '_time');
     const now = Date.now();
-    console.log("cached", cached);
+    ;
 
     // Si hay cache y no ha expirado (ej. 1 hora)
     if (cached && cacheTime && (now - cacheTime) < 3600000) {

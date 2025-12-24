@@ -1,3 +1,4 @@
+//IMPORTACIONES DE FUNCIONES Y CONSTANTES 
 import {
   conversionFecha, handleDataTableLoadingGET, General,
   handleDataTableLoadingPOST, handlePOST, handlePUT, cambiarLabelSwitch,
@@ -5,6 +6,8 @@ import {
   ,obtenerUsuarioLocalStorage
 } from '../Utils.js';
 
+//IMPORTAR FUNCIONES PARA INCIALIZAR MODALES
+//import { clsAreas } from '../UtilsFuncionesModales.js';
 
 const api = URLAPI;
 const idcomponente = document.getElementById('idcomponenteValue').textContent;
@@ -320,10 +323,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
+  let searchTerm = $('#inputBusquedaArea').val().trim();
+//clsAreas.BuscarArea(searchTerm, estadoFormulario.tipo_unidad);
   //* Función BuscarArea (ubicacion)
   function BuscarArea() {
-    let searchTerm = $('#inputBusquedaArea').val().trim();
+      let searchTerm = $('#inputBusquedaArea').val().trim();
     if (searchTerm) {
       inicializarDataTableAreasPorTipoUnidad(searchTerm, estadoFormulario.tipo_unidad);
     } else {

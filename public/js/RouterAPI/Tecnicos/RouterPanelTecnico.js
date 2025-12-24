@@ -1,7 +1,6 @@
-// const api ='https://apirestcip.onrender.com';
 import {
     General, handlePOST, handleDataTableLoadingGET, URLAPI, ConfigTable,
-    handleGETSinProgressBar, handlePUT, handleGET,obtenerUsuarioLocalStorage
+    handleGETSinProgressBar, handlePUT, handleGET, obtenerUsuarioLocalStorage
 } from '../Utils.js';  // Importa tus utilidades
 const api = URLAPI;
 // PARA ALERTAS TOAST SWEETALERT2
@@ -58,12 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectEstatustecnicoEdit = document.getElementById('selectEstatustecnicoEdit');
     const selectisadminEdit = document.getElementById('selectisadminEdit');
 
+
+  
     //INICIALIZAR TABLA TECNICOS
 
     inicializarDataTableTecnico(searchTerm);
 
-     //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
-           obtenerUsuarioLocalStorage();
+    //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
+    obtenerUsuarioLocalStorage();
 
     //*funcion PARA INICIALIZAR LA TBLA AL CARGAR
     function inicializarDataTableTecnico(searchTerm) {
@@ -170,6 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         });
     }
+
+
     //*PERMITE HACER EL MECANISMO OCULTAR/MAXIMIZAR CAMBIA EL ESTADO DE VISIBLE / NO VISIBLE
     const setVisibleState = (newValue) => {
         visibleState = newValue; // Actualiza la variable
@@ -187,6 +190,10 @@ document.addEventListener('DOMContentLoaded', () => {
             );
         });
     }
+
+        
+
+ 
     //*PERMITE REALIZAR LA BUSQUEDA DE ALGUN USUARIO
     function BuscarTecnico() {
         let searchTerm = inputBusquedatecnico.value;
@@ -196,11 +203,23 @@ document.addEventListener('DOMContentLoaded', () => {
             inicializarDataTableTecnico(searchTerm = '');
         }
     }
+   
     if (btnBuscartecnico) {
         btnBuscartecnico.addEventListener('click', BuscarTecnico);
     }
 
 
+  //*EVENTO PARA REALIZAR BUSQUEDA  DE ALGUN USUARIO POR MEDIO DE LA TECLA ENTER
+     if (inputBusquedatecnico) {
+    inputBusquedatecnico.addEventListener('keydown', function (event) {
+
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        BuscarTecnico();
+      }
+    });
+  }
+   
     //*BOTON ABRIR MODAL AGREGAR TECNICO
     btnagregartecnico.addEventListener('click', function () {
 
@@ -284,18 +303,9 @@ document.addEventListener('DOMContentLoaded', () => {
     //PERMITE DEICIDIR SI QUIERE CAMBIAR LA CONTRASEÑA
     $('#checkCambiarPassword').on('change', function () {
         isChecked = $(this).is(':checked');
-        const $passFields = $('#seccionPassword input');
+        
 
-        if (isChecked) {
-            console.log("isChecked", isChecked)
-            $('#seccionPassword').slideDown(); // Muestra con animación
-            $passFields.attr('required', true); // Hace los campos obligatorios
-        } else {
-            console.log("isChecked CAN", isChecked)
-            $('#seccionPassword').slideUp(); // Oculta con animación
-            $passFields.attr('required', false); // Quita el atributo requerido
-            $passFields.val(''); // Opcional: Limpia los valores al ocultar
-        }
+       ocultarDesSesionPassword(isChecked);
     });
 
     //*cerrar modal limpiar campos
@@ -399,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const validacion = await ValidarCamposTecnicos(inputnombretecnicoEdit.value, inputusuariotecnicoEdit.value, capturapassword, selectcargoEdit.value, selectEstatustecnicoEdit.value, selectisadminEdit.value);
-        console.log("urlEdit", urlEdit);
+
         if (validacion == false) {
             console.log("validacion", validacion);
             //ASIGNACION A ARRAY  
@@ -438,6 +448,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         searchTerm = "";
                         inputBusquedatecnico.value = "";
                         visibleState = false;
+                        isChecked = false;
+                        ocultarDesSesionPassword(isChecked);
+
                         inicializarDataTableTecnico(searchTerm);
                     }, 2000);
                 }
@@ -471,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             return;
         }
-        
+
         const config = {
             url: `${api}/api/tecnicos/consultarportecnico`, // URL específica
             timeoutDuration: 5000, // Opcional: ajusta el timeout si es necesario
@@ -479,7 +492,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const response = await handleGET(config);
-       
+
         const bodyData = response.data.body;
         const dataTecnico = (Array.isArray(bodyData) && bodyData.length > 0) ? bodyData[0] : null;
         // Verifica que el cuerpo de la respuesta contenga datos
@@ -488,8 +501,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const listGroup = document.querySelector('#detalleTecnicoContenido .list-group');
             listGroup.innerHTML = '';
 
-        // Agregar información al modal
-        listGroup.innerHTML = `
+            // Agregar información al modal
+            listGroup.innerHTML = `
             <li class="list-group-item"><strong>ID Tecnico:</strong> ${dataTecnico.id_tecnico}</li>
             <li class="list-group-item"><strong>Nombre:</strong> ${dataTecnico.nombre}</li>
             <li class="list-group-item"><strong>Usuario:</strong> ${dataTecnico.usuario}</li>
@@ -536,6 +549,23 @@ function ValidarCamposTecnicos(inputnombre, inputusuario, inputpassword, selectc
     }
     return false;
 }
+
+function ocultarDesSesionPassword(isChecked) {
+   
+  const $passFields = $('#seccionPassword input');
+    if (isChecked) {
+         
+        console.log("isChecked", isChecked)
+        $('#seccionPassword').slideDown(); // Muestra con animación
+        $passFields.attr('required', true); // Hace los campos obligatorios
+    } else {
+        console.log("isChecked CAN", isChecked)
+        $('#seccionPassword').slideUp(); // Oculta con animación
+        $passFields.attr('required', false); // Quita el atributo requerido
+        $passFields.val(''); // Opcional: Limpia los valores al ocultar
+    }
+}
+
 
 
 

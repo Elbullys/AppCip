@@ -1,16 +1,21 @@
 //PERMITE EXPORTAR LA RUTA DE LA API
- export const URLAPI= 'https://apirestcip.onrender.com';
-  //export const URLAPI= 'http://localhost:7000';
-//PERMITE REDIRIGIR A LA PAGINA DE LOGIN
-   const logoutAndRedirect = (errorMessage) => {
- 
-    // 3. Redirigir al login después de un breve momento
-    setTimeout(() => {
-      localStorage.removeItem('username');
-        window.location.href = '/logintecnico';
-    }, 1500); // 1.5 segundos para que el usuario vea el mensaje
+//export const URLAPI = 'https://apirestcip.onrender.com';
+export const URLAPI= 'http://localhost:7000';
 
-   
+//VARIBLES CACHE
+const cacheKey = 'cacheConsRetTransito';
+const cacheKeyChart = 'TipoUnidad';
+const cacheKeyChartActivoBaja='CharActivoBAJA';
+//PERMITE REDIRIGIR A LA PAGINA DE LOGIN
+const logoutAndRedirect = (errorMessage) => {
+
+  // 3. Redirigir al login después de un breve momento
+  setTimeout(() => {
+    localStorage.removeItem('username');
+    window.location.href = '/logintecnico';
+  }, 1500); // 1.5 segundos para que el usuario vea el mensaje
+
+
 };
 
 // utils.js - Archivo para funciones y utilidades globales reutilizables
@@ -71,25 +76,25 @@ export async function handleDataTableLoadingPOST(config) {
 
     //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
     if (response.status === 401) {
-            // Si el servidor devuelve 401, forzamos el logout y la redirección
-            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
-            
-            try {
-                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
-                const errorResponse = await response.json(); 
-                errorMessage = errorResponse.message || errorMessage;
-            } catch (e) {
-                // Si el cuerpo no es JSON, usamos el mensaje por defecto
-            }
-            
-            // Cerrar el modal de carga y redirigir
-            Swal.close(); 
-            clearInterval(swalInstance._progressInterval);
-            logoutAndRedirect(errorMessage);
+      // Si el servidor devuelve 401, forzamos el logout y la redirección
+      let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
 
-            // Devolvemos un array vacío ya que la operación falló.
-            return [];
-        }
+      try {
+        // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+        const errorResponse = await response.json();
+        errorMessage = errorResponse.message || errorMessage;
+      } catch (e) {
+        // Si el cuerpo no es JSON, usamos el mensaje por defecto
+      }
+
+      // Cerrar el modal de carga y redirigir
+      Swal.close();
+      clearInterval(swalInstance._progressInterval);
+      logoutAndRedirect(errorMessage);
+
+      // Devolvemos un array vacío ya que la operación falló.
+      return [];
+    }
     if (!response.ok) {
       throw new Error(`Error en la respuesta: ${response.statusText}`);
     }
@@ -131,7 +136,7 @@ export async function handleDataTableLoadingPOST(config) {
 // Función GET PARA DATATABLE OBTECION DE DATOS
 export async function handleDataTableLoadingGET(config) {
 
- 
+
   const { url, data, timeoutDuration = 3000 } = config;
 
 
@@ -168,28 +173,28 @@ export async function handleDataTableLoadingGET(config) {
       credentials: 'include',
 
     });
-//VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
+    //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
     if (response.status === 401) {
-            // Si el servidor devuelve 401, forzamos el logout y la redirección
-            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
-            
-            try {
-                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
-                const errorResponse = await response.json(); 
-                errorMessage = errorResponse.message || errorMessage;
-            } catch (e) {
-                // Si el cuerpo no es JSON, usamos el mensaje por defecto
-            }
-            
-            // Cerrar el modal de carga y redirigir
-            Swal.close(); 
-            clearInterval(swalInstance._progressInterval);
-            logoutAndRedirect(errorMessage);
+      // Si el servidor devuelve 401, forzamos el logout y la redirección
+      let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
 
-            // Devolvemos un array vacío ya que la operación falló.
-            return [];
-        }
-//SI NO HAY ERROR 401, SIGUE CORRRIENDO EL CODIGO
+      try {
+        // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+        const errorResponse = await response.json();
+        errorMessage = errorResponse.message || errorMessage;
+      } catch (e) {
+        // Si el cuerpo no es JSON, usamos el mensaje por defecto
+      }
+
+      // Cerrar el modal de carga y redirigir
+      Swal.close();
+      clearInterval(swalInstance._progressInterval);
+      logoutAndRedirect(errorMessage);
+
+      // Devolvemos un array vacío ya que la operación falló.
+      return [];
+    }
+    //SI NO HAY ERROR 401, SIGUE CORRRIENDO EL CODIGO
 
     if (!response.ok) {
       throw new Error(`Error en la respuesta: ${response.statusText}`);
@@ -343,51 +348,49 @@ export class General {
 
     return { icon: "check", error: false, message: "Datos válidos" };
   }
-  static resetearCampos(contenedorSelector)
-
-  {
+  static resetearCampos(contenedorSelector) {
     const contenedor = document.querySelector(contenedorSelector);
 
     if (!contenedor) {
-        console.error(`Error: No se encontró el contenedor: ${contenedorSelector}`);
-        return;
+      console.error(`Error: No se encontró el contenedor: ${contenedorSelector}`);
+      return;
     }
-    
+
     // Si el contenedor es un <form>, el método reset() es el más eficiente.
     if (contenedor.tagName === 'FORM') {
-        contenedor.reset();
-    } 
-    
+      contenedor.reset();
+    }
+
     // Si es cualquier otro contenedor (DIV, SECTION, etc.), limpiamos manualmente:
-    
+
     // Buscar y limpiar inputs, textareas y selects
     contenedor.querySelectorAll('input, textarea, select').forEach(campo => {
-        const type = campo.type ? campo.type.toLowerCase() : '';
+      const type = campo.type ? campo.type.toLowerCase() : '';
 
-        // Limpiar el valor (text, number, email, password, textarea)
-        if (type !== 'submit' && type !== 'button' && type !== 'reset' && type !== 'hidden') {
-            campo.value = '';
-        }
-        
-        // Desmarcar checkboxes y radio buttons
-        if (type === 'checkbox' || type === 'radio') {
-            campo.checked = false;
-        }
-        
-        // Resetear select a la primera opción
-        if (campo.tagName === 'SELECT') {
-             campo.selectedIndex = 0;
-        }
-        
+      // Limpiar el valor (text, number, email, password, textarea)
+      if (type !== 'submit' && type !== 'button' && type !== 'reset' && type !== 'hidden') {
+        campo.value = '';
+      }
+
+      // Desmarcar checkboxes y radio buttons
+      if (type === 'checkbox' || type === 'radio') {
+        campo.checked = false;
+      }
+
+      // Resetear select a la primera opción
+      if (campo.tagName === 'SELECT') {
+        campo.selectedIndex = 0;
+      }
+
     });
 
     // Opcional: Remover clases de validación (ej. Bootstrap .is-invalid/.is-valid)
     contenedor.querySelectorAll('.is-invalid, .is-valid').forEach(campo => {
-        campo.classList.remove('is-invalid', 'is-valid');
-        // Esto también quita las clases de los elementos padre que Bootstrap usa
-        if (campo.closest('.form-group')) {
-             campo.closest('.form-group').classList.remove('is-invalid', 'is-valid');
-        }
+      campo.classList.remove('is-invalid', 'is-valid');
+      // Esto también quita las clases de los elementos padre que Bootstrap usa
+      if (campo.closest('.form-group')) {
+        campo.closest('.form-group').classList.remove('is-invalid', 'is-valid');
+      }
     });
   }
 
@@ -512,25 +515,25 @@ export async function handleGET(config) {
     });
     //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
     if (response.status === 401) {
-            // Si el servidor devuelve 401, forzamos el logout y la redirección
-            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
-            
-            try {
-                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
-                const errorResponse = await response.json(); 
-                errorMessage = errorResponse.message || errorMessage;
-            } catch (e) {
-                // Si el cuerpo no es JSON, usamos el mensaje por defecto
-            }
-            
-            // Cerrar el modal de carga y redirigir
-            Swal.close(); 
-            clearInterval(swalInstance._progressInterval);
-            logoutAndRedirect(errorMessage);
+      // Si el servidor devuelve 401, forzamos el logout y la redirección
+      let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
 
-            // Devolvemos un array vacío ya que la operación falló.
-            return [];
-        }
+      try {
+        // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+        const errorResponse = await response.json();
+        errorMessage = errorResponse.message || errorMessage;
+      } catch (e) {
+        // Si el cuerpo no es JSON, usamos el mensaje por defecto
+      }
+
+      // Cerrar el modal de carga y redirigir
+      Swal.close();
+      clearInterval(swalInstance._progressInterval);
+      logoutAndRedirect(errorMessage);
+
+      // Devolvemos un array vacío ya que la operación falló.
+      return [];
+    }
 
     if (!response.ok) {
       // Maneja respuestas no-JSON usando text() con try-catch
@@ -581,7 +584,7 @@ export async function handleGETSinProgressBar(config) {
   const {
     url,
     data = {}, // Opcional: objeto para query params (si no se pasa, no se agregan)
-    
+
     errorTitle = 'Error al obtener datos', // Solo para errores
   } = config;
 
@@ -596,7 +599,7 @@ export async function handleGETSinProgressBar(config) {
     return false;
   }
 
- 
+
 
   try {
     // Construir URL con query params si data está presente
@@ -613,22 +616,22 @@ export async function handleGETSinProgressBar(config) {
     });
     //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
     if (response.status === 401) {
-            // Si el servidor devuelve 401, forzamos el logout y la redirección
-            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
-            
-            try {
-                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
-                const errorResponse = await response.json(); 
-                errorMessage = errorResponse.message || errorMessage;
-            } catch (e) {
-                // Si el cuerpo no es JSON, usamos el mensaje por defecto
-            }
+      // Si el servidor devuelve 401, forzamos el logout y la redirección
+      let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
 
-            logoutAndRedirect(errorMessage);
+      try {
+        // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+        const errorResponse = await response.json();
+        errorMessage = errorResponse.message || errorMessage;
+      } catch (e) {
+        // Si el cuerpo no es JSON, usamos el mensaje por defecto
+      }
 
-            // Devolvemos un array vacío ya que la operación falló.
-            return [];
-        }
+      logoutAndRedirect(errorMessage);
+
+      // Devolvemos un array vacío ya que la operación falló.
+      return [];
+    }
 
     if (!response.ok) {
       // Maneja respuestas no-JSON usando text() con try-catch
@@ -740,25 +743,25 @@ export async function handlePUT(config) {
 
     //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
     if (response.status === 401) {
-            // Si el servidor devuelve 401, forzamos el logout y la redirección
-            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
-            
-            try {
-                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
-                const errorResponse = await response.json(); 
-                errorMessage = errorResponse.message || errorMessage;
-            } catch (e) {
-                // Si el cuerpo no es JSON, usamos el mensaje por defecto
-            }
-            
-            // Cerrar el modal de carga y redirigir
-            Swal.close(); 
-            clearInterval(swalInstance._progressInterval);
-            logoutAndRedirect(errorMessage);
+      // Si el servidor devuelve 401, forzamos el logout y la redirección
+      let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
 
-            // Devolvemos un array vacío ya que la operación falló.
-            return [];
-        }
+      try {
+        // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+        const errorResponse = await response.json();
+        errorMessage = errorResponse.message || errorMessage;
+      } catch (e) {
+        // Si el cuerpo no es JSON, usamos el mensaje por defecto
+      }
+
+      // Cerrar el modal de carga y redirigir
+      Swal.close();
+      clearInterval(swalInstance._progressInterval);
+      logoutAndRedirect(errorMessage);
+
+      // Devolvemos un array vacío ya que la operación falló.
+      return [];
+    }
 
     if (!response.ok) {
       // CORRECCIÓN: Maneja respuestas no-JSON usando text() con try-catch
@@ -870,7 +873,7 @@ export async function handlePOST(config) {
   }
 
   try {
-    
+
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -881,25 +884,25 @@ export async function handlePOST(config) {
 
     //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
     if (response.status === 401) {
-            // Si el servidor devuelve 401, forzamos el logout y la redirección
-            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
-            
-            try {
-                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
-                const errorResponse = await response.json(); 
-                errorMessage = errorResponse.message || errorMessage;
-            } catch (e) {
-                // Si el cuerpo no es JSON, usamos el mensaje por defecto
-            }
-            
-            // Cerrar el modal de carga y redirigir
-            Swal.close(); 
-            clearInterval(swalInstance._progressInterval);
-            logoutAndRedirect(errorMessage);
+      // Si el servidor devuelve 401, forzamos el logout y la redirección
+      let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
 
-            // Devolvemos un array vacío ya que la operación falló.
-            return [];
-        }
+      try {
+        // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+        const errorResponse = await response.json();
+        errorMessage = errorResponse.message || errorMessage;
+      } catch (e) {
+        // Si el cuerpo no es JSON, usamos el mensaje por defecto
+      }
+
+      // Cerrar el modal de carga y redirigir
+      Swal.close();
+      clearInterval(swalInstance._progressInterval);
+      logoutAndRedirect(errorMessage);
+
+      // Devolvemos un array vacío ya que la operación falló.
+      return [];
+    }
 
     if (!response.ok) {
       // Maneja respuestas no-JSON usando text() con try-catch
@@ -991,27 +994,27 @@ export async function handleGETHiddenCookie(config) {
 
     //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
     if (response.status === 401) {
-            // Si el servidor devuelve 401, forzamos el logout y la redirección
-            let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
-            
-            try {
-                // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
-                const errorResponse = await response.json(); 
-                errorMessage = errorResponse.message || errorMessage;
-            } catch (e) {
-                // Si el cuerpo no es JSON, usamos el mensaje por defecto
-            }
-            
-            // Cerrar el modal de carga y redirigir
-            Swal.close(); 
-            clearInterval(swalInstance._progressInterval);
-            logoutAndRedirect(errorMessage);
+      // Si el servidor devuelve 401, forzamos el logout y la redirección
+      let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
 
-            // Devolvemos un array vacío ya que la operación falló.
-            return [];
-        }
+      try {
+        // Intentamos leer el mensaje de error del cuerpo JSON de la respuesta
+        const errorResponse = await response.json();
+        errorMessage = errorResponse.message || errorMessage;
+      } catch (e) {
+        // Si el cuerpo no es JSON, usamos el mensaje por defecto
+      }
 
-        
+      // Cerrar el modal de carga y redirigir
+      Swal.close();
+      clearInterval(swalInstance._progressInterval);
+      logoutAndRedirect(errorMessage);
+
+      // Devolvemos un array vacío ya que la operación falló.
+      return [];
+    }
+
+
 
     if (!response.ok) {
       // Maneja respuestas no-JSON usando text() con try-catch
@@ -1185,45 +1188,85 @@ export function obtenerEstadoSwitch(idSwitch) {
   return 0;  // Valor por defecto si no se encuentra
 }
 
-export async function ObtenerIdTecnicoSesion()
-{
-try{
- const verifyResponse = await fetch(`${URLAPI}/api/logintecnicos/protected`, {
-        method: 'GET',
-        credentials: 'include',
+export async function ObtenerIdTecnicoSesion() {
+  try {
+    const verifyResponse = await fetch(`${URLAPI}/api/logintecnicos/protected`, {
+      method: 'GET',
+      credentials: 'include',
 
-      });
-      if (!verifyResponse.ok) {
-        console.error(`Error de verificación HTTP: ${verifyResponse.status}`);
-        setTimeout(() => {
-          window.location.href = '/logintecnico';
-        }, 1500);
-        return null; // Retorno temprano: detiene la ejecución
-      }
+    });
+    if (!verifyResponse.ok) {
+      console.error(`Error de verificación HTTP: ${verifyResponse.status}`);
+      setTimeout(() => {
+        window.location.href = '/logintecnico';
+      }, 1500);
+      return null; // Retorno temprano: detiene la ejecución
+    }
 
-     const data = await verifyResponse.json();
+    const data = await verifyResponse.json();
 
-     // Validamos si el JSON tiene contenido real (por ejemplo, si tiene un ID)
-        if (!data || Object.keys(data).length === 0) {
-            console.warn("La respuesta del servidor está vacía.");
-            return null;
+    // Validamos si el JSON tiene contenido real (por ejemplo, si tiene un ID)
+    if (!data || Object.keys(data).length === 0) {
+      console.warn("La respuesta del servidor está vacía.");
+      return null;
+    }
+
+    return data;
+  }
+  catch (error) {
+    console.error("Error de red o parsing:", error);
+    return null;
+  }
+
+}
+
+export function obtenerUsuarioLocalStorage() {
+  //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
+  const nombreperfil = document.getElementById('username');//username
+  nombreperfil.classList.remove('hidden-until-loaded');
+  nombreperfil.textContent = localStorage.getItem('username');
+
+   const btnlogout = document.getElementById('logout');
+     btnlogout.addEventListener('click', async function (event) {
+        event.preventDefault();
+        console.log('Cerrando sesión...');
+        // Limpia localStorage y redirige
+        localStorage.removeItem('username');
+        //CACHE DATOS TRANSITO, MOV DIA, CORRECTIVO Y PREVENTIVO
+         localStorage.removeItem(cacheKey);
+        localStorage.removeItem(cacheKey + '_time');
+        //CACHE DATOS CHARTS
+         localStorage.removeItem(cacheKeyChart);
+        localStorage.removeItem(cacheKeyChart + '_time');
+            //CACHE DATOS CHARTS ACTIVO BAJA
+          localStorage.removeItem(cacheKeyChartActivoBaja);
+        localStorage.removeItem(cacheKeyChartActivoBaja + '_time');
+
+        try {//`${api}/api/componentes/BusquedaComponenteCodigoTINumSerie
+            // 1. Enviar la solicitud POST al servidor para limpiar la cookie
+            const response = await fetch(`${URLAPI}/api/logintecnicos/logouttecnico`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log("response.ok", response);
+            if (response.ok) {
+                // 1. Redirige solo si la respuesta del servidor fue exitosa (código 200-299)
+                window.location.href = '/logintecnico';
+            } else {
+                console.error('Error del servidor al cerrar sesión.');
+                // Puedes mostrar un SweetAlert si tienes uno
+            }
+        } catch (error) {
+            console.error('Error de conexión:', error);
         }
 
-        return data;
-}
-  catch (error) {
-        console.error("Error de red o parsing:", error);
-        return null;
-    }
-     
-}
 
-export function obtenerUsuarioLocalStorage()
-{
-    //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
-    const nombreperfil = document.getElementById('username');//username
-     nombreperfil.classList.remove('hidden-until-loaded');
- nombreperfil.textContent = localStorage.getItem('username');
+    });
+
+
 }
 
 
