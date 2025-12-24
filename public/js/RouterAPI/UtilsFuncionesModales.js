@@ -1,4 +1,4 @@
-/*import {
+import {
   conversionFecha, handleDataTableLoadingGET, General,
   handleDataTableLoadingPOST, handlePOST, handlePUT, cambiarLabelSwitch,
   obtenerValorRadioSeleccionado, obtenerEstadoSwitch, handleGET, URLAPI,ObtenerIdTecnicoSesion
@@ -230,4 +230,4 @@ export class clsAreas{
       };
     }
     // FINALIZAR DATATABLE RESPONSABLE POR TIPO UNIDAD
-}*/
+}
