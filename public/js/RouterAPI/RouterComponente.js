@@ -74,15 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // *su lógica se integra directamente en los event listeners.
 });
 
-// --- Funciones Asíncronas y Lógica de Negocio ---
-
-function logoutAndRedirect(message) {
-     // 3. Redirigir al login después de un breve momento
-    setTimeout(() => {
-        window.location.href = '/logintecnico';
-    }, 1500); // 1.5 segundos para que el usuario vea el mensaje
-
-}
 
 /**
  * Muestra los detalles de un componente después de una búsqueda exitosa.

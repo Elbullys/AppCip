@@ -23,6 +23,7 @@ app.use('/',require('./router/RouterViewWeb'));
 app.use('/',require('./router/RouterViewLogin'));
 app.use('/',require('./router/RouterViewComponente'));
 app.use('/',require('./router/RouterViewTecnico'));
+app.use('/',require('./router/RouterViewResponsable'));
 app.use('/',require('./router/RouterViewCatalogo'));
 app.use('/',require('./router/RouterViewInventario'));
 

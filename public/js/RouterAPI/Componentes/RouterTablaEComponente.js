@@ -6,7 +6,7 @@ import {
 const api = URLAPI;
 
 
-//const api ='https://apirestcip.onrender.com';
+
 const databusqueda = document.getElementById('codigoTIValue').textContent;
 
 const queryParams = new URLSearchParams(); // Inicializar queryParams

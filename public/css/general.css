@@ -1,6 +1,6 @@
-/* ========================= */
-/* Estilo para la barra de navegación INICIO   */
-/* ========================= */
+/* *========================= */
+/** Estilo para la barra de navegación INICIO   */
+/** ========================= */
 /*  */
 .navbar {
   background-color: #f8f9fa; /* Fondo claro */
@@ -61,9 +61,9 @@
 /* Estilo para la barra de navegación FIN   */
 /* ========================= */
 
-/* ========================= */
-/* Estilo para la tabla  INICIO    */
-/* ========================= */
+/** ========================= */
+/** Estilo para la tabla  INICIO    */
+/* *========================= */
 
 .table {
   border-collapse: collapse; /* Colapsa los bordes de la tabla */
@@ -105,9 +105,9 @@ tr.selected {
 /* Estilo para la tabla  FIN    */
 /* ========================= */
 
-/* ========================= */
-/* Estilo para LeerCodigoQR   */
-/* ========================= */
+/** ========================= */
+/** Estilo para LeerCodigoQR   */
+/** ========================= */
 #btnmanual {
   margin-top: 10px;
 }
@@ -129,9 +129,9 @@ tr.selected {
 /* FIN Estilo para LeerCodigoQR   */
 /* ========================= */
 
-/* ========================= */
-/* INICIO ESTILO MODAL  CONSULTAR COMPONENTE QR   */
-/* ========================= */
+/** ========================= */
+/* *INICIO ESTILO PARA MODALES  DETALLE O CONSULTA */
+/** ========================= */
 .modal {
   background-color: transparent !important; /* Fondo transparente para el modal */
 }
@@ -186,15 +186,108 @@ tr.selected {
   .modal-backdrop.fade {
     opacity: 1 !important;
   }
+/*PERSONALIZACION DE MODAL AGRUPACION DE DATOS Y MEJOR ESPACIADO. 
+ /* Contenedor del Scroll */
+#detalleCatalogoComponenteContenido {
+    max-height: 450px; /* Ajusta según prefieras */
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/*PERSONALIZACION PARA DIV TEXTOS LARGOS*/
+/* Personalización del Scrollbar */
+#detalleCatalogoComponenteContenido::-webkit-scrollbar {
+    width: 6px;
+}
+#detalleCatalogoComponenteContenido::-webkit-scrollbar-thumb {
+    background: #ced4da;
+    border-radius: 10px;
+}
+
+/* Tarjeta Principal */
+.card-detalle-custom {
+    background: #ffffff;
+    border: 1px solid #e3e6f0;
+    border-left: 4px solid #4e73df !important; 
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Colores de las Specs */
+.subtitulo-modal-agrupado {
+    color: #002852;
+    font-weight: 1000;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+
+}
+.Titulo {
+    color: #002852;
+    font-weight: 1000;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+
+}
+
+.table-specs-custom {
+    width: 100%;
+    background: #f8f9fc;
+    border-radius: 8px;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+
+.table-specs-custom td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eceeef;
+}
+
+.label {
+    font-weight: 400;
+    color: #002852;
+}
+
+/* Contenedor de datos agrupados */
+.info-grid {
+   
+    grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.info-item {
+    background: #f8f9fc;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #e3e6f0;
+}
+
+.info-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #002852;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 0.9rem;
+    color: #5a5c69;
+    font-weight: 500;
+}
 
 /* ========================= */
 /* fin ESTILO MODAL CONSULTAR COMPONENTE QR   */
 /* ========================= */
 
 
-/* ========================= */
+/** ========================= */
 /* ESTILO PARA VISTA EDITAR   */
-/* ========================= */
+/** ========================= */
 
 
  .card-header-edit {
@@ -221,10 +314,77 @@ tr.selected {
 /* ========================= */
 /* FINESTILO PARA VISTA EDITAR   */
 /* ========================= */
-/*
-.encabezado-title {
-  text-align: left;
-  color: #002852;  Color del texto 
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+
+
+/** ========================= */
+/** Estilo para VistaBuscador List  */
+/** ========================= */
+/* Estilos personalizados para vistaBuscador  */
+.custom-vista {
+  background-color: #ffffff !important; /* Override bg-light a fondo blanco puro */
+  border: 1px solid #dee2e6; /* Borde sutil gris para definición */
+  border-radius: 0.5rem; /* Bordes redondeados suaves */
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Sombra ligera para profundidad */
 }
-*/
+
+/* Títulos (h6): Azul fuerte para destacar */
+.custom-vista h6 {
+  color: #0056b3 !important; /* Azul fuerte intenso (override text-primary) */
+  
+}
+
+/* Inputs (inputBusquedaInterna): Grises para un look moderno */
+.custom-vista .form-control {
+  background-color: #f8f9fa !important; /* Fondo gris muy claro */
+  border-color: #6c757d !important; /* Borde gris */
+  color: #495057 !important; /* Texto gris oscuro */
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Transición suave al focus */
+}
+
+.custom-vista .form-control:focus {
+  border-color: #0056b3 !important; /* Azul fuerte al focus para consistencia */
+  box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.25) !important; /* Sombra azul sutil */
+}
+
+/* Botón de filtro (btnEjecutarFiltro): Azul fuerte con hover */
+.custom-vista .btn-primary {
+  background-color: #0056b3 !important; /* Azul fuerte */
+  border-color: #0056b3 !important;
+  color: #ffffff !important; /* Texto blanco */
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.custom-vista .btn-primary:hover {
+  background-color: #004085 !important; /* Azul más oscuro al hover */
+  border-color: #003d6b !important;
+}
+
+/* Lista de resultados (listaResultados): Fondo blanco, hover gris */
+.custom-vista .list-group-item {
+  background-color: #ffffff !important; /* Fondo blanco */
+  color: #202223 !important; /* Texto gris */
+  border-color: #dee2e6 !important; /* Borde gris sutil */
+}
+
+.custom-vista .list-group-item:hover {
+  background-color: #f8f9fa !important; /* Hover gris claro */
+  color: #000000 !important; /* Texto más oscuro */
+}
+
+.custom-vista .list-group-item-action:active {
+  background-color: #e9ecef !important; /* Gris al seleccionar */
+}
+
+/* Mensajes de estado (e.g., en listaResultados): Grises para consistencia */
+.custom-vista .text-muted {
+  color: #6c757d !important;
+}
+
+.custom-vista .text-danger {
+  color: #dc3545 !important; /* Rojo para errores */
+}
+
+
+/* ========================= */
+/* FIN Estilo para VistaBuscador List  */
+/* ========================= */

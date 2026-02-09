@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('FormLogin');
     const btnLogin = document.getElementById('btnlogin');
 
-    // Escucha el evento 'submit' del formulario
+    // evento 'submit' 
     loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();  // Previene recargar la página
+        e.preventDefault();  
 
         // Recopila los datos del formulario
         const username = document.getElementById('inputusername');
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             return;
         } else {
-            // Deshabilita el botón para evitar múltiples clics
+            // Deshabilitar el botón para evitar múltiples clics
             btnLogin.disabled = true;
             btnLogin.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Iniciando...';
 
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (puesto.value.trim() === 'TECNICO') {
                     url = `${api}/api/logintecnicos/logintecnico`;
                 } else if (puesto.value.trim() === 'RESPONSABLE') {
-                    // url = `${api}/api/loginresponsables/loginresponsable`;  // Descomenta si tienes endpoint para responsable
+                    
                     throw new Error('Login para RESPONSABLE no implementado aún.');
                 }
 
@@ -56,10 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const Data = {
                     username: username.value.trim(),
-                    Password: password.value.trim(),  // Mantén mayúscula si tu backend lo espera así
+                    Password: password.value.trim(),  
                 };
 
-                // Configuración para handlePOST (asume que handlePOST usa fetch y soporta credentials)
+                // Configuración para handlePOST 
                 const config = {
                     url: url,
                     data: Data,
@@ -67,37 +67,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     loadingTitle: 'Iniciando sesión',
                     loadingText: 'Verificando credenciales...',
                     errorTitle: 'Error en login',
-                    credentials: 'include'  // Agrega esto si handlePOST lo soporta; envía cookies
+                    credentials: 'include' 
                 };
 
                 const response = await handlePOST(config);
 
 
 
-                // Verifica éxito: response.success y response.data.data existen
+                // Verifica éxito
                 if (response && response.success && response.data && response.data.data) {
                     const userDataFromResponse = response.data.data;
-                    const token = userDataFromResponse.token;
-
-                    // Guarda el token en localStorage (en lugar de depender de cookies)
-                    //localStorage.setItem('access_token', token);
+              
 
                     try {
-
-                        // Fetch a /protected con el token en headers
                         const verifyResponse = await fetch(`${api}/api/logintecnicos/protected`, {
                             method: 'GET',
                             credentials: 'include',
                             headers: {
 
                             },
-                            // Quita credentials: 'include' si usas headers
+                            
                         });
 
                         if (verifyResponse.ok) {
                             const responseData = await verifyResponse.json();
 
-                                console.log("responseData",responseData);
+                            
                             if (responseData.success && responseData.data) {
                                 // Guarda el nombre en localStorage (persistente hasta logout)
                                 localStorage.setItem('username', responseData.data.usuario);

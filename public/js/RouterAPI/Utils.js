@@ -1,6 +1,6 @@
 //PERMITE EXPORTAR LA RUTA DE LA API
-export const URLAPI = 'https://apirestcip.onrender.com';
-//export const URLAPI= 'http://localhost:7000';
+//export const URLAPI = 'https://apirestcip.onrender.com';
+export const URLAPI= 'http://localhost:7000';
 
 //VARIBLES CACHE
 const cacheKey = 'cacheConsRetTransito';
@@ -308,7 +308,7 @@ export class General {
 
   static password(Password) {
     if (typeof Password === "undefined") {
-      console.log("password desconocido");
+
       return {
         icon: "warning",
         error: true,
@@ -393,6 +393,13 @@ export class General {
       }
     });
   }
+  static limpiarSelectDinamico(idSelect) {
+    const select = document.getElementById(idSelect);
+    if (select) {
+        select.innerHTML = '<option value="">Seleccione una opción</option>';
+        select.selectedIndex = 0;
+    }
+}
 
 }
 
@@ -690,8 +697,7 @@ export async function handlePUT(config) {
     errorTitle = 'Error al editar',
   } = config;
 
-  console.log("data", data);
-  console.log("id", id);
+
 
   // Validaciones iniciales
   if (!url || !data) {
@@ -808,6 +814,7 @@ export async function handlePUT(config) {
       if (typeof Toast !== 'undefined') {
         Toast.fire({
           icon: "error",
+          error:true,
           title: `${errorTitle}: ${error.message}`,
         });
       } else {
@@ -1153,7 +1160,7 @@ export async function handlePOSTbatch(config) {
   }
 }
 
-
+// Evento para convertir texto a mayúsculas en inputs de texto y áreas de texto
 export const textInputs = document.querySelectorAll('input[type="text"], input[type="email"], textarea');
 textInputs.forEach(input => {
   input.addEventListener('input', function () {
@@ -1161,14 +1168,14 @@ textInputs.forEach(input => {
   });
 });
 
-// Función para cambiar el texto del label del switch
+// Función para cambiar el texto del label asociado a un switch
 export function cambiarLabelSwitch(idSwitch, nuevoTexto) {
   const labelElement = document.querySelector(`label[for="${idSwitch}"]`);
   if (labelElement) {
     labelElement.textContent = nuevoTexto;
   }
 }
-
+// Función para obtener el valor del radio seleccionado en un grupo
 export function obtenerValorRadioSeleccionado(nombreGrupo) {
   const radios = document.getElementsByName(nombreGrupo);
   for (let radio of radios) {
@@ -1178,7 +1185,7 @@ export function obtenerValorRadioSeleccionado(nombreGrupo) {
   }
   return null;  // Si ninguno está seleccionado
 }
-
+// Función para obtener el estado de un switch (checkbox) por su ID
 export function obtenerEstadoSwitch(idSwitch) {
   const switchElement = document.getElementById(idSwitch);
   if (switchElement) {
@@ -1187,7 +1194,7 @@ export function obtenerEstadoSwitch(idSwitch) {
   console.warn(`Switch con ID "${idSwitch}" no encontrado.`);
   return 0;  // Valor por defecto si no se encuentra
 }
-
+// Función para cerrar sesión y redirigir al login
 export async function ObtenerIdTecnicoSesion() {
   try {
     const verifyResponse = await fetch(`${URLAPI}/api/logintecnicos/protected`, {
@@ -1219,7 +1226,7 @@ export async function ObtenerIdTecnicoSesion() {
   }
 
 }
-
+// Función para cerrar sesión y redirigir al login
 export function obtenerUsuarioLocalStorage() {
   //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
   const nombreperfil = document.getElementById('username');//username

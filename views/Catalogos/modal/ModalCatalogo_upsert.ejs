@@ -1,71 +1,263 @@
-<div class="modal fade" id="upsertCatalogoModal" tabindex="-1" aria-labelledby="upsertCatalogoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="upsertCatalogoModalLabel">Agregar Catálogo de Componentes</h5>
-                 <button type="button" id="btoncloseupsertCatalogomodal" class="btn-close-custom btn-secondary" data-bs-dismiss="modal" tabindex="-1"><i class="fas fa-times"></i></button> 
-
+<div
+  class="modal fade"
+  id="upsertCatalogoModal"
+  tabindex="-1"
+  aria-labelledby="upsertCatalogoModalLabel"
+  aria-hidden="true"
+  data-bs-keyboard="false"
+  data-bs-backdrop="static"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="upsertCatalogoModalLabel">
+          Catálogo Componentes
+        </h5>
+        <button
+          type="button"
+          id="btoncloseupsertCatalogomodal"
+          class="btn-close-custom btn-secondary"
+          data-bs-dismiss="modal"
+          tabindex="-1"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="vistaFormulario">
+          <!-- Vista base del formulario -->
+          <form
+            id="formularioupsertCatalogo"
+            action=""
+            method="POST"
+            enctype="multipart/form-data"
+            autocomplete="off"
+          >
+            <div
+              class="align-items-center mb-3" 
+              id="colIdCatalogoComponentes"
+            >
+              <label
+                for="inputidcatalogo"
+                class="form-label me-2"
+                style="min-width: 120px"
+                
+              >
+                ID del Catálogo
+              </label>
+              <input
+                type="text"
+                id="inputidcatalogo"
+                class="form-control form-control-sm"
+                placeholder="*"
+                style="max-width: 100px"
+                disabled="false"
+              />
             </div>
-            <div class="modal-body">
-                <form id="formularioupsertCatalogo" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
-                    <!-- Inputs principales: Nombre, Dispositivo, Marca/Modelo -->
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label for="inputnombrecatalogo" class="form-label">Nombre del Catálogo</label>
-                            <input type="text" id="inputnombrecatalogo" class="form-control" placeholder="Nombre del Cátalogo" required disabled/>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="inputdispositivo" class="form-label">Dispositivo</label>
-                            <input type="text" id="inputdispositivo" class="form-control" placeholder="Dispositivo" required />
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputmarcamodelo" class="form-label">Marca/Modelo</label>
-                        <input type="text" id="inputmarcamodelo" class="form-control" placeholder="Marca/Modelo" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputdescripcioncatalogo" class="form-label">Descripción del Catálogo</label>
-                        <textarea class="form-control" id="inputdescripcioncatalogo" placeholder="Descripción del catálogo" rows="3" autocomplete="off"></textarea>
-                    </div>
 
-                    <!-- Sesión Adicional: Selects en grid -->
-                    <div id="sesionAdicional" class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label for="selectprocesador" class="form-label">Procesador</label>
-                            <select class="form-select" name="procesador" id="selectprocesador" required>
-                                <option value="" selected disabled>Seleccione un procesador</option>
-                                <!-- Agrega opciones dinámicamente aquí -->
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="selectmemoriaram" class="form-label">Memoria RAM</label>
-                            <select class="form-select" name="memoriaram" id="selectmemoriaram" required>
-                                <option value="" selected disabled>Seleccione memoria RAM</option>
-                                <!-- Agrega opciones dinámicamente aquí -->
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="selectdiscoduro" class="form-label">Disco Duro</label>
-                            <select class="form-select" name="discoduro" id="selectdiscoduro" required>
-                                <option value="" selected disabled>Seleccione disco duro</option>
-                                <!-- Agrega opciones dinámicamente aquí -->
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="selectsistemaoperativo" class="form-label">Sistema Operativo</label>
-                            <select class="form-select" name="sistemaoperativo" id="selectsistemaoperativo" required>
-                                <option value="" selected disabled>Seleccione sistema operativo</option>
-                                <!-- Agrega opciones dinámicamente aquí -->
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Botón de registrar -->
-                    <div class="d-grid gap-2">
-                        <button type="button" id="btonupsertcatalogo" class="btn btn-primary">Registrar</button>
-                    </div>
-                </form>
+            <div class="mb-6" id="colNombreCatalogo">
+              <label for="inputnombrecatalogo" class="form-label"
+                >Nombre del Catálogo</label
+              >
+              <input
+                type="text"
+                id="inputnombrecatalogo"
+                class="form-control"
+                placeholder="Nombre del Catálogo"
+                required
+                disabled
+              />
             </div>
+            <div class="mb-3" id="colDispositivo">
+              <label
+                for="inputdispositivo"
+                class="form-label me-2 mb-0"
+                style="min-width: 100px"
+                >Dispositivo</label
+              >
+              <div class="input-group shadow-sm">
+                <input
+                  type="text"
+                  id="inputdispositivo"
+                  class="form-control"
+                  placeholder="Toca para buscar..."
+                  required
+                />
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="btnAbrirBuscador"
+                >
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+
+            
+            <div class="mb-3" id="colmarcamodelo">
+              <label for="inputmarcamodelo" class="form-label me-2 mb-0"
+                >Marca/Modelo</label
+              >
+              <div class="input-group shadow-sm">
+                <input
+                  type="text"
+                  id="inputmarcamodelo"
+                  class="form-control"
+                  placeholder="Toca para buscar..."
+                  required
+                  disabled
+                />
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="btnAbrirBuscadorMarca"
+                >
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+              <input type="hidden" id="id_marca_seleccionada" />
+            </div>
+
+            <!-- Vista de búsqueda integrada -->
+            <div
+              id="vistaBuscador"
+              style="display: none"
+              class="custom-vista mt-3 border rounded p-3 bg-light"
+            >
+              <div
+                class="d-flex justify-content-between align-items-center mb-2"
+              >
+                <h6 class="m-0 text-primary fw-bold" id="busquedaTittle">
+                  Realiza tu búsqueda
+                </h6>
+                <button
+                  type="button"
+                  class="btn-close"
+                  id="btnCancelarBusqueda"
+                  style="font-size: 0.8rem"
+                ></button>
+              </div>
+              <div class="input-group mb-2">
+                <input
+                  type="text"
+                  id="inputBusquedaInterna"
+                  class="form-control"
+                  placeholder="Serie o nombre..."
+                />
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="btnEjecutarFiltro"
+                >
+                  <i class="fas fa-filter"></i>
+                </button>
+              </div>
+              <div
+                id="listaResultados"
+                class="list-group"
+                style="max-height: 250px; overflow-y: auto"
+              >
+    
+                <div class="text-center p-3 text-muted">
+                  <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
+                  <p>Escribe y filtra para ver resultados</p>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3" id="coldescripcioncatalogo">
+              <label for="inputdescripcioncatalogo" class="form-label"
+                >Descripción del Catálogo</label
+              >
+              <textarea
+                class="form-control"
+                id="inputdescripcioncatalogo"
+                placeholder="Descripción del catálogo"
+                rows="3"
+                autocomplete="off"
+                disabled
+              ></textarea>
+            </div>
+            <!-- Sesión adicional -->
+            <div
+              id="sesionCaracteristicasAdicionales"
+              class="row g-3 mb-3"
+              display="none"
+            >
+              <div class="col-md-6">
+                <label for="selectprocesador" class="form-label"
+                  >Procesador</label
+                >
+                <select
+                  class="form-select"
+                  name="procesador"
+                  id="selectprocesador"
+                  required
+                >
+                  <option value="" selected disabled>
+                    Seleccione un procesador
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="selectmemoriaram" class="form-label"
+                  >Memoria RAM</label
+                >
+                <select
+                  class="form-select"
+                  name="memoriaram"
+                  id="selectmemoriaram"
+                  required
+                >
+                  <option value="" selected disabled>
+                    Seleccione memoria RAM
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="selectdiscoduro" class="form-label"
+                  >Disco Duro</label
+                >
+                <select
+                  class="form-select"
+                  name="discoduro"
+                  id="selectdiscoduro"
+                  required
+                >
+                  <option value="" selected disabled>
+                    Seleccione disco duro
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="selectsistemaoperativo" class="form-label"
+                  >Sistema Operativo</label
+                >
+                <select
+                  class="form-select"
+                  name="sistemaoperativo"
+                  id="selectsistemaoperativo"
+                  required
+                >
+                  <option value="" selected disabled>
+                    Seleccione sistema operativo
+                  </option>
+                </select>
+              </div>
+            </div>
+            <!-- Botón de registrar y actualizar -->
+            <div class="d-grid gap-2">
+              <button
+                type="button"
+                id="btonupsertcatalogo"
+                class="btn btn-primary"
+              >
+                Registrar
+              </button>
+            </div>
+          </form>
         </div>
+        <!-- Fin de vistaFormulario -->
+      </div>
     </div>
+  </div>
 </div>

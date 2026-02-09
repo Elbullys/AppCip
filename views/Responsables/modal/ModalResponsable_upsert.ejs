@@ -1,0 +1,251 @@
+<div
+  class="modal fade"
+  id="upsertResponsableModal"
+  tabindex="-1"
+  aria-labelledby="upsertResponsableModalLabel"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="upsertResponsableModalLabel">
+          Responsables
+        </h5>
+        <button
+          type="button"
+          id="btoncloseupsertResponsablemodal"
+          class="btn-close-custom btn-secondary"
+          data-bs-dismiss="modal"
+          tabindex="-1"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="vistaFormulario">
+          <!-- Vista base del formulario -->
+          <form
+            id="formularioupsertResponsable"
+            action=""
+            method="POST"
+            enctype="multipart/form-data"
+            autocomplete="off"
+          >
+            <!-- Fila 1: ID Responsable y Nombre -->
+            <div class="row g-3 mb-3" id="colrow1">
+              <div class="col-md-4">
+                <label for="inputidResponsable" class="form-label">ID Responsable</label>
+                <input
+                  type="text"
+                  id="inputidResponsable"
+                  class="form-control form-control-sm"
+                  placeholder="*"
+                  disabled="false"
+                />
+              </div>
+              <div class="col-md-8">
+                <label for="inputNombreResponsable" class="form-label">Nombre del Responsable</label>
+                <input
+                  type="text"
+                  id="inputNombreResponsable"
+                  class="form-control"
+                  placeholder="Nombre Responsable"
+                  autocomplete="new-password"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Fila 2: Usuario -->
+            <div class="row g-3 mb-3" id="colrow2">
+              <div class="col-md-12">
+                <label for="inputUsuario" class="form-label">Usuario</label>
+                <input
+                  type="text"
+                  id="inputUsuario"
+                  class="form-control"
+                  placeholder="Usuario"
+                  autocomplete="new-password"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Fila 3: Checkbox y Contraseña -->
+            <div class="row g-3 mb-3 mt-3 align-items-end" id="colrow3">
+              <div class="col-md-12">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="checkCambiarPassword"
+                  />
+                  <label class="form-check-label" for="checkCambiarPassword">
+                    Deseo cambiar la Contraseña
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fila 4: Confirmar Contraseña -->
+            <div class="row g-3 mb-3" id="colrow4">
+               <div class="col-md-12" id="divcontraseña">
+                <label for="inputpassword" id="lblcontraseña" class="form-label">Contraseña</label>
+                <input
+                  type="password"
+                  id="inputpassword"
+                  class="form-control"
+                  placeholder="Contraseña"
+                  autocomplete="new-password"
+                  required
+                />
+              </div>
+              <div class="col-md-12">
+                <label for="inputpasswordrepetir" id="lblcontraseñarepetir" class="form-label">Confirmar Contraseña</label>
+                <input
+                  type="password"
+                  id="inputpasswordrepetir"
+                  class="form-control"
+                  placeholder="Repetir Contraseña"
+                  autocomplete="new-password"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Fila 5: Unidad -->
+            <div class="row g-3 mb-3" id="colrow5">
+              <div class="col-md-12">
+                <label for="inputUnidad" class="form-label">Unidad</label>
+                <div class="input-group shadow-sm">
+                  <input
+                    type="text"
+                    id="inputUnidad"
+                    class="form-control"
+                    placeholder="Toca para buscar..."
+                    autocomplete="off"
+                    required
+                  />
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    id="btnAbrirBuscadorUnidad"
+                  >
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fila 6: Cargo y Área -->
+            <div class="row g-3 mb-3" id="colrow6">
+              <div class="col-md-6">
+                <label for="selectCargo" class="form-label">Cargo</label>
+                <select
+                  class="form-select"
+                  name="Cargo"
+                  id="selectCargo"
+                  required
+                >
+                  <option value="" selected disabled>Seleccione un Cargo</option>
+                  <option value="GERENCIA">GERENCIA</option>
+                  <option value="JEFE DE ÁREA">JEFE DE ÁREA</option>
+                  <option value="ASISTENTE">ASISTENTE</option>
+                  <option value="SUPERVISOR">SUPERVISOR</option>
+                  <option value="RESPONSABLE">RESPONSABLE</option>
+                  <option value="RESPONSABLE SANITARIO">RESPONSABLE SANITARIO</option>
+                  <option value="ENCARGADO">ENCARGADO</option>
+                  <option value="AUXILIAR">AUXILIAR</option>
+                  <option value="SIN CARGO">SIN CARGO</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="selectArea" class="form-label">Área</label>
+                <select class="form-select" name="Area" id="selectArea" required>
+                  <option value="" selected disabled>Seleccione una Área</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Fila 7: Estado del Responsable -->
+            <div class="row g-3 mb-3" id="colrow7">
+              <div class="col-md-12">
+                <label for="selectStatusResponsable" class="form-label">Estado del Responsable</label>
+                <select
+                  class="form-select"
+                  name="Area"
+                  id="selectStatusResponsable"
+                  required
+                >
+                  <option value="" selected disabled>Seleccione un Estatus</option>
+                  <option value="ACTIVO">ACTIVO</option>
+                  <option value="CANCELADO">CANCELADO</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Vista de búsqueda integrada -->
+            <div
+              id="vistaBuscador"
+              style="display: none"
+              class="custom-vista mt-3 border rounded p-3 bg-light"
+            >
+              <div
+                class="d-flex justify-content-between align-items-center mb-2"
+              >
+                <h6 class="m-0 text-primary fw-bold" id="busquedaTittle">
+                  Realiza tu búsqueda
+                </h6>
+                <button
+                  type="button"
+                  class="btn-close"
+                  id="btnCancelarBusqueda"
+                  style="font-size: 0.8rem"
+                ></button>
+              </div>
+              <div class="input-group mb-2">
+                <input
+                  type="text"
+                  id="inputBusquedaInterna"
+                  class="form-control"
+                  placeholder="Nombre ó unidad..."
+                />
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="btnEjecutarFiltro"
+                >
+                  <i class="fas fa-filter"></i>
+                </button>
+              </div>
+              <div
+                id="listaResultados"
+                class="list-group"
+                style="max-height: 250px; overflow-y: auto"
+              >
+                <div class="text-center p-3 text-muted">
+                  <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
+                  <p>Escribe y filtra para ver resultados</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botón de registrar y actualizar -->
+            <div class="d-grid" id="colbtn">
+              <button
+                type="button"
+                id="btonupsertResponsable"
+                class="btn btn-primary"
+              >
+                Registrar
+              </button>
+            </div>
+          </form>
+        </div>
+        <!-- Fin de vistaFormulario -->
+      </div>
+    </div>
+  </div>
+</div>

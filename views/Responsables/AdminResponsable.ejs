@@ -1,0 +1,105 @@
+<%- include("../template/cabecera",{tituloweb:'Panel Administrador Responsables'}) %>
+<%- include("../template/navbar") %>
+
+<div class="container py-5">
+    <main class="container-fluid mt-5">
+        <h3 class="text-center mb-4">Responsables</h3>
+    </main>
+
+    <!-- Contenedor para búsqueda, Unidad y botones de acciones -->
+    <div class="row align-items-end py-3 flex-column flex-md-row fixed-buttons">
+
+        <div class="col-12 col-md-3 mb-3 mb-md-0">
+            <label for="inputUnidadPanel" class="form-label">Unidad</label>
+            <div class="input-group shadow-sm">
+                <input
+                    type="text"
+                    id="inputUnidadPanel"
+                    class="form-control"
+                    placeholder="👉 Haga clic para seleccionar unidad"
+                    autocomplete="off"
+                    required
+                />
+            </div>
+        </div>
+ <div class="col-12 col-md-3 mb-3 mb-md-0">
+            <label for="inputBusquedaresponsable" class="form-label">Buscar Responsable</label>
+            <div class="input-group">
+                <input
+                    type="text"
+                    id="inputBusquedaresponsable"
+                    class="form-control"
+                    placeholder="Buscar Responsable..."
+                    autocomplete="off"
+                    tabindex="1"
+                />
+                <button id="btnBuscarResponsable" class="btn btn-primary"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+  
+        <div class="col-12 col-md-6 text-end d-flex d-md-block justify-content-around flex-wrap">
+            <a
+                type="button"
+                id="btnMaximizartblResponsable" 
+                class="btn btn-primary me-2 mb-2 mb-md-0" 
+                title="Maximizar Tabla Responsable"
+            >
+                <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+            </a>
+            
+            <a
+                type="button"
+                id="btnAbriragregarResponsable" 
+                class="btn btn-success me-2 mb-2 mb-md-0"
+                title="Registrar Nuevo Responsable"
+            >
+                <i class="fa-solid fa-person-circle-plus"></i>
+            </a>
+            
+            <a
+                type="button"
+                id="btnAbrirEditarResponsable" 
+                class="btn btn-warning me-2 mb-2 mb-md-0" 
+                title="Editar Responsable"
+            >
+                <i class="fas fa-edit"></i>
+            </a>
+            
+            <a
+                type="button"
+                id="btnVisualizarResponsable" 
+                class="btn btn-info me-2 mb-2 mb-md-0" 
+                title="Visualizar Responsable"
+            >
+                <i class="fa-solid fa-eye"></i>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="table-container">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table id="table_Responsable" class="table table-hover tableModalConsulta table-striped table-sm">
+                <thead class="table-header-fixed">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Cargo</th>
+                        <th scope="col">Unidad</th>
+                        <th scope="col">Área</th>
+                        <th scope="col">Estatus</th>
+                    </tr>
+                </thead>
+                <tbody class="table-body-scroll"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="/js/RouterAPI/Responsable/RouterPanelResponsable.js" type="module"></script>
+<%- include("../template/footer") %>
+<%- include("./modal/ModalResponsable_upsert") %>
+<%- include("./modal/ModalDetalleResponsable") %>
+<%- include("../Unidades/modal/ModalConsultarUnidades") %>
+<%- include("../Areas/modal/ModalConsultarAreas") %>
