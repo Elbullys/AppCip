@@ -21,7 +21,6 @@
     top: 0; /* Fija el header en la parte superior del contenedor de la tabla */
     background-color: #f8f9fa; /* Color de fondo igual al de Bootstrap para consistencia */
     z-index: 10; /* Por encima del tbody */
-    /* Si usas Bootstrap, agrega box-shadow para un borde sutil */
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
 }
 

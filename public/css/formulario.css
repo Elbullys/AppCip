@@ -150,24 +150,24 @@
     border-bottom: none !important;
 }
 
-/* Sobrescribe EXPLÍCITAMENTE las clases odd/even de DataTables en la fila seleccionada - MANTIENE COLOR FIJO */
+
 .tableModalConsulta tbody tr.selected-row.odd,
 .tableModalConsulta tbody tr.selected-row.even {
-    background-color: #85d2ff !important;  /* Ignora odd/even - COLOR FIJO */
+    background-color: #85d2ff !important;  
 }
 
 .tableModalConsulta tbody tr.selected-row.odd td,
 .tableModalConsulta tbody tr.selected-row.even td,
 .tableModalConsulta tbody tr.selected-row.odd .selected-cell,
 .tableModalConsulta tbody tr.selected-row.even .selected-cell {
-    background-color: #85d2ff !important;  /* COLOR FIJO en celdas, ignora odd/even */
+    background-color: #85d2ff !important;  /* COLOR FIJO en celdas */
 }
 
 /* ELIMINA COMPLETAMENTE el hover en la fila seleccionada - COLOR SIEMPRE FIJO, SIN CAMBIOS AL MOVER CURSOR */
 .tableModalConsulta tbody tr.selected-row:hover,
 .tableModalConsulta tbody tr.selected-row:hover td,
 .tableModalConsulta tbody tr.selected-row:hover .selected-cell {
-    background-color: #85d2ff !important;  /* COLOR FIJO: No cambia NADA en hover */
+    background-color: #85d2ff !important; 
     color: #000 !important;
 }
 
@@ -194,18 +194,18 @@
     }
 }
 
-/* Tema dark opcional - COLOR FIJO también aquí */
+/* Tema dark  */
 @media (prefers-color-scheme: dark) {
     .tableModalConsulta tbody tr.selected-row,
     .tableModalConsulta tbody tr.selected-row td,
     .tableModalConsulta tbody .selected-cell {
-        background-color: #0d6efd !important;  /* Azul oscuro FIJO */
+        background-color: #0d6efd !important;  /* Azul oscuro  */
         color: #fff !important;
     }
     .tableModalConsulta tbody tr.selected-row:hover,
     .tableModalConsulta tbody tr.selected-row:hover td,
     .tableModalConsulta tbody tr.selected-row:hover .selected-cell {
-        background-color: #0d6efd !important;  /* COLOR FIJO: No cambia en hover */
+        background-color: #0d6efd !important;  /* No cambia en hover */
     }
 }
 /*////////////////////////////////////////////////////////////////////////////////////////////////////////*/

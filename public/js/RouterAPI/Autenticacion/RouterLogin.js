@@ -94,9 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             
                             if (responseData.success && responseData.data) {
-                                // Guarda el nombre en localStorage (persistente hasta logout)
+                                // Guarda el nombre en localStorage 
                                 localStorage.setItem('username', responseData.data.usuario);
-                                //localStorage.setItem('id_tecnico', responseData.data.id_tecnico);
+                                
                                 const customMessage = `Bienvenido ${responseData.data.usuario}!`;
                                 Swal.fire({
                                     icon: responseData.data.icon||'success',

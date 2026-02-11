@@ -9,8 +9,8 @@ const api = URLAPI;
 
 const databusqueda = document.getElementById('codigoTIValue').textContent;
 
-const queryParams = new URLSearchParams(); // Inicializar queryParams
-const componenteoData = {};
+//const queryParams = new URLSearchParams(); // Inicializar queryParams
+//const componenteoData = {};
 let id_componente = null;
 let EstadoInventario = null;
 let modal = null;
@@ -38,14 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnVisualizar = document.getElementById('btnVisualizar');
     const btnmaximizarColumnas = document.getElementById('toggleColumns');//toggleColumns
     
-    // --- VARIABLES DE ÁMBITO CORREGIDO ---
-    let table; // Declarada aquí para ser accesible por los listeners
-    let visibleState = false; // Declarada aquí para manejar el estado de las columnas
-    // ------------------------------------
+  
+    let table; 
+    let visibleState = false; 
+    
 
     inicializarDataTableComponentes(databusqueda);
 
-    //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
+    //PARA OBTENER DE LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
         obtenerUsuarioLocalStorage();
 
     // DATATABLES INICIARLIZAR COMPONENTE
@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     "data": 'id_componente',
                     "render": function (data, type, row) {
                         // Aquí se guarda el ID de la primera fila. 
-                        // NOTA: Si hay varias filas, solo se guarda el ID de la última.
                         id_componente = data;
                         return data;
                     }
@@ -69,8 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { "data": 'modelo' },
                 { "data": 'numero_serie' },
                 {
-                    // Esta columna está en el índice 6
-                    "data": null, // No se usa un campo específico
+                    "data": null, 
                     "render": function (data, type, row) {
                         const idUnidad = row.id_unidad.toString(); // Convertir a string
                         const idContrato = row.num_contrato_actual; 
@@ -87,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             } else if (idUnidad.length === 3) {
                                 ceros = '';
                             }
-                            // Concatenar id_contrato, ceros y id_unidad
+                            
                             return idContrato + ceros + idUnidad + "-" + unidad;
                         } else {
                             return idUnidad + "-" + unidad;
@@ -95,13 +93,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     "title": "Nombre de la Unidad"
                 },
-                // Columnas de la 7 a la 11 (Ocultables)
-                { "data": 'area' }, // 7
-                { "data": 'nombre_responsable' }, // 8
-                { "data": 'observaciones' }, // 9
-                { "data": 'status_componente' }, // 10
+                
+                { "data": 'area' }, 
+                { "data": 'nombre_responsable' }, 
+                { "data": 'observaciones' }, 
+                { "data": 'status_componente' }, 
                 {
-                    "data": 'status_inventario', // 11
+                    "data": 'status_inventario', 
                     "render": function (data, type, row) {
                         if (data === 1) {
                             return '<span class="text-success">ACTIVO</span>';
@@ -124,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             info: false,
             ordering: true,
             responsive: true,
-            destroy: true // Opción clave: destruye automáticamente si ya existe
+            destroy: true // destruye automáticamente si ya existe
 
         };
         handleDataTableLoadingGET({
@@ -146,17 +144,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // --- LISTENERS ---
 
     if (btnEditar) {
         btnEditar.addEventListener('click', EnviarFormEditarComponente);
     }
 
-    if (btnVisualizar) { // Corregido: Usar if (btnVisualizar) en lugar de if (btnEditar)
+    if (btnVisualizar) { 
         btnVisualizar.addEventListener('click', verDetallesComponente);
     }
 
-  // Variable para rastrear el estado de visibilidad (inicialmente false = ocultas)
+  // Variable para rastrear el estado de visibilidad 
  visibleState = false;
 
 // Función callback para actualizar el estado
@@ -165,10 +162,9 @@ const setVisibleState = (newValue) => {
  
 };
 
-// Tu código existente, pero corregido
 if (btnmaximizarColumnas) {
     btnmaximizarColumnas.addEventListener('click', () => {
-        // Llama al método con los parámetros correctos
+        // Llama al método 
         ConfigTable.maximizarColumnas(
             table,              // Instancia de la tabla
             visibleState,       // Estado actual (boolean dinámico)
@@ -178,8 +174,6 @@ if (btnmaximizarColumnas) {
     });
 }
 
-
-    // --- FUNCIONES LÓGICAS ---
 
     function EnviarFormEditarComponente() {
         if (id_componente === undefined || id_componente === null || id_componente === '') {
@@ -193,7 +187,6 @@ if (btnmaximizarColumnas) {
 
             if (EstadoInventario.toString() === "0") {
 
-                // Muestra el toast de pregunta
                 Swal.fire({
                     title: '¿Advertencia?',
                     text: 'Esta apunto de Actualizar Un Componente El cual Ha sido Dado De baja, Si lo modificas se Ocasionará Un Descuadre En los Inventario , por consecuencia si se modifica esta bajo responsabilidad del técnico ¿Esta seguro de realizarlo ?',
@@ -240,7 +233,6 @@ if (btnmaximizarColumnas) {
 
         modal = $('#detallecomponenteQR');
 
-        // Cerrar el modal si está abierto
         if (modal.hasClass('show')) {
             modal.modal('hide');
             modal.one('hidden.bs.modal', function () {
@@ -275,7 +267,7 @@ if (btnmaximizarColumnas) {
             } else if (idUnidad.length === 2) {
                 textoFormateado = '0' + idUnidad; // Agregar 1 cero si tiene 2 dígitos
             }
-            else if (idUnidad.length === 3) {
+            else if (idUnidad.length === 3) {// No agrega ceros tiene 3 dígitos
                 textoFormateado = idUnidad;
             }
 
@@ -288,7 +280,7 @@ if (btnmaximizarColumnas) {
             fechacompra = conversionFecha(fecha);
 
 
-            // Limpiar contenido previo
+          
             document.getElementById('idunidad').innerText = String(data.body[0].num_contrato_actual) + textoFormateado;
             document.getElementById('tecnicoregistro').innerText = data.body[0].nombre;
             document.getElementById('fecharegistro').innerText = fecharegistro;
@@ -310,15 +302,11 @@ if (btnmaximizarColumnas) {
             document.getElementById('observaciones').innerText = data.body[0].observaciones;
             document.getElementById('area').innerText = data.body[0].area;
             document.getElementById('statusInventario').innerText = data.body[0].status_inventario === 1 ? 'ACTIVO' : 'INACTIVO';
-            // Mostrar el modal con Bootstrap 5
+            // Mostrar el modal 
             const bootstrapModal = new bootstrap.Modal(document.getElementById('detallecomponenteQR'));
             bootstrapModal.show();
         }
 
     }
 });
-
-// ----------------------------------------------------------------------
-// FUNCIONES DE UTILIDAD PARA VISIBILIDAD DE COLUMNAS (MANTENIENDO EL ESTADO)
-// ----------------------------------------------------------------------
 

@@ -107,13 +107,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputresponsable = document.getElementById("inputresponsable");
   const inputdispositivos = document.getElementById("inputdispositivos");
   const inputcatalogo = document.getElementById("inputcatalogo");
-  const inputdescripcioncatalogo = document.getElementById(
-    "inputdescripcioncatalogo"
-  );
+  const inputIdfactura = document.getElementById("inputIdfactura");
   const btnDescargarPlantilla = document.getElementById("downloadTemplate");
   const btnsubirform = document.getElementById("btnsubirform");
   const btnVerificacionyActualizacion = document.getElementById(
-    "btnVerificacionyActualizacion"
+    "btnVerificacionyActualizacion",
   );
 
   let jsonData;
@@ -141,9 +139,8 @@ document.addEventListener("DOMContentLoaded", () => {
     inputBusqueda.addEventListener("keydown", async function (event) {
       if (event.key === "Enter") {
         const searchTerm = $("#inputBusqueda").val().trim();
-        const EleccionUnidad = await clsFuncionesModales.BuscarUnidad(
-          searchTerm
-        );
+        const EleccionUnidad =
+          await clsFuncionesModales.BuscarUnidad(searchTerm);
         //asignacion a variables globales del array
         asignacionVariablesUnidades(EleccionUnidad);
       }
@@ -162,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const EleccionArea = await clsFuncionesModales.BuscarArea(
         searchTerm,
-        estadoFormulario.tipo_unidad
+        estadoFormulario.tipo_unidad,
       );
       asignacionVariablesAreas(EleccionArea);
     });
@@ -172,10 +169,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (inputBusquedaArea) {
     inputBusquedaArea.addEventListener("keydown", async function (event) {
       if (event.key === "Enter") {
-        // Usa 'Enter' (case-sensitive)
+        // Usa 'Enter'
         const EleccionArea = await clsFuncionesModales.BuscarArea(
           inputBusquedaArea.value,
-          estadoFormulario.tipo_unidad
+          estadoFormulario.tipo_unidad,
         ); // Llama a la función de búsqueda
 
         asignacionVariablesAreas(EleccionArea);
@@ -194,30 +191,30 @@ document.addEventListener("DOMContentLoaded", () => {
       const EleccionResponsable =
         await inicializarDataTableResponsablePorIdUnidad(
           inputBusquedaResponsable.value,
-          estadoFormulario.IdUnidadValue
+          estadoFormulario.IdUnidadValue,
         );
       asignacionVariablesResponsables(EleccionResponsable);
     });
   }
 
   const inputBusquedaResponsable = document.getElementById(
-    "inputBusquedaResponsable"
+    "inputBusquedaResponsable",
   );
   if (inputBusquedaResponsable) {
     inputBusquedaResponsable.addEventListener(
       "keydown",
       async function (event) {
         if (event.key === "Enter") {
-          // Usa 'Enter' (case-sensitive)
+          // Usa 'Enter'
           const EleccionResponsable =
             await clsFuncionesModales.BuscarResponsable(
               inputBusquedaResponsable.value,
-              estadoFormulario.IdUnidadValue
+              estadoFormulario.IdUnidadValue,
             ); // Llama a la función de búsqueda
 
           asignacionVariablesResponsables(EleccionResponsable);
         }
-      }
+      },
     );
   } else {
     console.error("No se encuentra tu búsqueda del Responsable");
@@ -231,10 +228,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // Aquí capturamos los valores JUSTO en el momento del clic
       const searchTerm = $("#inputBusquedadispositivo").val().trim();
 
-      const EleccionDispositivos = await inicializarDataTableDispositivos(
-        searchTerm
-      );
-      console.log("EleccionDispositivos", EleccionDispositivos);
+      const EleccionDispositivos =
+        await inicializarDataTableDispositivos(searchTerm);
+
       asignacionVariablesDispositivos(EleccionDispositivos);
     });
   }
@@ -244,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (inputDispositivo) {
     inputDispositivo.addEventListener("keydown", async function (event) {
       if (event.key === "Enter") {
-        // Usa 'Enter' (case-sensitive)
+        // Usa 'Enter'
         const EleccionDispositivos =
           await clsFuncionesModales.BuscarDispositivo(inputDispositivo.value);
         asignacionVariablesDispositivos(EleccionDispositivos); // Llama a la función de búsqueda
@@ -257,16 +253,16 @@ document.addEventListener("DOMContentLoaded", () => {
   //*CATALOGO COMPONENTES
 
   const inputBusquedaCatalogo = document.getElementById(
-    "inputBusquedaCatalogo"
+    "inputBusquedaCatalogo",
   );
   if (inputBusquedaCatalogo) {
     inputBusquedaCatalogo.addEventListener("keydown", async function (event) {
       if (event.key === "Enter") {
-        // Usa 'Enter' (case-sensitive)
+        // Usa 'Enter'
         const EleccionCatalogoComponentes =
           await clsFuncionesModales.BuscarCatalogoComponente(
             inputBusquedaCatalogo.value,
-            estadoFormulario.IdDispositivo
+            estadoFormulario.IdDispositivo,
           ); // Llama a la función de búsqueda
         asignacionVariablesCatalogoComponentes(EleccionCatalogoComponentes);
       }
@@ -275,11 +271,11 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("No se encuentra tu Búsqueda de Catálogo");
   }
 
-  /*////////////////////////////////////////////////////////////////////////////////////////////////////////////*
- 
-  // EVENTOS PARA ABRIR MODALES
- 
-/* /////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+  //*////////////////////////////////////////////////////////////////////////////////////////////////////////////*
+
+  //* EVENTOS PARA ABRIR MODALES
+
+  //* /////////////////////////////////////////////////////////////////////////////////////////////////////////*/
   //* Evento para abrir modal unidades
   //desktop
   inputunidad.addEventListener("keydown", function (event) {
@@ -316,7 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
         $("#consultaAreasModal").modal("show");
         const EleccionArea = await inicializarDataTableAreasPorTipoUnidad(
           "",
-          estadoFormulario.tipo_unidad
+          estadoFormulario.tipo_unidad,
         );
         asignacionVariablesAreas(EleccionArea);
       }
@@ -337,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
         $("#consultaAreasModal").modal("show");
         const EleccionArea = await inicializarDataTableAreasPorTipoUnidad(
           "",
-          estadoFormulario.tipo_unidad
+          estadoFormulario.tipo_unidad,
         );
         asignacionVariablesAreas(EleccionArea);
       }
@@ -361,7 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const EleccionResponsable =
           await inicializarDataTableResponsablePorIdUnidad(
             "",
-            estadoFormulario.IdUnidadValue
+            estadoFormulario.IdUnidadValue,
           );
         asignacionVariablesResponsables(EleccionResponsable);
       }
@@ -383,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const EleccionResponsable =
           await inicializarDataTableResponsablePorIdUnidad(
             "",
-            estadoFormulario.IdUnidadValue
+            estadoFormulario.IdUnidadValue,
           );
         asignacionVariablesResponsables(EleccionResponsable);
       }
@@ -432,14 +428,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const EleccionCatalogoComponentes =
           await inicializarDataTableCatalogoComponentePorDispositivo(
             "",
-            estadoFormulario.IdDispositivo
+            estadoFormulario.IdDispositivo,
           );
         asignacionVariablesCatalogoComponentes(EleccionCatalogoComponentes);
       }
     }
   });
   // Evento touch para abrir modal CATALOGOS COMPONENTES
-  inputcatalogo.addEventListener("click",async function (event) {
+  inputcatalogo.addEventListener("click", async function (event) {
     if (estadoFormulario.EsDispositivoMovil == true) {
       event.preventDefault();
       if (!estadoFormulario.IdDispositivo) {
@@ -453,11 +449,43 @@ document.addEventListener("DOMContentLoaded", () => {
         let searchTerm;
         const EleccionCatalogoComponentes =
           await inicializarDataTableCatalogoComponentePorDispositivo(
-          "",
-          estadoFormulario.IdDispositivo
-        );
-         asignacionVariablesCatalogoComponentes(EleccionCatalogoComponentes);
+            "",
+            estadoFormulario.IdDispositivo,
+          );
+        asignacionVariablesCatalogoComponentes(EleccionCatalogoComponentes);
       }
+    }
+  });
+
+  //* Evento para abrir modal FACTURA
+  // INICIO EVENTO TECLADO PARA ABRIR MODAL FACTURA
+  inputIdfactura.addEventListener("keydown", async function (event) {
+    if (event.key === "F1" || event.key === "F2") {
+      event.preventDefault();
+
+      inputIdfactura.value = "";
+      document.getElementById("inputfactura").value = "";
+      document.getElementById("inputnombreproveedor").value = "";
+
+      $("#consultaFacturaModal").modal("show");
+
+      const EleccionFactura = await inicializarDataTableFactura("");
+      asignacionVariablesFacturas(EleccionFactura);
+    }
+  });
+  // Evento touch para abrir modal FACTURA
+  inputIdfactura.addEventListener("click", async function (event) {
+    if (estadoFormulario.EsDispositivoMovil == true) {
+      event.preventDefault();
+
+      inputIdfactura.value = "";
+      document.getElementById("inputfactura").value = "";
+      document.getElementById("inputnombreproveedor").value = "";
+
+      $("#consultaFacturaModal").modal("show");
+
+      const EleccionFactura = await inicializarDataTableFactura("");
+      asignacionVariablesFacturas(EleccionFactura);
     }
   });
 
@@ -478,7 +506,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("inputunidad").value =
         General.concatenar_contrato_unidad(
           estadoFormulario.IdUnidadValue,
-          estadoFormulario.contratoid
+          estadoFormulario.contratoid,
         ) +
         " - " +
         data.nombre_unidad;
@@ -487,7 +515,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("inputunidad").value =
         General.concatenar_contrato_unidad(
           estadoFormulario.IdUnidadValue,
-          estadoFormulario.contratoid
+          estadoFormulario.contratoid,
         ) +
         " - " +
         data.nombre_unidad;
@@ -528,22 +556,37 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("inputdescripcioncatalogo").value = "";
   }
   function asignacionVariablesCatalogoComponentes(data) {
-      estadoFormulario.IdCatalogoComponente = data.id_catalogo_componente;
-              estadoFormulario.Nombre_Catalogo = data.nombre_catalogo;
-              estadoFormulario.Descripcion = data.descripcion_modelo;
-              estadoFormulario.marca = data.marca;
-              estadoFormulario.modelo = data.modelo;
-              estadoFormulario.procesador = data.Procesador;
-              estadoFormulario.memoria_ram = data['Memoria Ram'];
-              estadoFormulario.disco_duro = data['Disco Duro'];
-              estadoFormulario.sistema_operativo = data['Sistema Operativo'];
+    estadoFormulario.IdCatalogoComponente = data.id_catalogo_componente;
+    estadoFormulario.Nombre_Catalogo = data.nombre_catalogo;
+    estadoFormulario.Descripcion = data.descripcion_modelo;
+    estadoFormulario.marca = data.marca;
+    estadoFormulario.modelo = data.modelo;
+    estadoFormulario.procesador = data.Procesador;
+    estadoFormulario.memoria_ram = data["Memoria Ram"];
+    estadoFormulario.disco_duro = data["Disco Duro"];
+    estadoFormulario.sistema_operativo = data["Sistema Operativo"];
     //ASIGNACION A INPUTS
-    document.getElementById("inputcatalogo").value = estadoFormulario.Nombre_Catalogo;
-              document.getElementById("inputdescripcioncatalogo").value = estadoFormulario.Descripcion;
-   
+    document.getElementById("inputcatalogo").value =
+      estadoFormulario.Nombre_Catalogo;
+    document.getElementById("inputdescripcioncatalogo").value =
+      estadoFormulario.Descripcion;
   }
-
-  
+  function asignacionVariablesFacturas(data) {
+    //asignacion a variables globales del array
+    estadoFormulario.IdFactura = data.IdFactura;
+    estadoFormulario.NumeroFactura = data.NumeroFactura;
+    estadoFormulario.NombreProveedor = data.NombreProveedor;
+    estadoFormulario.LugarCompra = data.LugarCompra;
+    estadoFormulario.FechaFactura = data.FechaFactura;
+    estadoFormulario.Observacion = data.Observacion;
+    //ASIGNACION A INPUTS
+    document.getElementById("inputIdfactura").value =
+      estadoFormulario.IdFactura;
+    document.getElementById("inputfactura").value =
+      estadoFormulario.NumeroFactura;
+    document.getElementById("inputnombreproveedor").value =
+      estadoFormulario.NombreProveedor;
+  }
 
   //*////////////////////////////////////////////////////////////////////////////////////////////////////////////*
 
@@ -562,7 +605,9 @@ document.addEventListener("DOMContentLoaded", () => {
       inputdispositivos.value == "" ||
       inputdispositivos.value == null ||
       inputcatalogo.value == "" ||
-      inputcatalogo.value == null
+      inputcatalogo.value == null||
+      inputIdfactura.value == "" ||
+      inputIdfactura.value == null
     ) {
       Toast.fire({
         icon: "warning",
@@ -593,7 +638,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      // Procesa y valida datos (optimiza para no bloquear UI)
+      // Procesa y valida datos
       const processedData = await processExcelData(jsonData);
       // Muestra en DataTable
       displayInDataTable(processedData);
@@ -608,7 +653,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function (event) {
       event.preventDefault();
       const ActualizacionComponente = await actualizarBDDesdeTabla(jsonData);
-    }
+    },
   );
 });
 
@@ -624,6 +669,8 @@ async function generarPlantillaExcel() {
   const nom_c = document.getElementById("inputcatalogo").value || "";
   const desc_cc =
     document.getElementById("inputdescripcioncatalogo").value || "";
+  const IdFactura =
+    document.getElementById("inputIdfactura").value || "";
 
   const statusArr = [
     "BUENAS CONDICIONES",
@@ -652,9 +699,10 @@ async function generarPlantillaExcel() {
     ["Área:", nom_a], // Fila 9
     ["ID Catálogo:", id_c], // Fila 10
     ["Catálogo:", nom_c], // Fila 11
-    ["Descripción Catálogo:", desc_cc], // Fila 12 (NUEVA)
-    [""], // Fila 13 (ESPACIADOR)
-    ["CONDICIÓN", "NÚMERO DE SERIE", "OBSERVACIONES"], // Encabezados (Fila 14 / Índice 14)
+    ["Descripción Catálogo:", desc_cc], // Fila 12 
+    ["Id Factura:", IdFactura], // Fila 13 
+    [""], // Fila 14 (ESPACIADOR)
+    ["CONDICIÓN", "NÚMERO DE SERIE", "OBSERVACIONES"], // Encabezados (Fila 16 / Índice 16)
   ];
 
   // Agregar ejemplos y status
@@ -665,10 +713,10 @@ async function generarPlantillaExcel() {
 
   const worksheet = XLSX.utils.aoa_to_sheet(data);
 
-  // 3. APLICAR NEGRITAS (Solo funciona con xlsx-js-style)
+  // 3. APLICAR NEGRITAS ( xlsx-js-style)
   const styleBold = { font: { bold: true } };
 
-  // Hemos actualizado las celdas para que coincidan con la nueva fila 12
+  //  celdas
   const cellsToBold = [
     "A1",
     "A4",
@@ -680,10 +728,12 @@ async function generarPlantillaExcel() {
     "A10",
     "A11",
     "A12",
-    "A13", // Etiquetas de datos
-    "A15",
-    "B15",
-    "C15", // Encabezados de la tabla (Condición, Serie, Observación)
+    "A13",
+    "A14",
+    "A15", // Etiquetas de datos
+    "A16",
+    "B16",//ENCABEZADO LIMPIO
+    "C16", // Encabezados de la tabla (Condición, Serie, Observación)
   ];
 
   cellsToBold.forEach((cell) => {
@@ -709,7 +759,7 @@ async function generarPlantillaExcel() {
   document.getElementById("btnsubirform")?.classList.remove("d-none");
 }
 
-// Función para procesar datos (actualizada con verificación batch)
+// Función para procesar datos
 async function processExcelData(data) {
   const processed = [];
   const seriesArray = [];
@@ -718,12 +768,13 @@ async function processExcelData(data) {
   let rowIndex = 1;
   let IndicadorDeErrores = 0;
 
-  //validamos si estan vacios cargamos en inputs
+  //validar si estan vacios carga en inputs
   const camposVacios = [
     inputarea,
     inputcatalogo,
     inputunidad,
     inputresponsable,
+    inputIdfactura,
   ].some((input) => input.value === "");
 
   if (camposVacios) {
@@ -733,10 +784,10 @@ async function processExcelData(data) {
     estadoFormulario.nombre_responsable = data[7]?.[1]; //Fila 8, Columna B
     estadoFormulario.IdArea = data[8]?.[1]; // Fila 9, Columna B
     estadoFormulario.Nombre_Area = data[9]?.[1]; // Fila 10, Columna B
-    //estadoFormulario.IdDispositivo= data[10]?.[1];  // Fila 10, Columna B
     estadoFormulario.IdCatalogoComponente = data[10]?.[1]; // Fila 11, Columna B
     estadoFormulario.Nombre_Catalogo = data[11]?.[1]; // Fila 12, Columna B
-    estadoFormulario.Descripcion = data[12]?.[1]; // Fila 12, Columna B
+    estadoFormulario.Descripcion = data[12]?.[1]; // Fila 13, Columna B
+    estadoFormulario.IdFactura= data[13]?.[1];  // Fila 14, Columna B
 
     //asignacion a inputs
     inputarea.value = estadoFormulario.Nombre_Area;
@@ -744,13 +795,14 @@ async function processExcelData(data) {
     inputresponsable.value = estadoFormulario.nombre_responsable;
     inputcatalogo.value = estadoFormulario.Nombre_Catalogo;
     inputdescripcioncatalogo.value = estadoFormulario.Descripcion;
+    inputIdfactura.value = estadoFormulario.IdFactura;
   }
 
   //*ASIGNACION POR CARGA MANUAL
   //* --- PASO 1: Recopilar y Pre-contar duplicados en Excel ---
   const excelCounts = {}; // Para contar cuántas veces aparece cada serie en el archivo
 
-  for (let i = 15; i < data.length; i++) {
+  for (let i = 16; i < data.length; i++) {
     const row = data[i];
     const serie = row[1]?.toString().trim();
 
@@ -769,7 +821,7 @@ async function processExcelData(data) {
     seriesArray.splice(1000);
   }
 
-  //* --- PASO 2: Verificación en Base de Datos (API) ---
+  //* --- PASO 2: Verificación en Base de Datos ---
   let apiResults = {};
   if (seriesArray.length > 0) {
     try {
@@ -782,10 +834,10 @@ async function processExcelData(data) {
       const response = await handlePOSTbatch(config);
 
       if (response.success) {
-        // Habilitamos el botón si la comunicación fue exitosa
+        // Habilita el botón si la comunicación fue exitosa
         btnVerificacionyActualizacion.classList.remove("d-none");
 
-        // Mapeamos resultados de la BD
+        // Mapea resultados de la BD
         apiResults = response.data.body.resultados.reduce((acc, res) => {
           acc[res.serie] = res;
           return acc;
@@ -812,7 +864,7 @@ async function processExcelData(data) {
   //* --- PASO 3: Procesamiento Final con Jerarquía de Errores ---
   const seenInExcelLoop = new Set(); // Para saber si es la primera vez que vemos la serie en este loop
 
-  for (let i = 15; i < data.length; i++) {
+  for (let i = 16; i < data.length; i++) {
     const row = data[i];
     const serie = row[1]?.toString().trim();
     const observacionExcel = row[2]?.toString().trim() || "SIN OBSERVACION";
@@ -872,7 +924,7 @@ async function processExcelData(data) {
       `<span class="${
         rowClass ? "text-danger" : "text-success"
       }">${status}</span>`,
-      `<small class="text-muted">${apiRes ? apiRes.detalles : details}</small>`, // Aquí
+      `<small class="text-muted">${apiRes ? apiRes.detalles : details}</small>`,
       `<small>${status_componenteExcel}</small>`,
       `<small>${observacionExcel}</small>`,
     ]);
@@ -895,13 +947,14 @@ async function processExcelData(data) {
 
 //FUNCION PARA EDITAR COMPONENTES MASIVAMENTE POR COLECTIVO
 async function actualizarBDDesdeTabla(data) {
+  //PERMITE OBTENER EL ID DE TECNICO DESDE EL CACHE
   const sesionTecnico = await ObtenerIdTecnicoSesion();
   let IdTecnico = sesionTecnico.data.id_tecnico;
 
   if (sesionTecnico || sesionTecnico.body) {
     const table = $("#processedTable").DataTable();
     const allData = table.rows().data().toArray();
-    // Filtra solo registros válidos (ej. excluye errores)
+    // Filtra solo registros válidos ( excluye errores)
     const validData = allData.filter((row) => {
       const status = $(row[2]).text();
       return (
@@ -930,19 +983,20 @@ async function actualizarBDDesdeTabla(data) {
       id_area: estadoFormulario.IdArea,
       id_catalogo_componentes: estadoFormulario.IdCatalogoComponente,
       id_tecnico: IdTecnico,
+      FK_Factura : estadoFormulario.IdFactura,
     }));
 
     try {
       const config = {
-        url: `${api}/api/movComponentes/Inventario/AgregarMovimientoComponenteColectivoArray`, // Nuevo endpoint
+        url: `${api}/api/movComponentes/Inventario/AgregarMovimientoComponenteColectivoArray`, //  endpoint
         data: { componentes: seriesToUpdate },
         disableAlerts: true,
       };
       const response = await handlePOSTbatch(config);
-      console.log("response", response);
+
       if (response.success) {
         limpiarcampos();
-        //alert('Actualización completada. ' + response.data.message);
+
         Swal.fire({
           icon: "success",
           title: "Inventario Actualizado",
@@ -950,11 +1004,9 @@ async function actualizarBDDesdeTabla(data) {
             response.data.message ||
             "Los componentes se han procesado y registrado correctamente",
           showConfirmButton: false,
-          timer: 2500, // Cierra automáticamente después de 2 segundos (1000 ms)
+          timer: 2500, 
         });
-        // Opcional: Recarga tabla o muestra confirmación
       } else {
-        //alert('Error en actualización: ' + response.message);
         Toast.fire({
           icon: "warning",
           title: "Error en actualización",
@@ -977,7 +1029,7 @@ function displayInDataTable(data) {
     columns: [
       { title: "#" },
       { title: "Número de Serie" },
-      { title: "Estado", orderable: false }, // No ordenable si tiene HTML
+      { title: "Estado", orderable: false },
       { title: "Detalles", orderable: false },
       { title: "Status componente", orderable: false },
       { title: "Observación", orderable: false },
@@ -985,7 +1037,7 @@ function displayInDataTable(data) {
     pageLength: 10,
     destroy: true,
     createdRow: function (row, data, dataIndex) {
-      // Agrega clase a la fila basada en el estado (ej. 'table-danger' para errores)
+      // Agrega clase a la fila basada en el estado
       const statusText = $(data[1]).text(); // Extrae texto de HTML
       if (
         statusText.includes("Duplicado") ||
@@ -1005,7 +1057,7 @@ function limpiarcampos() {
   $("#processedTable").DataTable().clear().draw(); // Vacía filas y redibuja
   // 3. Ocultar contenedor de tabla
   document.getElementById("processedTableContainer").style.display = "none";
-  // 4. Resetear indicador de errores (si tienes uno)
+  // 4. Resetear indicador de errores
   document.getElementById("errorCount").textContent = "0";
   IndicadorDeErrores = 0;
   window.scrollTo({ top: 0, behavior: "smooth" });

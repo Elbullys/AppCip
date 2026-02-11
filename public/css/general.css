@@ -93,7 +93,7 @@
 }
 
 .table-responsive {
-  margin-top: 20px; /* Espaciado superior para separar la tabla de otros elementos */
+  margin-top: 20px; 
 }
 
 tr.selected {
@@ -120,10 +120,10 @@ tr.selected {
 }
 
 .text-title {
-  color: black !important; /* Color del texto del título */
+  color: black !important; 
 }
 .input-result {
-  color: black !important ; /* Color del texto del título */
+  color: black !important ; 
 }
 /* ========================= */
 /* FIN Estilo para LeerCodigoQR   */
@@ -189,7 +189,7 @@ tr.selected {
 /*PERSONALIZACION DE MODAL AGRUPACION DE DATOS Y MEJOR ESPACIADO. 
  /* Contenedor del Scroll */
 #detalleCatalogoComponenteContenido {
-    max-height: 450px; /* Ajusta según prefieras */
+    max-height: 450px; 
     overflow-y: auto;
     padding-right: 5px;
 }
@@ -327,7 +327,7 @@ tr.selected {
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Sombra ligera para profundidad */
 }
 
-/* Títulos (h6): Azul fuerte para destacar */
+/* Títulos (h6)*/
 .custom-vista h6 {
   color: #0056b3 !important; /* Azul fuerte intenso (override text-primary) */
   
@@ -375,7 +375,7 @@ tr.selected {
   background-color: #e9ecef !important; /* Gris al seleccionar */
 }
 
-/* Mensajes de estado (e.g., en listaResultados): Grises para consistencia */
+
 .custom-vista .text-muted {
   color: #6c757d !important;
 }

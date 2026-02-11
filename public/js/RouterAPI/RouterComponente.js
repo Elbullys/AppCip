@@ -1,11 +1,8 @@
-// const api ='https://apirestcip.onrender.com';
+
 import { General, handlePOST,conversionFecha, URLAPI,obtenerUsuarioLocalStorage } from '../RouterAPI/Utils.js';  // Importa tus utilidades
 const api = URLAPI;
 
-// Declaraciones de alcance global que son necesarias
-let accion = ""; // Se usará para diferenciar entre buscar y editar
-
-// Clase de utilidades para la conversión de fecha
+let accion = ""; 
 
 
 // PARA ALERTAS TOAST SWEETALERT2
@@ -21,33 +18,26 @@ const Toast = Swal.mixin({
     }
 });
 
-// --- Funciones del DOMContentLoaded ---
+
 
 document.addEventListener('DOMContentLoaded', () => {
-    //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
+    //OBTENER DE LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL 
            obtenerUsuarioLocalStorage();
    
-    // 1. Obtención de Elementos del DOM
-    // Asumiendo que existen estos IDs en tu HTML
+
     const btonmanual = document.getElementById('btnmanual'); 
     const btnSearch = document.getElementById('btnSearch'); // Botón para buscar
     const actionButton = document.getElementById('action-button'); // Botón para editar
-    
-    // 2. Inicialización de Variables y Datos
-    // No son estrictamente necesarias aquí, pero se mantienen por coherencia
-    // const queryParams = new URLSearchParams(); 
-    // const componenteoData = {};
 
-    // 3. Definición de Eventos
     
     // Evento para el botón de Búsqueda
     if (actionButton) {
-        // 2. Determinar la acción inicial leyendo el texto que EJS ya renderizó
+        
         const buttonText = actionButton.innerText.trim();
         
         if (buttonText === 'Consulta') {
             accion = "buscar_componente";
-            // Opcional: Asegurar la clase si no viene del EJS, aunque en tu caso ya lo hace.
+
             actionButton.classList.add('btn-primary'); 
         } else if (buttonText === 'Editar') {
             accion = "editar_componente";
@@ -57,30 +47,29 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 3. Definición del Evento (Común para ambos modos)
+        // 3. Definición del Evento 
         actionButton.addEventListener('click', () => {
-            // Llama a la función principal, usando la variable 'accion' ya configurada
+            // Llama a la función principal
             Verificacion_Componente();
         });
     }
 
-    // Evento para el botón manual (si debe tener un comportamiento específico)
-    // Se deja como estaba en tu código original, si se usaba para algo más
+    // Evento para el botón manual 
+  
     if (btonmanual) {
-         // Ejemplo: btonmanual.addEventListener('click', () => { /* tu lógica */ });
+
     }
 
-    // *Nota: La función Search() y Edit() ya no son necesarias y se eliminan,
-    // *su lógica se integra directamente en los event listeners.
+  
 });
 
 
-/**
- * Muestra los detalles de un componente después de una búsqueda exitosa.
- */
+
+ //* Muestra los detalles de un componente después de una búsqueda exitosa.
+
 function verDetallesComponenteQR() {
     const databusqueda = document.getElementById('qr-result').value;
-    console.log(databusqueda);
+
     
     if (!databusqueda) {
         Toast.fire({
@@ -90,29 +79,26 @@ function verDetallesComponenteQR() {
         return;
     }
 
-    // **Nota:** En un entorno moderno, es mejor usar new bootstrap.Modal()
-    // En lugar de acceder a jQuery (si #detallecomponenteQR es un modal de Bootstrap)
+
+    //DECLARACION DE MODAL
     const modalElement = document.getElementById('detallecomponenteQR');
     const bootstrapModal = bootstrap.Modal.getOrCreateInstance(modalElement);
     
-    // Si el modal está abierto, lo cierra y luego recarga. Si no, lo carga directamente.
+ 
     if (modalElement.classList.contains('show')) {
         bootstrapModal.hide();
         modalElement.addEventListener('hidden.bs.modal', function handler() {
-            console.log("Modal cerrado, recargando datos...");
+            
             cargarComponenteQR(databusqueda, modalElement);
-            modalElement.removeEventListener('hidden.bs.modal', handler); // Limpiar listener
+            modalElement.removeEventListener('hidden.bs.modal', handler); 
         }, { once: true });
     } else {
         cargarComponenteQR(databusqueda, modalElement);
     }
 }
 
-/**
- * Carga los datos del componente desde el API y los muestra en el modal.
- */
 async function cargarComponenteQR(databusqueda, modal) {
-    console.log("Cargando detalles del componente para:", databusqueda);
+  
     const queryParams = new URLSearchParams({
         dataBusqueda: databusqueda,
     });
@@ -131,10 +117,10 @@ async function cargarComponenteQR(databusqueda, modal) {
 
         const data = await response.json();
         
-        // Asumiendo que `General` está definido y tiene `ConversionFecha`
+
         const componente = data.body[0];
 
-        // Lógica de formateo del ID de la unidad
+ 
         let textoFormateado;
         const idUnidad = String(componente.id_unidad);
         if (idUnidad.length === 1) {
@@ -173,7 +159,7 @@ async function cargarComponenteQR(databusqueda, modal) {
         document.getElementById('area').innerText = componente.area;
         document.getElementById('statusInventario').innerText = componente.status_inventario === 1 ? 'ACTIVO' : 'INACTIVO';
 
-        // Mostrar el modal
+
         const bootstrapModal = new bootstrap.Modal(document.getElementById('detallecomponenteQR'));
         bootstrapModal.show();
 
@@ -195,7 +181,7 @@ async function Verificacion_Componente() {
     
     const componenteoData = { databusqueda };
 
-    console.log("componenteoData", componenteoData.databusqueda);
+
     
     // Validar datos
     if (!componenteoData.databusqueda) {
@@ -222,10 +208,10 @@ async function Verificacion_Componente() {
         });
 
         const result = await response.json(); 
-        console.log("response",response);
+
          if (response.status === 401) {
             Swal.close();
-            // Usamos la ruta de redirección del servidor si está disponible
+           
                 window.location.href = `/logintecnico`;
         }
 
@@ -246,7 +232,7 @@ async function Verificacion_Componente() {
                 showConfirmButton: true
             });
         } else if (result.body.error === false) {
-            console.log("si existe:");
+            
             
             if (accion === 'editar_componente') {
                 Swal.fire({
@@ -264,9 +250,6 @@ async function Verificacion_Componente() {
                 verDetallesComponenteQR();
             }
 
-            // Deshabilitar botón manual si existe y tiene sentido
-            // const btonmanual = document.getElementById('btnmanual');
-            // if (btonmanual) btonmanual.disabled = true;
         } 
         
     } catch (error) {

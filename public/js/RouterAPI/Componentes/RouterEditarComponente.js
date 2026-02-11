@@ -96,7 +96,7 @@ const VariablesFactura = {
   observacionfactura: null,
 };
 
-//*PERMITE REALIZAR
+//*PERMITE REALIZAR EL ALMACENAMIENTO DE VARIABLES ANTERIORES 
 const ComponentesAnteriores = {
   //CONTRATOS
   IdContrato: null,
@@ -142,11 +142,12 @@ var Toast = Swal.mixin({
   },
 });
 
-// AL ABRIR LA PAGINA - TODO DENTRO DE DOMContentLoaded
+
 document.addEventListener("DOMContentLoaded", () => {
   //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL
   obtenerUsuarioLocalStorage();
   let cambiosPendientes = true; // Bandera para saber si hay cambios no guardados
+  //SI HAY CAMBIOS PERMITE NOTIFICAR SI QUIERE SALIR EL USUARIO
   window.onbeforeunload = (event) => {
     if (cambiosPendientes) {
       event.preventDefault();
@@ -159,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // OBTIENE DATOS
   const editComponenteForm = document.getElementById("FormEditComponente");
-  const btnmodificar = document.getElementById("btnmodificar");
+
 
   // Inicializar DataTable al cargar la página
   InicializarFormulario();
@@ -305,7 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
         //contrato
         numero_contrato_actual: estadoFormulario.contratoid,
       };
-
+      //PERMITE OBTENER DEL CACHE EL ID DEL USUARIO QUE INICIO SESION
       const sesionTecnico = await ObtenerIdTecnicoSesion();
       let IdTecnico = sesionTecnico.data.id_tecnico;
 
@@ -346,7 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnBuscarUnidad = document.getElementById("btnBuscarUnidad");
   if (btnBuscarUnidad) {
     btnBuscarUnidad.addEventListener("click", async () => {
-      // Aquí capturamos los valores JUSTO en el momento del clic
+      //  captura los valores JUSTO en el momento del clic
       const searchTerm = $("#inputBusqueda").val().trim();
 
       const EleccionUnidad = await clsFuncionesModales.BuscarUnidad(searchTerm);
@@ -377,14 +378,15 @@ const inputBusquedaResponsable = document.getElementById(
     inputBusquedaResponsable.addEventListener(
       "keydown",
       async function (event) {
+         // Usa 'Enter' 
         if (event.key === "Enter") {
           
-          // Usa 'Enter' (case-sensitive)
+         
           const EleccionResponsable =
             await clsFuncionesModales.BuscarResponsable(
               inputBusquedaResponsable.value,
               estadoFormulario.IdUnidadValue
-            ); // Llama a la función de búsqueda
+            ); 
 
             asignacionVariablesResponsables(EleccionResponsable);
         }
@@ -411,7 +413,7 @@ const inputBusquedaResponsable = document.getElementById(
   const btnBuscarArea = document.getElementById("btnBuscarArea");
   if (btnBuscarArea) {
     btnBuscarArea.addEventListener("click", async () => {
-      // Aquí capturamos los valores JUSTO en el momento del clic
+      //captura los valores JUSTO en el momento del clic
       const searchTerm = $("#inputBusquedaArea").val().trim();
 
       const EleccionArea = await clsFuncionesModales.BuscarArea(
@@ -427,7 +429,7 @@ const inputBusquedaResponsable = document.getElementById(
   if (inputBusquedaArea) {
     inputBusquedaArea.addEventListener("keydown", async function (event) {
       if (event.key === "Enter") {
-        // Usa 'Enter' (case-sensitive)
+        // Usa 'Enter' 
         const EleccionArea = await clsFuncionesModales.BuscarArea(
           inputBusquedaArea.value,
           estadoFormulario.tipo_unidad
@@ -446,12 +448,12 @@ const inputBusquedaResponsable = document.getElementById(
   const btnBuscarDispositivo = document.getElementById("btnBuscarDispositivo");
   if (btnBuscarDispositivo) {
       btnBuscarDispositivo.addEventListener("click", async () => {
-      // Aquí capturamos los valores JUSTO en el momento del clic
+      // captura los valores JUSTO en el momento del clic
       const searchTerm = $("#inputBusquedadispositivo").val().trim();
 
       const EleccionDispositivos=
         await inicializarDataTableDispositivos(searchTerm);
-        console.log("EleccionDispositivos",EleccionDispositivos);
+
         asignacionVariablesDispositivos(EleccionDispositivos);
     });
   }
@@ -461,7 +463,7 @@ const inputBusquedaResponsable = document.getElementById(
   if (inputDispositivo) {
     inputDispositivo.addEventListener("keydown",async function (event) {
       if (event.key === "Enter") {
-        // Usa 'Enter' (case-sensitive)
+        // Usa 'Enter'
         const EleccionDispositivos=await clsFuncionesModales.BuscarDispositivo(inputDispositivo.value);
         asignacionVariablesDispositivos(EleccionDispositivos); // Llama a la función de búsqueda
       }
@@ -475,7 +477,7 @@ const inputBusquedaResponsable = document.getElementById(
   const btnBuscarcatalogo = document.getElementById("btnBuscarcatalogo");
   if (btnBuscarcatalogo) {
      btnBuscarcatalogo.addEventListener("click", async () => {
-      // Aquí capturamos los valores JUSTO en el momento del clic
+      // captura los valores JUSTO en el momento del clic
       const searchTerm = $("#inputBusquedaCatalogo").val().trim();
 
       const EleccionResponsable =
@@ -486,13 +488,29 @@ const inputBusquedaResponsable = document.getElementById(
         asignacionVariablesCatalogoComponentes(EleccionResponsable);
     });
    
+    
+  }
+  // EVENTO PARA BUSCAR CON ENTER EN EL INPUT DEL MODAL
+  const inputBusquedaCatalogo = document.getElementById(
+    "inputBusquedaCatalogo"
+  );
+  if (inputBusquedaCatalogo) {
+    inputBusquedaCatalogo.addEventListener("keydown",async function (event) {
+      if (event.key === "Enter") {
+        // Usa 'Enter' 
+        const EleccionCatalogoComponentes=await clsFuncionesModales.BuscarCatalogoComponente(inputBusquedaCatalogo.value,estadoFormulario.IdDispositivo); // Llama a la función de búsqueda
+        asignacionVariablesCatalogoComponentes(EleccionCatalogoComponentes);
+      }
+    });
+  } else {
+    console.error("No se encuentra tu Búsqueda de Catálogo");
   }
     //*EVENTO BOTON BUSCAR FACTURA EN MODAL
   const btnBuscarfactura = document.getElementById("btnBuscarfactura");
  
     if (btnBuscarfactura) {
       btnBuscarfactura.addEventListener("click", async () => {
-      // Aquí capturamos los valores JUSTO en el momento del clic
+      // captura los valores JUSTO en el momento del clic
       const searchTerm = $("#inputBusquedafactura").val().trim();
 
       const EleccionFactura =
@@ -500,7 +518,7 @@ const inputBusquedaResponsable = document.getElementById(
           searchTerm,
           estadoFormulario.IdUnidadValue
         );
-        console.log("EleccionFactura",EleccionFactura);
+      
         asignacionVariablesFacturas(EleccionFactura);
     });
      
@@ -510,9 +528,9 @@ const inputBusquedaResponsable = document.getElementById(
 
   /*////////////////////////////////////////////////////////////////////////////////////////////////////////////*
   
-    // EVENTOS PARA ABRIR MODALES
+    //* EVENTOS PARA ABRIR MODALES
   
-  /*/ /////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+  //* /////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
   //* Evento para abrir modal unidades
   document
@@ -690,21 +708,7 @@ const inputBusquedaResponsable = document.getElementById(
         }
       }
     });
-  // EVENTO PARA BUSCAR CON ENTER EN EL INPUT DEL MODAL
-  const inputBusquedaCatalogo = document.getElementById(
-    "inputBusquedaCatalogo"
-  );
-  if (inputBusquedaCatalogo) {
-    inputBusquedaCatalogo.addEventListener("keydown",async function (event) {
-      if (event.key === "Enter") {
-        // Usa 'Enter' (case-sensitive)
-        const EleccionCatalogoComponentes=await clsFuncionesModales.BuscarCatalogoComponente(inputBusquedaCatalogo.value,estadoFormulario.IdDispositivo); // Llama a la función de búsqueda
-        asignacionVariablesCatalogoComponentes(EleccionCatalogoComponentes);
-      }
-    });
-  } else {
-    console.error("No se encuentra tu Búsqueda de Catálogo");
-  }
+  
 
   // Evento touch para abrir modal CATALOGOS COMPONENTES
   document
@@ -751,9 +755,9 @@ const inputBusquedaResponsable = document.getElementById(
   if (inputBusquedafactura) {
     inputBusquedafactura.addEventListener("keydown",async function (event) {
       if (event.key === "Enter") {
-        // Usa 'Enter' (case-sensitive)
+        // Usa 'Enter' 
         const EleccionFactura= await clsFuncionesModales.BuscarFactura(inputBusquedafactura.value); // Llama a la función de búsqueda
-         console.log("EleccionFactura",EleccionFactura);
+        
         asignacionVariablesFacturas(EleccionFactura);
       }
     });
@@ -771,23 +775,19 @@ const inputBusquedaResponsable = document.getElementById(
           document.getElementById("inputBusquedafactura").value = ""; // Limpiar el campo de búsqueda al abrir el modal
           $("#consultaFacturaModal").modal("show"); // Mostrar modal
           const EleccionFactura= await inicializarDataTableFactura("");
-           console.log("EleccionFactura",EleccionFactura);
           asignacionVariablesFacturas(EleccionFactura);
-          // INICIALIZAR EVENTO TECLADO TECLA (ENTER) PARA BUSQUEDA EN UNIDAD
-          const input = document.getElementById("inputBusquedafactura");
+          
+          //const input = document.getElementById("inputBusquedafactura");
         }
       }
-      // Función para detectar si hay cambios no guardados (implementa según tu formulario)
-
-      // Código del formulario aquí (ej. event listeners para switches, toasts, etc.)
-      // Función y event listener para advertencia de navegación atrás
+     
     });
 
   //*TERMINA
 
   //*////////////////////////////////////////////////////////////////////////////////////////////////////////////*
 
-  //FUNCIONES PARA ASIGNACION DE CAMPOS
+  //*FUNCIONES PARA ASIGNACION DE CAMPOS
 
   //*//////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
@@ -821,15 +821,8 @@ const inputBusquedaResponsable = document.getElementById(
     document.getElementById("txtcargoresponsable").value = "";
     document.getElementById("txtarea").value = "";
     document.getElementById("txtarearesponsable").value = "";
-    console.log("estadoFormulario.contratoid", estadoFormulario.contratoid);
-    console.log("estadoFormulario.operacion", estadoFormulario.operacion);
-    console.log("estadoFormulario.Estado", estadoFormulario.Estado);
-    console.log(
-      "estadoFormulario.nombre_unidad",
-      estadoFormulario.nombre_unidad
-    );
-    console.log("estadoFormulario.tipo_unidad", estadoFormulario.tipo_unidad);
-    console.log("estadoFormulario.AbrevEstado", estadoFormulario.AbrevEstado);
+   
+  
   }
 
   function asignacionVariablesResponsables(data) {
@@ -900,7 +893,6 @@ function asignacionVariablesDispositivos(data)
 
  function asignacionVariablesFacturas(data)
 {
-   console.log("data",data);
   //asignacion a variables globales del array
     estadoFormulario.IdFactura = data.IdFactura;
                   estadoFormulario.NumeroFactura = data.NumeroFactura;
@@ -1062,7 +1054,7 @@ function asignacionVariablesDispositivos(data)
           inputobservacionfactura.disabled = true;
           btneditarfactura.disabled = false;
           btncancelarfactura.hidden = true;
-          // Usa response.id para lo que necesites
+         
         }
       }
 
@@ -1125,6 +1117,7 @@ function asignacionVariablesDispositivos(data)
   document
     .getElementById("btneditarfactura")
     .addEventListener("click", function (event) {
+
       const inputidfactura = document.getElementById("txidfactura");
       inputidfactura.disabled = false;
       estadoFormulario.StatusFacturaEdit = true;
@@ -1162,8 +1155,8 @@ function asignacionVariablesDispositivos(data)
 
       const config = {
         url: `${api}/api/componentes/ConsultarIdComponente/${idcomponente}`, // URL específica
-        timeoutDuration: 5000, // Opcional: ajusta el timeout si es necesario
-        // data: {} // Opcional: no se pasa si no hay query params
+        timeoutDuration: 5000, //ajusta el timeout si es necesario
+        // data: {} //  no se pasa si no hay query params
       };
       const response = await handleGET(config);
 
@@ -1173,7 +1166,7 @@ function asignacionVariablesDispositivos(data)
       if (data.body.length > 0) {
         const componente = data.body[0]; // Accede al primer elemento del array
 
-        //* Llenar el variables globales con los datos del componente traigo desde la API
+        //* Llenar el variables globales con los datos del componente trae desde la API
 
         document.getElementById("txtcodigoti").value = componente.codigo_TI;
         estadoFormulario.IdUnidadValue = componente.id_unidad.toString();
@@ -1185,7 +1178,7 @@ function asignacionVariablesDispositivos(data)
         estadoFormulario.IdDispositivo = componente.id_dispositivo;
         estadoFormulario.EsClienteServidor = componente.EsClienteServidor;
         estadoFormulario.IdArea = componente.FK_id_area;
-        console.log("IdArea", estadoFormulario.IdArea);
+ 
         estadoFormulario.AbrevEstado = componente.abreviatura_estado;
         estadoFormulario.AbrDispositivo = componente.abreviatura_tipo;
         estadoFormulario.IdCatalogoComponente =
@@ -1249,10 +1242,7 @@ function asignacionVariablesDispositivos(data)
 
         //*SWITCH QUE PERMITE DAR UN ACTIVO O CANCELADO
         const switchElement = document.getElementById("switchinventario");
-        console.log(
-          "EstatusInventario inicial formulario",
-          estadoFormulario.EstatusInventario
-        );
+      
         if (estadoFormulario.EstatusInventario.toString() == "1") {
           switchElement.checked = true; // Activar switch si activo
           cambiarLabelSwitch("switchinventario", "ACTIVO");
@@ -1265,17 +1255,11 @@ function asignacionVariablesDispositivos(data)
           cambiarLabelSwitch("switchinventario", "UNDEFINED");
         }
 
-        // Cargar PUESTOS
-        //await SelectobtenerPuestos('AsignacionSelectPuestos'); // Llenar el select de PUESTOS
-        // Seleccionar el color correspondiente
-        //const selectpuesto = document.getElementById('AsignacionSelectPuestos');
-        //selectpuesto.value = usuarios.IdPuesto; // Asegúrate de que este valor coincida con el value de las opciones
-
+       
         document.getElementById("datefechacompra").value = conversionFecha(
           estadoFormulario.FechaCompra
         );
         let clienteservidor = estadoFormulario.EsClienteServidor.toString();
-        console.log("clienteservidor", clienteservidor);
         if (clienteservidor === "SERVIDOR") {
           document.getElementById("chbxservidor").checked = true;
         } else if (clienteservidor === "CLIENTE") {

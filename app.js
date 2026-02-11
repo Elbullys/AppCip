@@ -28,11 +28,10 @@ app.use('/',require('./router/RouterViewCatalogo'));
 app.use('/',require('./router/RouterViewInventario'));
 
 
-//body parser permite acceder y procesar lods datos que se envian desde el formulario html
+
 app.use(bodyParser.json());
-//se utiliza para analizar los datos de la url enviados en las solicitudes POST
+
 app.use(bodyParser.urlencoded({extended:false}));
-//para varios archivos
   app.use((req,res,next) => {
     res.status(404).render("404",{
       titulo:"404",

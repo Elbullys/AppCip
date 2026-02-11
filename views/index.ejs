@@ -1,18 +1,15 @@
 <%- include("template/cabecera",{tituloweb:'Pagina de Inicio'}) %> <%-
 include("template/navbar") %>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- Begin Page Content -->
+
 <div class="container-fluid">
- <!-- Contenido Principal (agrega tu contenido aquí, ej. tablas) -->
-    <main class="container-fluid mt-5 pt-4">  <!-- Padding para navbar fijo -->
-      <!-- Inserta aquí el contenido de la página (ej. <div class="row"> ... </div>) -->
+
+    <main class="container-fluid mt-5 pt-4"> 
       <h1 class="text-center mb-4">Administración de Inventarios</h1>
-      <!-- Ejemplo: <table id="dataTable" class="table table-striped"> ... </table> -->
     </main>
 
   <!-- Content Row -->
   <div class="row">
-    <!-- Earnings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-primary shadow h-100 py-2">
         <div class="card-body">
@@ -33,7 +30,6 @@ include("template/navbar") %>
       </div>
     </div>
 
-    <!-- Earnings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-success shadow h-100 py-2">
         <div class="card-body">
@@ -54,7 +50,6 @@ include("template/navbar") %>
       </div>
     </div>
 
-    <!-- Earnings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-info shadow h-100 py-2">
         <div class="card-body">
@@ -81,7 +76,6 @@ include("template/navbar") %>
       </div>
     </div>
 
-    <!-- Pending Requests Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-warning shadow h-100 py-2">
         <div class="card-body">
@@ -114,13 +108,11 @@ include("template/navbar") %>
     </div>
   </div>
 
-  <!-- Content Row -->
+
 
   <div class="row">
-    <!-- Area Chart -->
     <div class="col-xl-8 col-lg-7">
       <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
         <div
           class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
         >
@@ -149,7 +141,6 @@ include("template/navbar") %>
             </div>
           </div>
         </div>
-        <!-- Card Body -->
         <div class="card-body">
           <div class="chart-area">
            <canvas id="chartConteoPorTipoUnidad" ></canvas>
@@ -159,10 +150,8 @@ include("template/navbar") %>
       </div>
     </div>
 
-    <!-- Pie Chart -->
     <div class="col-xl-4 col-lg-5">
       <div class="card shadow mb-4">
-        <!-- Card Header - Dropdown -->
         <div
           class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
         >
@@ -191,7 +180,6 @@ include("template/navbar") %>
             </div>
           </div>
         </div>
-        <!-- Card Body -->
         <div class="card-body">
           <div class="chart-pie pt-4 pb-2">
             <canvas id="chartActivoPasivo"></canvas>
@@ -210,9 +198,6 @@ include("template/navbar") %>
     </div>
   </div>
 
-  <!-- Content Row -->
- 
-<!-- /.container-fluid -->
 <script src="/js/RouterAPI/Inicio/dashboard.js" type="module"></script>
 <%- include("template/footer") %>
 

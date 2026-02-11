@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const MantCorrectivoContador = document.getElementById('MantCorrectivoContador');
 
     fetchComponentes().then(parsedData => {
-        // Renderiza datos (ej. en un div)
-        console.log("data ejecutado fetch componnete", parsedData);
+        // Renderiza datos 
+
         const conteoMantoCorrectivo = parsedData.mantenimientoCorrectivo;
         const conteoMantPreventivo = parsedData.mantenimientoPreventivo;
         const conteoMovComponente = parsedData.movimientoComponente;
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   
 
 
-    const shouldVerify = window.location.pathname === '/inicio';  // O tu lógica
+    const shouldVerify = window.location.pathname === '/inicio';  
     if (shouldVerify) {
         const urlProtected = `${api}/api/logintecnicos/protected`;
         try {
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     btnlogout.addEventListener('click', async function (event) {
         event.preventDefault();
-        console.log('Cerrando sesión...');
+     
         // Limpia localStorage y redirige
         localStorage.removeItem('username');
 
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             });
 
-            console.log("response.ok", response);
+       
             if (response.ok) {
                 // 1. Redirige solo si la respuesta del servidor fue exitosa (código 200-299)
                 window.location.href = '/logintecnico';
@@ -127,12 +127,12 @@ async function fetchComponentes() {
     const now = Date.now();
     ;
 
-    // Si hay cache y no ha expirado (ej. 1 hora)
+    // Si hay cache y no ha expirado 
     if (cached && cacheTime && (now - cacheTime) < 3600000) {
-        console.log('Datos desde localStorage fecth');
+
         try {
             const parsedData = JSON.parse(cached);
-            return parsedData;  // Devuelve el valor cacheado (ej. 8)
+            return parsedData;  // Devuelve el valor cacheado 
         } catch (error) {
             console.error('Error al parsear cache, limpiando:', error);
             localStorage.removeItem(cacheKey);
@@ -141,14 +141,13 @@ async function fetchComponentes() {
     }
     const config = {
         url: `${api}/api/reportes/reporteDashboard/consultaretirostransito`, // URL específica
-        timeoutDuration: 5000, // Opcional: ajusta el timeout si es necesario
-        // data: {} // Opcional: no se pasa si no hay query params
+        timeoutDuration: 5000, // ajusta el timeout 
+        // data: {} // no se pasa si no hay query params
     };
     try {
         const response = await handleGET(config);
-        console.log("Respuesta completa:", response);
-        // Asume que response.data es el array [{ EquiposEnTransito: 8 }]
-        // Verifica si response tiene body y es válida
+
+        
        // Verifica si la respuesta es válida
         if (!response || !response.data) {
             console.warn('Respuesta inválida de handleGET');
@@ -156,9 +155,9 @@ async function fetchComponentes() {
         }
         const data = response.data.body;
         
-        console.log("Data extraída (body):", data.mantenimientoCorrectivo);
+
         if (data) {
-            console.log("entro array");
+
             // Guarda con JSON.stringify
             localStorage.setItem(cacheKey, JSON.stringify(data));
             localStorage.setItem(cacheKey + '_time', now.toString());
@@ -179,14 +178,14 @@ async function fetchChart() {
     const cacheTime = localStorage.getItem(cacheKeyChart + '_time');
     const now = Date.now();
 
-    // Si hay cache y no ha expirado (ej. 1 hora)
+    // Si hay cache y no ha expirado
     if (cached && cacheTime && (now - cacheTime) < 3600000) {
-        console.log('Datos desde localStorage');
+
         try {
             const data = JSON.parse(cached);
-            console.log("data cache chart", data);
+        
             
-            return data;  // Devuelve el valor cacheado (ej. 8)
+            return data;  // Devuelve el valor cacheado
         } catch (error) {
             console.error('Error al parsear cache, limpiando:', error);
             localStorage.removeItem(cacheKeyChart);
@@ -196,14 +195,12 @@ async function fetchChart() {
     }
     const config = {
         url: `${api}/api/reportes/reporteDashboard/ConsultaComponentesChartCoteoTipoUnidad`, // URL específica
-        timeoutDuration: 5000, // Opcional: ajusta el timeout si es necesario
-        // data: {} // Opcional: no se pasa si no hay query params
+        timeoutDuration: 5000, //  ajusta el timeout 
+        // data: {} //  no se pasa si no hay query params
     };
     try {
         const response = await handleGETSinProgressBar(config);
-        console.log("Respuesta completa:", response);
-        // Asume que response.data es el array [{ EquiposEnTransito: 8 }]
-        // Verifica si response tiene body y es válida
+ 
        // Verifica si la respuesta es válida
         if (!response || !response.data) {
             console.warn('Respuesta inválida de handleGET');
@@ -211,9 +208,7 @@ async function fetchChart() {
         }
         const data = response.data.body;
         
-        console.log("Data extraída (body):", data.mantenimientoCorrectivo);
         if (data) {
-            console.log("entro array");
             // Guarda con JSON.stringify
             localStorage.setItem(cacheKeyChart, JSON.stringify(data));
             localStorage.setItem(cacheKeyChart + '_time', now.toString());
@@ -228,7 +223,7 @@ async function fetchChart() {
     }
 }
 
-// Función para renderizar el gráfico (agrega esto fuera de fetchChart)
+// Función para renderizar el gráfico 
 function renderChart(chartData) {
        // Extrae etiquetas y valores
     const labels = chartData.map(item => item.tipo_unidad);  // ["CEDIS GUANAJUATO", "HOSPITAL", ...]
@@ -262,14 +257,13 @@ async function fetchChartActivoNBaja() {
     const cacheTime = localStorage.getItem(cacheKeyChartActivoBaja + '_time');
     const now = Date.now();
 
-    // Si hay cache y no ha expirado (ej. 1 hora)
+    // Si hay cache y no ha expirado 
     if (cached && cacheTime && (now - cacheTime) < 3600000) {
-        console.log('Datos desde localStorage');
         try {
             const data = JSON.parse(cached);
-            console.log("data cache chart", data);
+  
             
-            return data;  // Devuelve el valor cacheado (ej. 8)
+            return data;  // Devuelve el valor cacheado 
         } catch (error) {
             console.error('Error al parsear cache, limpiando:', error);
             localStorage.removeItem(cacheKeyChartActivoBaja);
@@ -279,14 +273,12 @@ async function fetchChartActivoNBaja() {
     }
     const config = {
         url: `${api}/api/reportes/reporteDashboard/ConsultaComponentesChartConteoActivoBaja`, // URL específica
-        timeoutDuration: 5000, // Opcional: ajusta el timeout si es necesario
-        // data: {} // Opcional: no se pasa si no hay query params
+        timeoutDuration: 5000, //  ajusta el timeout 
+        // data: {} // no se pasa si no hay query params
     };
     try {
         const response = await handleGETSinProgressBar(config);
-        console.log("Respuesta completa ACVTIVO BJA:", response);
-        // Asume que response.data es el array [{ EquiposEnTransito: 8 }]
-        // Verifica si response tiene body y es válida
+    
        // Verifica si la respuesta es válida
         if (!response || !response.data) {
             console.warn('Respuesta inválida de handleGET');
@@ -296,7 +288,6 @@ async function fetchChartActivoNBaja() {
         
       
         if (data) {
-            console.log("entro array");
             // Guarda con JSON.stringify
             localStorage.setItem(cacheKeyChartActivoBaja, JSON.stringify(data));
             localStorage.setItem(cacheKeyChartActivoBaja + '_time', now.toString());
@@ -316,14 +307,14 @@ function renderChartActivoBaja(chartData) {
     const labels = chartData.map(item => item.status_inventario); 
     const dataValues = chartData.map(item => item.totalcomponentes);  
 
-    // Colores dinámicos para cada sección (puedes personalizar o usar una paleta)
+    // Colores dinámicos para cada sección 
     const backgroundColors = [
         'rgba(255, 99, 132, 0.8)',   // Rojo
         'rgba(54, 162, 235, 0.8)',   // Azul
         'rgba(255, 205, 86, 0.8)',   // Amarillo
         'rgba(75, 192, 192, 0.8)',   // Verde
         'rgba(153, 102, 255, 0.8)',  // Morado
-        // Agrega más si hay más categorías
+      
     ].slice(0, labels.length);  // Limita al número de etiquetas
 
     const ctx = document.getElementById('chartActivoPasivo').getContext('2d');
@@ -332,7 +323,7 @@ function renderChartActivoBaja(chartData) {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Total de Componentes Activo/BAJA',  // Opcional, pero útil para tooltips
+                label: 'Total de Componentes Activo/BAJA',  
                 data: dataValues,
                 backgroundColor: backgroundColors,
                 hoverBackgroundColor: backgroundColors.map(color => color.replace('0.8', '1')),  // Más opaco al hover
@@ -343,7 +334,7 @@ function renderChartActivoBaja(chartData) {
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'bottom'  // Muestra la leyenda abajo (opcional, puedes quitarla si usas custom)
+                    position: 'bottom'  // Muestra la leyenda abajo 
                 },
                 tooltip: {
                     callbacks: {
@@ -357,7 +348,6 @@ function renderChartActivoBaja(chartData) {
                     }
                 }
             }
-            // Quita 'scales' porque el pastel no las necesita
         }
     });
 }

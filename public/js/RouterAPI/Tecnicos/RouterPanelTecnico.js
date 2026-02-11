@@ -8,7 +8,7 @@ import {
   handlePUT,
   handleGET,
   obtenerUsuarioLocalStorage,
-} from "../Utils.js"; // Importa tus utilidades
+} from "../Utils.js"; 
 const api = URLAPI;
 // PARA ALERTAS TOAST SWEETALERT2
 const Toast = Swal.mixin({
@@ -30,7 +30,7 @@ const StatePanelTecnico = {
 document.addEventListener("DOMContentLoaded", () => {
   var table; // Variable global para la tabla
   var searchTerm = "";
-  let visibleState = false; // Declarada aquí para manejar el estado de las columnas
+  let visibleState = false; 
   let urlEdit;
   const btnmaximizarColumnas = document.getElementById(
     "btnMaximizartblTecnicos",
@@ -100,12 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
       columns: [
         {
           data: "id_tecnico",
-          /*"render": function (data, type, row) {
-                        // Aquí se guarda el ID de la primera fila. 
-                        // NOTA: Si hay varias filas, solo se guarda el ID de la última.
-                        id_componente = data;
-                        return data;
-                    }*/
         },
         { data: "nombre" },
         { data: "usuario" },
@@ -134,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
       info: false,
       ordering: true,
       responsive: true,
-      destroy: true, // Opción clave: destruye automáticamente si ya existe
+      destroy: true, 
     };
     handleDataTableLoadingGET({
       url: url,
@@ -143,10 +137,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }).then((data) => {
       if (data && Array.isArray(data) && data.length > 0) {
         // Verificación de éxito
-        // ASIGNAR LA INSTANCIA DE LA TABLA CREADA A LA VARIABLE 'table'
+       
         table = $("#table_tecnicos").DataTable({
           ...configBase,
-          data: data, // Usa los datos retornados
+          data: data,
         });
 
         table.on("click", "tr", function () {
@@ -156,19 +150,19 @@ document.addEventListener("DOMContentLoaded", () => {
           if (rowData && rowData.id_tecnico) {
             StatePanelTecnico.id_tecnico = rowData.id_tecnico;
 
-            // --- INICIO DE LA LÓGICA DE SELECCIÓN OPTIMIZADA ---
+
 
             // 2. Deseleccionar la fila anterior si existe
             if (selectedRow) {
-              // Elimina tu clase y la clase activa de Bootstrap
+  
               selectedRow.removeClass("selected-row table-active");
               selectedRow.find("td").removeClass("selected-cell");
             }
 
-            // 3. Establecer la nueva fila como seleccionada
+            // 3. nueva fila seleccionada
             const newSelectedRow = $(this);
 
-            // Agrega tu clase y la clase activa de Bootstrap para el color
+            // clase activa de Bootstrap para el color
             newSelectedRow.addClass("selected-row table-active");
             newSelectedRow.find("td").addClass("selected-cell");
 
@@ -204,10 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
   //*PERMITE MAXIMIZAR LAS COLUMNAS
   if (btnmaximizarColumnas) {
     btnmaximizarColumnas.addEventListener("click", () => {
-      // Llama al método con los parámetros correctos
+
       ConfigTable.maximizarColumnas(
         table, // Instancia de la tabla
-        visibleState, // Estado actual (boolean dinámico)
+        visibleState, // Estado actual 
         setVisibleState, // Función callback para actualizar el estado
         [3, 4], // Columnas a alternar
       );
@@ -291,16 +285,16 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       const response = await handlePOST(config);
-      console.log("response", response);
+      
 
       Swal.fire({
         icon: response.data.icon || "success",
         title: response.data.tittle,
         text: response.data.message,
         showConfirmButton: false,
-        timer: 2000, // Cierra automáticamente después de 2 segundos (1000 ms)
+        timer: 2000,
       });
-      console.log("response.data.error", response.data.error);
+
       if (response.data.error === false) {
         setTimeout(() => {
           General.resetearCampos("#formularioAgregarTecnico");
@@ -327,7 +321,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   //*BOTON ABRIR MODAL EDITAR TECNICO
-  // BOTON ABRIR MODAL EDITAR TECNICO
   btnAbrirEditarTecnico.addEventListener("click", async function () {
     if (!StatePanelTecnico.id_tecnico) {
       Toast.fire({
@@ -341,7 +334,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let id_tecnico = StatePanelTecnico.id_tecnico;
 
     const config = {
-      url: `${api}/api/tecnicos/consultarportecnico`, // Asegúrate de que 'api' esté definida
+      url: `${api}/api/tecnicos/consultarportecnico`, 
       data: { id_tecnico: id_tecnico },
     };
 
@@ -368,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
         selectisadminEdit.value = data.IsAdmin;
       });
 
-      // Asignación de datos (descomentado y movido aquí para ejecutarse solo si hay data)
+    
     } catch (error) {
       console.error("Error en la petición GET:", error); // Log del error en catch
       Toast.fire({
@@ -402,7 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
       urlEdit = `${api}/api/tecnicos/EditartecnicoPorIDConPassword`;
     } else {
       capturapassword = "12345";
-      console.log("isChecked false no cambiemos contraseña", isChecked);
+
       urlEdit = `${api}/api/tecnicos/EditartecnicoPorIDSinPassword`;
     }
 
@@ -416,7 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     if (validacion == false) {
-      console.log("validacion", validacion);
+   
       //ASIGNACION A ARRAY
       const TecnicoData = {
         nombre: inputnombretecnicoEdit.value,
@@ -440,8 +433,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const response = await handlePUT(config);
-        console.log("response", response);
-
+        
         if (response.error === false && response.status == 200) {
           setTimeout(() => {
             General.resetearCampos("#EditarTecnicoEdit");
@@ -483,7 +475,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const config = {
       url: `${api}/api/tecnicos/consultarportecnico`, // URL específica
-      timeoutDuration: 5000, // Opcional: ajusta el timeout si es necesario
+      timeoutDuration: 5000,
       data: { id_tecnico: StatePanelTecnico.id_tecnico },
     };
 
@@ -598,13 +590,12 @@ function ValidarCamposTecnicos(
 function ocultarDesSesionPassword(isChecked) {
   const $passFields = $("#seccionPassword input");
   if (isChecked) {
-    console.log("isChecked", isChecked);
+   
     $("#seccionPassword").slideDown(); // Muestra con animación
     $passFields.attr("required", true); // Hace los campos obligatorios
   } else {
-    console.log("isChecked CAN", isChecked);
     $("#seccionPassword").slideUp(); // Oculta con animación
     $passFields.attr("required", false); // Quita el atributo requerido
-    $passFields.val(""); // Opcional: Limpia los valores al ocultar
+    $passFields.val(""); 
   }
 }

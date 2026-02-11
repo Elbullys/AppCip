@@ -17,7 +17,7 @@ import {
 const api = URLAPI;
 
 
-// Función auxiliar para agregar eventos (reutilizable)
+// Función auxiliar para agregar eventos 
 const agregarEventosSeleccion = (
   tableInstance,
   resolve,
@@ -31,12 +31,12 @@ const agregarEventosSeleccion = (
     const rowData = tableInstance.row(this).data();
     if (rowData) {
       $(modalId).modal("hide");
-      console.log("rowData", rowData);
+  
       resolve(rowData);
     }
   });
 
-  // 2. Clic Simple: Manejo de selección visual (Usando la API de DataTable)
+  // 2. Clic Simple: Manejo de selección visual 
   tableBody.off("click").on("click", "tr", function () {
     // Quitamos la clase a cualquier otra fila previamente seleccionada
     tableInstance.$("tr.selected-row").removeClass("selected-row table-active");
@@ -61,8 +61,8 @@ const agregarEventosSeleccion = (
 
       if (selectedRowData) {
         $(modalId).modal("hide");
-        console.log("selectedRowData", selectedRowData);
-        resolve(selectedRowData); // Retorna el objeto completo (id, nombre, etc)
+
+        resolve(selectedRowData); // Retorna el objeto completo 
       } else {
         Swal.fire({
           icon: "warning",
@@ -109,7 +109,7 @@ export class clsFuncionesModales {
 
     //* Función BuscarFACTURA
   static async BuscarFactura(searchTerm) {
-    console.log("BuscarFactura",searchTerm);
+
     return inicializarDataTableFactura(
       searchTerm
     );
@@ -151,7 +151,7 @@ export async function inicializarDataTableUnidades(searchTerm) {
     destroy: true,
   };
 
-  // Retornar la Promise directamente  AREAS
+  // Retornar la Promise directamente  UNIDADES
   return new Promise((resolve, reject) => {
     const url = urlUnidades;
     const dataPayload = { search: searchTerm };
@@ -251,7 +251,7 @@ export async function inicializarDataTableResponsablePorIdUnidad(
       timeoutDuration: 60000,
     })
       .then((data) => {
-        console.log("Datos cargados:", data);
+ 
         if (data && Array.isArray(data) && data.length > 0) {
           table = $("#table_Modal_ConsultaResponsable").DataTable({
             ...configBase,
@@ -334,7 +334,7 @@ export async function inicializarDataTableAreasPorTipoUnidad(
       timeoutDuration: 60000,
     })
       .then((data) => {
-        console.log("Datos cargados:", data);
+        
         if (data && Array.isArray(data) && data.length > 0) {
           table = $("#table_Modal_ConsultaArea").DataTable({
             ...configBase,
@@ -395,10 +395,10 @@ export async function inicializarDataTableDispositivos(searchTerm) {
     info: false,
     ordering: false,
     responsive: true,
-    destroy: true, // Opción clave: destruye automáticamente si ya existe
+    destroy: true,
   };
 
-  // Retornar la Promise directamente  AREAS
+  // Retornar la Promise directamente  DISPOSITIVOS
   return new Promise((resolve, reject) => {
     const url = urlDispositivos;
     const dataPayload = searchTerm;
@@ -578,7 +578,7 @@ export async function inicializarDataTableFactura(searchTerm) {
       info: false,
       ordering: true,
       responsive: true,
-      destroy: true, // Opción clave: destruye automáticamente si ya existe
+      destroy: true, 
     };
 
   //*MODAL facturas
@@ -628,7 +628,7 @@ export async function inicializarDataTableFactura(searchTerm) {
 }
 
 
-// Función genérica para ocultar elementos (ahora usa IDs directos para contenedores)
+// Función genérica para ocultar elementos 
 export const ocultarElementos = (selectores) => {
   selectores.forEach(selector => {
     const elementos = document.querySelectorAll(selector);
@@ -637,13 +637,13 @@ export const ocultarElementos = (selectores) => {
         elemento.style.display = 'none';
       }
       else {
-        console.log(`Elemento no encontrado para selector: ${selector}`);  // Logging
+        console.warn(`Elemento no encontrado para selector: ${selector}`);  // Logging
       }
     });
   });
 };
 
-// Función para mostrar elementos (simétrica)
+// Función para mostrar elementos 
 export const mostrarElementos = (selectores) => {
   selectores.forEach(selector => {
     const elementos = document.querySelectorAll(selector);
@@ -699,9 +699,7 @@ export class BuscadorGenericoSelectFiltro {
     const config = this.configBuscador[campo];
     const busquedaTittle = document.getElementById("busquedaTittle");
     busquedaTittle.textContent = `Realiza tu búsqueda ${nombre}`;
-    // Oculta elementos
-    //this.ocultarElementos(['#colNombreCatalogo', '#colDispositivo', '#colmarcamodelo', '#coldescripcioncatalogo', '.d-grid']);
-
+    
     // Muestra búsqueda
     this.vistaBuscador.style.display = 'block';
     this.inputBusqueda.placeholder = config.placeholder;
@@ -715,7 +713,7 @@ export class BuscadorGenericoSelectFiltro {
 cerrar() {
   this.vistaBuscador.style.display = 'none';
   
-  // Ejecuta onClose si existe (controlado desde el DOM)
+ 
   const config = this.configBuscador[this.campoActual];
   if (config && config.onClose) config.onClose();
   
@@ -757,7 +755,7 @@ if (config.getExtraParams && typeof config.getExtraParams === 'function') {
 
     const response = await fetch(`${config.endpoint}?${queryParams}`, fetchOptions);
     const data = await response.json();
-    console.log("Respuesta completa del backend:", data);
+   
 
     if (!response.ok) {
       throw new Error(`Error HTTP: ${response.status} - ${data.message || 'Desconocido'}`);
@@ -779,10 +777,10 @@ if (config.getExtraParams && typeof config.getExtraParams === 'function') {
   }
 }
 
- // Dentro de la clase BuscadorGenerico, modifica o añade estos métodos:
+
 
 async ejecutarBusqueda() {
-    const items = await this.buscar(); // Tu método fetch actual
+    const items = await this.buscar(); 
     
     this.listaResultados.innerHTML = '';
 
@@ -794,24 +792,24 @@ async ejecutarBusqueda() {
     const config = this.configBuscador[this.campoActual];
 
     items.forEach(item => {
-        const li = document.createElement('button'); // Mejor button para accesibilidad
+        const li = document.createElement('button'); 
         li.type = 'button';
         li.className = 'list-group-item list-group-item-action';
         
-        // USAMOS LA CONFIGURACIÓN DINÁMICA
+   
         li.textContent = config.renderLabel(item);
         
         li.onclick = () => {
             // Asignación visual básica
             config.inputVisual.value = config.renderLabel(item);
             
-            // Ejecutamos la lógica personalizada (StatePanel, etc)
+            // Ejecutamos la lógica personalizada 
             if (config.onSelect) config.onSelect(item);
             
             this.cerrar();
         };
         this.listaResultados.appendChild(li);
-        // Renderizado interno (lo que ya hace la clase)
+        // Renderizado interno 
     this.renderizarLista(items);
 
    
@@ -863,7 +861,7 @@ inicializar() {
     // Vinculamos el botón de filtro a la nueva función de la clase
     this.btnFiltro.onclick = () => this.ejecutarBusqueda();
     
-    // Opcional: Buscar al presionar Enter
+    //  Buscar al presionar Enter
     this.inputBusqueda.onkeyup = (e) => {
         if (e.key === 'Enter') this.ejecutarBusqueda();
     };
@@ -878,7 +876,7 @@ export class SelectLoader {
     
     if (!select) return;
 
-    // Lógica de limpieza (Corregida: true para limpiar)
+
     if (limpiarOpciones) {
       select.innerHTML = '<option value="">Selecciona una opción</option>';
     }
@@ -917,7 +915,7 @@ export class SelectLoader {
 
       const items = Array.isArray(data) ? data : (data.body || []);
 
-      // AQUÍ VA EL CÓDIGO: 
+    
       // Usamos un bucle normal para asegurar que se procese todo antes de terminar la función
       items.forEach(item => {
         const optionData = renderOption(item);
@@ -927,8 +925,8 @@ export class SelectLoader {
         select.appendChild(option);
       });
 
-      // Al llegar aquí, el DOM ya tiene las opciones. 
-      // La promesa de la función se resuelve automáticamente.
+
+
       return true; 
     } catch (error) {
       console.error('Error al cargar opciones:', error);

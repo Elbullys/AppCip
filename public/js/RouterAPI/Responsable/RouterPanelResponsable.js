@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   var table;
   // Variable global para la tabla
   var searchTerm = "";
-  let visibleState = false; // Declarada aquí para manejar el estado de las columnas
+  let visibleState = false; 
   let urlEdit;
   // Variable para checkbox cambiar contraseña
   let isChecked = false;
@@ -92,11 +92,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   StatePanelResponsable.EsDispositivoMovil = General.esDispositivoMovil();
 
   //INICIALIZAR MODAL
-  const modalTitle = document.getElementById("upsertCatalogoModalLabel");
-  const btonupsertcatalogo = document.getElementById("btonupsertcatalogo"); //BOTON SAVE TECNICO MODAL
-  const btoncloseupsertCatalogomodal = document.getElementById(
-    "btoncloseupsertCatalogomodal",
-  );
+
 
   //*modal UPSERT CATALOGO
   const ModalupsertResponsableModal = document.getElementById(
@@ -135,9 +131,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const divcambiarpassword = document.getElementById("divcambiarpassword");
   const divcontraseña = document.getElementById("divcontraseña");
 
-  //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL
+  //Obtener del LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL
   obtenerUsuarioLocalStorage();
 
+  //permite personalizar el placeholder dependiendo si es dispositivo movil o de escritorio
   inputUnidadPanel.placeholder = StatePanelResponsable.EsDispositivoMovil
     ? "👉 Toca para seleccionar unidad"
     : "👉 Pulsa F1 para buscar";
@@ -196,7 +193,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         data: { id_unidad: id_unidad, searchTerm: searchTerm },
         timeoutDuration: 60000,
       }).then((data) => {
-        console.log("data", data);
+        
         if (data && Array.isArray(data) && data.length > 0) {
           // Verificación de éxito
           // ASIGNAR LA INSTANCIA DE LA TABLA CREADA A LA VARIABLE 'table'
@@ -449,7 +446,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           true,
         );
 
-        //.PARA SELECCIONAR EL AREA CORRESPONDIENTE AL RESPONSABLE,
+        //PARA SELECCIONAR EL AREA CORRESPONDIENTE AL RESPONSABLE,
         let selectArea = document.getElementById("selectArea");
         selectArea.value = StatePanelResponsable.IdArea;
 
@@ -473,7 +470,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       upsertResponsableModal.show();
 
-      // Asignación de datos (descomentado y movido aquí para ejecutarse solo si hay data)
+
     } catch (error) {
       console.error("Error en la petición GET:", error); // Log del error en catch
       Toast.fire({
@@ -517,7 +514,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       btnAbrir: document.getElementById("btnAbrirBuscadorUnidad"),
       endpoint: `${api}/api/unidades/ConsultaPorUnidadBusqueda`,
       onOpen: () => {
-        // Decidimos qué lista usar según la acción actual
+        // comparacion  lista para usar según la acción actual
         const listaOcultar =
           StatePanelResponsable.accion_update_insert === "UPDATE"
             ? elementosInsert
@@ -530,7 +527,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("btonupsertResponsable").style.display = "none";
       },
       onClose: () => {
-        // Decidimos qué lista usar según la acción actual
+             // comparacion  lista para usar según la acción actual
         const mostrar =
           StatePanelResponsable.accion_update_insert === "UPDATE"
             ? elementosUpdate
@@ -614,7 +611,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
   buscador.inicializar();
 
-  // Función para manejar la búsqueda (reutiliza config)
+  // Función para manejar la búsqueda 
   async function manejarBusqueda() {
     const items = await buscador.buscar();
     buscador.listaResultados.innerHTML = "";
@@ -634,10 +631,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       li.onclick = () => {
         const selectedItem = buscador.seleccionarItem(item);
 
-        // Reutiliza onSelect
+        
         config.onSelect(selectedItem);
 
-        // Reutiliza onVisibility (diferencia por campo automáticamente)
+
         if (config.onVisibility) {
           config.onVisibility(selectedItem);
         }
@@ -768,20 +765,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   function ocultarDesSesionPassword(isChecked) {
     const $passFields = $("#colrow4 input");
     if (isChecked) {
-      console.log("isChecked", isChecked);
+     
       $("#colrow4").slideDown(); // Muestra con animación
       $passFields.attr("required", true); // Hace los campos obligatorios
     } else {
-      console.log("isChecked CAN", isChecked);
       $("#colrow4").slideUp(); // Oculta con animación
       $passFields.attr("required", false); // Quita el atributo requerido
-      $passFields.val(""); // Opcional: Limpia los valores al ocultar
+      $passFields.val(""); //Limpia los valores al ocultar
     }
   }
 
   //*FUNCION PARA INICIALIZAR MODAL INSERT/UPDATE CATALOGO COMPONENTE
   function inicializarmodalUpsertResponsable() {
-    // Reset nativo del formulario (esto limpia TODO de golpe)
+    // Reset nativo del formulario 
     const formulario = document.getElementById("formularioupsertResponsable");
     if (formulario) {
       formulario.reset();
@@ -851,7 +847,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           title: response.data.tittle,
           text: response.data.message,
           showConfirmButton: false,
-          timer: 2000, // Cierra automáticamente después de 2 segundos (1000 ms)
+          timer: 2000,
         });
 
         if (response.data.error === false) {
@@ -889,7 +885,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           urlEdit = `${api}/api/responsables/EditarResponsablePorIDConPassword`;
         } else {
           capturapassword = "12345";
-          console.log("isChecked false no cambiemos contraseña", isChecked);
+   
           urlEdit = `${api}/api/responsables/EditarResponsablePorIDSinPassword`;
         }
 
@@ -914,7 +910,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           };
 
           const response = await handlePUT(config);
-          console.log("response", response);
+
 
           if (response.error === false && response.status == 200) {
             setTimeout(() => {
@@ -953,7 +949,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
       const config = {
         url: `${api}/api/responsables/ConsultaResponsablePorIdResponsable`, // URL específica
-        timeoutDuration: 5000, // Opcional: ajusta el timeout si es necesario
+        timeoutDuration: 5000, 
         data: { id_responsable: StatePanelResponsable.id_responsable },
       };
   

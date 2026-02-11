@@ -1,6 +1,6 @@
 //PERMITE EXPORTAR LA RUTA DE LA API
-//export const URLAPI = 'https://apirestcip.onrender.com';
-export const URLAPI= 'http://localhost:7000';
+export const URLAPI = 'https://apirestcip.onrender.com';//PRODUCCION
+//export const URLAPI= 'http://localhost:7000';//DESARROLLO
 
 //VARIBLES CACHE
 const cacheKey = 'cacheConsRetTransito';
@@ -65,11 +65,11 @@ export async function handleDataTableLoadingPOST(config) {
 
   try {
     const response = await fetch(url, {
-      method: 'POST',  // Cambiado a POST
+      method: 'POST',  
       headers: {
-        'Content-Type': 'application/json',  // Agregado para indicar que el body es JSON
+        'Content-Type': 'application/json',  
       },
-      body: JSON.stringify(data),  // Agregado: Envía data como cuerpo JSON
+      body: JSON.stringify(data), 
       signal: AbortSignal.timeout(timeoutDuration),
       credentials: 'include',
     });
@@ -84,7 +84,7 @@ export async function handleDataTableLoadingPOST(config) {
         const errorResponse = await response.json();
         errorMessage = errorResponse.message || errorMessage;
       } catch (e) {
-        // Si el cuerpo no es JSON, usamos el mensaje por defecto
+
       }
 
       // Cerrar el modal de carga y redirigir
@@ -100,8 +100,8 @@ export async function handleDataTableLoadingPOST(config) {
     }
     const json = await response.json();
     clearInterval(swalInstance._progressInterval);
-    // Agrega un retraso mínimo antes de cerrar la alerta
-    await new Promise(resolve => setTimeout(resolve, 1000));  // Espera 1 segundo
+   
+    await new Promise(resolve => setTimeout(resolve, 1000));  
     Swal.close();
 
 
@@ -173,7 +173,7 @@ export async function handleDataTableLoadingGET(config) {
       credentials: 'include',
 
     });
-    //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
+    //VERIFICA SI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
     if (response.status === 401) {
       // Si el servidor devuelve 401, forzamos el logout y la redirección
       let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
@@ -203,15 +203,15 @@ export async function handleDataTableLoadingGET(config) {
     const json = await response.json();
     clearInterval(swalInstance._progressInterval);
 
-    // Agrega un retraso mínimo antes de cerrar la alerta
-    await new Promise(resolve => setTimeout(resolve, 1000));  // Espera 1 segundo
+
+    await new Promise(resolve => setTimeout(resolve, 1000));  
     Swal.close();
 
 
     return json.body || [];
   } catch (error) {
     clearInterval(swalInstance._progressInterval);
-    Swal.close();  // Cierra inmediatamente en caso de error para no bloquear al usuario
+    Swal.close();  
 
     if (error.name === 'TimeoutError') {
 
@@ -236,9 +236,9 @@ export async function handleDataTableLoadingGET(config) {
 
 
 export class General {
-  // Método estático para validar búsqueda
+  
   static validarBusqueda(searchTerm) {
-    console.log(searchTerm);
+
     if (searchTerm === '' || searchTerm.length === 0) {
       Toast.fire({
         icon: "warning",
@@ -301,7 +301,7 @@ export class General {
         error: true,
         message: "El Usuario es Incorrecto",
       };
-      // return { icon:"warning",error: true, message: "El nombre de usuario ya está en uso." };
+      
     }
     return { icon: "check", error: false, message: "Datos válidos" };
   }
@@ -320,7 +320,7 @@ export class General {
     // Expresión regular para validar la contraseña
     //const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/; // Al menos una mayúscula, un número y longitud mínima de 6 caracteres
     if (Password.length < 3) {
-      console.log("password tamaño");
+
       return {
         icon: "warning",
         error: true,
@@ -405,7 +405,7 @@ export class General {
 
 export class ConfigTable {
 
-  // Método para ocultar columnas específicas (ahora configurable)
+  // Método para ocultar columnas específicas 
   static ocultarColumnas(tableInstance, columnasAOcultar = []) {
     if (!tableInstance) {
       return;
@@ -427,7 +427,7 @@ export class ConfigTable {
     });
   }
 
-  // Método para alternar la visibilidad de columnas específicas (ahora configurable)
+  // Método para alternar la visibilidad de columnas específicas 
   static maximizarColumnas(tableInstance, currentVisibleState, setVisibleStateCallback, columnasAAternar = []) {
     if (!tableInstance) {
       return;
@@ -469,11 +469,11 @@ export class ConfigTable {
 export async function handleGET(config) {
   const {
     url,
-    data = {}, // Opcional: objeto para query params (si no se pasa, no se agregan)
+    data = {}, 
     timeoutDuration = 3000,
-    loadingTitle = 'Cargando datos...', // Título del modal de carga
-    loadingText = 'Por favor, espera mientras se obtienen los datos. Conectando...', // Texto del modal de carga
-    errorTitle = 'Error al obtener datos', // Solo para errores
+    loadingTitle = 'Cargando datos...', 
+    loadingText = 'Por favor, espera mientras se obtienen los datos. Conectando...', 
+    errorTitle = 'Error al obtener datos', 
   } = config;
 
   // Validaciones iniciales
@@ -507,7 +507,7 @@ export async function handleGET(config) {
   });
 
   try {
-    // Construir URL con query params si data está presente
+    // Construir URL con query params 
     let fullUrl = url;
     if (data && typeof data === 'object' && Object.keys(data).length > 0) {
       const params = new URLSearchParams(data);
@@ -543,7 +543,7 @@ export async function handleGET(config) {
     }
 
     if (!response.ok) {
-      // Maneja respuestas no-JSON usando text() con try-catch
+ 
       let errorMessage;
       try {
         const errorData = await response.text();
@@ -557,9 +557,9 @@ export async function handleGET(config) {
 
     const result = await response.json();
     clearInterval(swalInstance._progressInterval);
-    // Agrega un retraso mínimo antes de cerrar la alerta
-    await new Promise(resolve => setTimeout(resolve, 1000));  // Espera 1 segundo
-    Swal.close();  // Cierra inmediatamente sin retraso
+ 
+    await new Promise(resolve => setTimeout(resolve, 1000));  
+    Swal.close();  
     // Retorna un objeto con success y data (sin mensajes de éxito)
     return {
       success: true,
@@ -567,7 +567,7 @@ export async function handleGET(config) {
     };
   } catch (error) {
     clearInterval(swalInstance._progressInterval);
-    Swal.close();  // Cierra inmediatamente en caso de error
+    Swal.close(); 
 
     if (error.name === 'TimeoutError') {
       Swal.fire({
@@ -590,7 +590,7 @@ export async function handleGET(config) {
 export async function handleGETSinProgressBar(config) {
   const {
     url,
-    data = {}, // Opcional: objeto para query params (si no se pasa, no se agregan)
+    data = {}, 
 
     errorTitle = 'Error al obtener datos', // Solo para errores
   } = config;
@@ -609,7 +609,7 @@ export async function handleGETSinProgressBar(config) {
 
 
   try {
-    // Construir URL con query params si data está presente
+    // Construir URL con query params 
     let fullUrl = url;
     if (data && typeof data === 'object' && Object.keys(data).length > 0) {
       const params = new URLSearchParams(data);
@@ -621,7 +621,7 @@ export async function handleGETSinProgressBar(config) {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     });
-    //VERIFICA DI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
+    //VERIFICA sI LA RESPUESTA ES 401 Y REALIZA LOGOUT Y REDIRECCION A INICIO DE SESION
     if (response.status === 401) {
       // Si el servidor devuelve 401, forzamos el logout y la redirección
       let errorMessage = "Tu sesión ha expirado. Vuelve a iniciar sesión.";
@@ -683,7 +683,7 @@ export async function handleGETSinProgressBar(config) {
 
 
 
-// Función PUT genérica para ediciones o actualizaciones (adaptada al estilo de handleDataTableLoadingGET)
+// Función PUT genérica para ediciones o actualizaciones 
 export async function handlePUT(config) {
   const {
     url,
@@ -738,7 +738,7 @@ export async function handlePUT(config) {
   try {
     let fullUrl = url;
     if (id) fullUrl += `/${id}`;
-    console.log("fullUrl", fullUrl);
+
     const response = await fetch(fullUrl, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -757,7 +757,7 @@ export async function handlePUT(config) {
         const errorResponse = await response.json();
         errorMessage = errorResponse.message || errorMessage;
       } catch (e) {
-        // Si el cuerpo no es JSON, usamos el mensaje por defecto
+        // Si el cuerpo no es JSON
       }
 
       // Cerrar el modal de carga y redirigir
@@ -770,10 +770,10 @@ export async function handlePUT(config) {
     }
 
     if (!response.ok) {
-      // CORRECCIÓN: Maneja respuestas no-JSON usando text() con try-catch
+     
       let errorMessage;
       try {
-        const errorData = await response.text(); // Cambiado a text() para mayor robustez
+        const errorData = await response.text();
         // Intenta parsear como JSON si es posible
         const parsed = JSON.parse(errorData);
         errorMessage = parsed.message || `Error en la edición: ${response.status}`;
@@ -933,7 +933,7 @@ export async function handlePOST(config) {
     return {
       success: true,
       data: result,
-      id: result.id || null, // Asume que el ID está en result.id; ajusta si es otro campo (ej. result.facturaId)
+      id: result.id || null,
     };
   } catch (error) {
     if (swalInstance && swalInstance._progressInterval) {
@@ -964,7 +964,7 @@ export async function handlePOST(config) {
 export async function handleGETHiddenCookie(config) {
   const {
     url,
-    data = {}, // Opcional: objeto para query params
+    data = {}, 
     timeoutDuration = 3000,
     successTitle = 'Datos obtenidos exitosamente',
     successMessage = 'Los datos han sido obtenidos exitosamente.',
@@ -1009,7 +1009,7 @@ export async function handleGETHiddenCookie(config) {
         const errorResponse = await response.json();
         errorMessage = errorResponse.message || errorMessage;
       } catch (e) {
-        // Si el cuerpo no es JSON, usamos el mensaje por defecto
+        
       }
 
       // Cerrar el modal de carga y redirigir
@@ -1040,7 +1040,7 @@ export async function handleGETHiddenCookie(config) {
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Retorna un objeto con success y data (sin id, ya que GET no crea recursos típicamente)
+    // Retorna un objeto con success y data 
     return {
       success: true,
       data: result,
@@ -1087,16 +1087,6 @@ export async function handlePOSTbatch(config) {
     return false;
   }
 
-  // Logging del payload antes de enviar
-  console.log('URL:', url);
-  console.log('Data a enviar:', data);
-  console.log('Data serializada:', JSON.stringify(data));  // Verifica si se serializa bien
-  console.log('Es data un array?', Array.isArray(data.series));  // Específico para tu caso
-
-  if (!disableAlerts) {
-    console.log(`${loadingTitle}: ${loadingText}`);
-  }
-
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -1106,9 +1096,7 @@ export async function handlePOSTbatch(config) {
       credentials: 'include',
     });
 
-    // Logging de la respuesta
-    console.log('Status de respuesta:', response.status);
-    console.log('Headers de respuesta:', response.headers);
+  
 
     // Manejo de 401 (logout)
     if (response.status === 401) {
@@ -1128,7 +1116,7 @@ export async function handlePOSTbatch(config) {
       let errorMessage;
       try {
         const errorData = await response.text();
-        console.log('Cuerpo de error crudo:', errorData);  // Agrega esto para ver el mensaje exacto del backend
+
         const parsed = JSON.parse(errorData);
         errorMessage = parsed.message || `Error al agregar: ${response.status}`;
       } catch {
@@ -1138,7 +1126,7 @@ export async function handlePOSTbatch(config) {
     }
 
     const result = await response.json();
-    console.log('Resultado exitoso:', result);
+
 
     return {
       success: true,
@@ -1147,7 +1135,7 @@ export async function handlePOSTbatch(config) {
     };
   } catch (error) {
     console.error('Error en fetch/handlePOSTbatch:', error.message);
-    console.error('Detalles del error:', error);  // Agrega stack trace
+    console.error('Detalles del error:', error); 
 
     if (!disableAlerts) {
       if (error.name === 'TimeoutError') {
@@ -1212,7 +1200,7 @@ export async function ObtenerIdTecnicoSesion() {
 
     const data = await verifyResponse.json();
 
-    // Validamos si el JSON tiene contenido real (por ejemplo, si tiene un ID)
+    // Validamos si el JSON tiene contenido real 
     if (!data || Object.keys(data).length === 0) {
       console.warn("La respuesta del servidor está vacía.");
       return null;
@@ -1236,7 +1224,7 @@ export function obtenerUsuarioLocalStorage() {
    const btnlogout = document.getElementById('logout');
      btnlogout.addEventListener('click', async function (event) {
         event.preventDefault();
-        console.log('Cerrando sesión...');
+   
         // Limpia localStorage y redirige
         localStorage.removeItem('username');
         //CACHE DATOS TRANSITO, MOV DIA, CORRECTIVO Y PREVENTIVO
@@ -1249,7 +1237,7 @@ export function obtenerUsuarioLocalStorage() {
           localStorage.removeItem(cacheKeyChartActivoBaja);
         localStorage.removeItem(cacheKeyChartActivoBaja + '_time');
 
-        try {//`${api}/api/componentes/BusquedaComponenteCodigoTINumSerie
+        try {
             // 1. Enviar la solicitud POST al servidor para limpiar la cookie
             const response = await fetch(`${URLAPI}/api/logintecnicos/logouttecnico`, {
                 method: 'POST',
@@ -1258,7 +1246,7 @@ export function obtenerUsuarioLocalStorage() {
                 }
             });
 
-            console.log("response.ok", response);
+        
             if (response.ok) {
                 // 1. Redirige solo si la respuesta del servidor fue exitosa (código 200-299)
                 window.location.href = '/logintecnico';

@@ -1,9 +1,8 @@
 const api='https://apirestcip.onrender.com'; 
-//const api='http://localhost:7000'; 
-//const api ='https://apirestcip.onrender.com';
+
 async function cargarDetallesUsuario(idusuario, modal) {
     
-    const url = `${api}/api/Usuarios/ConsultaUsuarioId/${idusuario}`; // Ajusta la URL si es necesario
+    const url = `${api}/api/Usuarios/ConsultaUsuarioId/${idusuario}`; 
 
     try {
         const response = await fetch(url);
@@ -26,7 +25,7 @@ async function cargarDetallesUsuario(idusuario, modal) {
           
         `;
 
-        // Mostrar el modal con Bootstrap 5
+        // DECLARAMOS MODAL 
         const bootstrapModal = new bootstrap.Modal(document.getElementById('detalleUsuarioModal'));
         bootstrapModal.show();
 

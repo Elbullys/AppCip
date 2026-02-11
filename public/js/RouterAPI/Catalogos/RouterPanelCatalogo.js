@@ -8,7 +8,7 @@ import {
   handlePUT,
   handleGET,
   obtenerUsuarioLocalStorage,
-} from "../Utils.js"; // Importa tus utilidades
+} from "../Utils.js"; 
 
 import {
   BuscadorGenericoSelectFiltro,
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   var table;
   // Variable global para la tabla
   var searchTerm = "";
-  let visibleState = false; // Declarada aquí para manejar el estado de las columnas
+  let visibleState = false; //estado de las columnas de tabla para visible 
   let urlEdit;
   //PARA LISTA DESPLEGABLE
   const loader = new SelectLoader();
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     "btnVisualizarCatalogo",
   );
 
-  //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL
+  //obtiene de LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL
   obtenerUsuarioLocalStorage();
 
   //MODALES
@@ -101,12 +101,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   //*modal UPSERT CATALOGO
   const ModalCatalogo_upsert = document.getElementById("upsertCatalogoModal"); //INICIALIZAR MODAL
   const Catalogo_upsertModal = new bootstrap.Modal(ModalCatalogo_upsert, {
-    keyboard: false, // Deshabilita el cierre con ESC
+    keyboard: false, // Deshabilita el cierre con ESC por script
   }); //INICIALIZAR MODAL
-  const btonsavetecnico = document.getElementById("btonsavetecnico"); //BOTON SAVE TECNICO MODAL
-  const btonclosetecnicomodal = document.getElementById(
-    "btonclosetecnicomodal",
-  );
+
   //*modal DETALLE CATALOGO
   const ModalCatalogo_Detalle = document.getElementById(
     "detalleCatalogoComponenteModal",
@@ -212,7 +209,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         data: { searchTerm: searchTerm },
         timeoutDuration: 60000,
       }).then((data) => {
-        console.log("data", data);
         if (data && Array.isArray(data) && data.length > 0) {
           // Verificación de éxito
           // ASIGNAR LA INSTANCIA DE LA TABLA CREADA A LA VARIABLE 'table'
@@ -229,7 +225,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               StatePanelCatalogoComponente.id_catalogo =
                 rowData.id_catalogo_componente;
 
-              // --- INICIO DE LA LÓGICA DE SELECCIÓN OPTIMIZADA ---
+      
 
               // 2. Deseleccionar la fila anterior si existe
               if (selectedRow) {
@@ -241,7 +237,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               // 3. Establecer la nueva fila como seleccionada
               const newSelectedRow = $(this);
 
-              // Agrega tu clase y la clase activa de Bootstrap para el color
+              // Agrega clase y la clase activa de Bootstrap para el color
               newSelectedRow.addClass("selected-row table-active");
               newSelectedRow.find("td").addClass("selected-cell");
 
@@ -271,7 +267,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  //*PERMITE REALIZAR LA BUSQUEDA DE ALGUN USUARIO
+  //*PERMITE REALIZAR LA BUSQUEDA DE CATALOGO COMPONENTE
   function BuscarCatalogoComponente() {
     let searchTerm = inputBusquedaCatalogo.value;
     if (searchTerm) {
@@ -283,7 +279,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (btnBuscarCatalogo) {
     btnBuscarCatalogo.addEventListener("click", BuscarCatalogoComponente);
   }
-  //*EVENTO PARA REALIZAR BUSQUEDA  DE ALGUN USUARIO POR MEDIO DE LA TECLA ENTER
+  //*EVENTO PARA REALIZAR BUSQUEDA  DE CATALOGO POR MEDIO DE LA TECLA ENTER
   if (inputBusquedaCatalogo) {
     inputBusquedaCatalogo.addEventListener("keydown", function (event) {
       if (event.key === "Enter") {
@@ -293,12 +289,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  //* /////////////////////////////////////////////////////////////////////////////////////////////
-  // FIN INICIALIZAR TABLA CATALOGO COMPONENTE
-  //* /////////////////////////////////////////////////////////////////////////////////////////////
 
   //* /////////////////////////////////////////////////////////////////////////////////////////////
-  // INTERACCION DE MODALES
+  //* INTERACCION DE MODALES
   //* /////////////////////////////////////////////////////////////////////////////////////////////
   //*BOTON ABRIR MODAL AGREGAR CATALOGO
   btnagregarCatalogo.addEventListener("click", function () {
@@ -319,7 +312,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
       return;
     }
-    //NOMBRE DE BOTON SUBMIT
+    //BOTON SUBMIT
     btonupsertcatalogo.textContent = "Actualizar";
     //aignacion de id catalogo
 
@@ -397,7 +390,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           let selectprocesador = document.getElementById("selectprocesador");
           selectprocesador.value = StatePanelCatalogoComponente.IdProcesador;
 
-          // Evento para capturar el cambio en el select de área y actualizar el estado global
+          // Evento para capturar el cambio en el select de PROCESADOR y actualizar el estado global
           selectprocesador.addEventListener("change", (e) => {
             const seleccionado = e.target.options[e.target.selectedIndex];
 
@@ -433,7 +426,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           let selectmemoriaram = document.getElementById("selectmemoriaram");
           selectmemoriaram.value = StatePanelCatalogoComponente.IdMemoriaRam;
 
-          // Evento para capturar el cambio en el select de área y actualizar el estado global
+          // Evento para capturar el cambio en el select de MEMORIA RAM y actualizar el estado global
           selectmemoriaram.addEventListener("change", (e) => {
             const seleccionado = e.target.options[e.target.selectedIndex];
 
@@ -468,7 +461,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           let selectdiscoduro = document.getElementById("selectdiscoduro");
           selectdiscoduro.value = StatePanelCatalogoComponente.IdDiscoDuro;
 
-          // Evento para capturar el cambio en el select de área y actualizar el estado global
+          // Evento para capturar el cambio en el select de DISCO DURO y actualizar el estado global
           selectdiscoduro.addEventListener("change", (e) => {
             const seleccionado = e.target.options[e.target.selectedIndex];
 
@@ -507,7 +500,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           selectsistemaoperativo.value =
             StatePanelCatalogoComponente.IdSistemaOperativo;
 
-          // Evento para capturar el cambio en el select de área y actualizar el estado global
+          // Evento para capturar el cambio en el select de SISTEMA OPERATIVO y actualizar el estado global
           selectsistemaoperativo.addEventListener("change", (e) => {
             const seleccionado = e.target.options[e.target.selectedIndex];
 
@@ -542,7 +535,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         StatePanelCatalogoComponente.Modelo = data.modelo;
       });
       Catalogo_upsertModal.show();
-      // Asignación de datos (descomentado y movido aquí para ejecutarse solo si hay data)
+      // Asignación de datos
     } catch (error) {
       console.error("Error en la petición GET:", error); // Log del error en catch
       Toast.fire({
@@ -553,11 +546,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   //* /////////////////////////////////////////////////////////////////////////////////////////////
-  //FIN Interaccion de modales
-  //* /////////////////////////////////////////////////////////////////////////////////////////////
-
-  //* /////////////////////////////////////////////////////////////////////////////////////////////
-  //EVENTO PARA MODALES SELECTOR
+  //*EVENTO PARA MODALES SELECTOR
   //* /////////////////////////////////////////////////////////////////////////////////////////////
   
   const configBuscador = {
@@ -673,7 +662,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           " " +
           StatePanelCatalogoComponente.Modelo;
 
-        //ASIGNACION A NOMBRE DE CATALOGO (MARCA MODELO) COMO SUGERENCIA
+        //ASIGNACION A NOMBRE DE CATALOGO (MARCA MODELO) 
         StatePanelCatalogoComponente.nombre_catalogo =
           StatePanelCatalogoComponente.Marca +
           " " +
@@ -681,10 +670,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         inputnombrecatalogo.value =
           StatePanelCatalogoComponente.nombre_catalogo;
       },
-      // Agrega lógica de visibilidad específica para marca (ejemplo: habilitar algo más)
+      // Agrega lógica de visibilidad específica para marca/modelo
        onVisibility: (selectedItem) => {
         //*comparacion para saber si el item seleccionado tiene caracteristicas adicionales
-        console.log("CaracteristicasAdicionales",StatePanelCatalogoComponente.CaracteristicasAdicionales);
+       
         if (StatePanelCatalogoComponente.CaracteristicasAdicionales === "SI") {
           sesionCaracteristicasAdicionales.hidden = false;
           sesionCaracteristicasAdicionales.style.display = "flex";
@@ -853,12 +842,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         StatePanelCatalogoComponente.procesador =
           combo.options[combo.selectedIndex].text;
 
-        // Aquí puedes cargar otro select dependiente, e.g., marcas basadas en dispositivo
+        
       });
     //*LLENADO DE LISTA DESPLEGABLES MEMORIA RAM
     loader.cargarOpciones(
       {
-        endpoint: `${api}/api/MemoriaRam/consulta_Todos_MemoriaRam_busqueda`, // Tu endpoint
+        endpoint: `${api}/api/MemoriaRam/consulta_Todos_MemoriaRam_busqueda`, 
         selectId: "selectmemoriaram",
         renderOption: (item) => ({
           value: item.IdMemoriaRam,
@@ -881,7 +870,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         StatePanelCatalogoComponente.MemoriaRam =
           combo.options[combo.selectedIndex].text;
 
-        // Aquí puedes cargar otro select dependiente, e.g., marcas basadas en dispositivo
+       
       });
 
     //*LLENADO DE LISTA DESPLEGABLES ALMACENAMIENTO
@@ -905,12 +894,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       .getElementById("selectdiscoduro")
       .addEventListener("change", (e) => {
         StatePanelCatalogoComponente.IdDiscoDuro = e.target.value;
-        // 2. Obtener el texto (Lo que el usuario ve)
+       
         const combo = e.target;
         StatePanelCatalogoComponente.Almacenamiento =
           combo.options[combo.selectedIndex].text;
 
-        // Aquí puedes cargar otro select dependiente, e.g., marcas basadas en dispositivo
+     
       });
 
     //*LLENADO DE LISTA DESPLEGABLES SISTEMA OPERATIVO
@@ -934,18 +923,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       .getElementById("selectsistemaoperativo")
       .addEventListener("change", (e) => {
         StatePanelCatalogoComponente.IdSistemaOperativo = e.target.value;
-        // 2. Obtener el texto (Lo que el usuario ve)
         const combo = e.target;
         StatePanelCatalogoComponente.SistemaOperativo =
           combo.options[combo.selectedIndex].text;
-
-        // Aquí puedes cargar otro select dependiente, e.g., marcas basadas en dispositivo
       });
   }
 
   //*FUNCION PARA INICIALIZAR MODAL INSERT/UPDATE CATALOGO COMPONENTE
   function inicializarmodalUpsertCatalogoComponente() {
-    // Reset nativo del formulario (esto limpia TODO de golpe)
+    // Reset  del formulario 
     const formulario = document.getElementById("formularioupsertCatalogo");
     if (formulario) {
       formulario.reset();
@@ -1255,7 +1241,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     const config = {
       url: `${api}/api/CatalogosComponentes/ConsultaCatalogoPorID`, // URL específica
-      timeoutDuration: 5000, // Opcional: ajusta el timeout si es necesario
+      timeoutDuration: 5000, // ajusta el timeout si es necesario
       data: { searchTerm: StatePanelCatalogoComponente.id_catalogo },
     };
 
