@@ -49,7 +49,7 @@ router.get('/EditarComponente/:databusqueda', (req, res) => {
 
 });
 
-//PERMITE CONSULTAR LOS DATOS DE LA TABLA COMPONENTES mediante un filtro
+//PERMITE Editar componentes escaneado con un codigo QR O NUMERO DE SERIE
 router.get("/FormularioEditarComponente/:idcomponente", (req, res) => {
  
     //console.log(__dirname)
@@ -63,5 +63,9 @@ router.get("/FormularioEditarComponente/:idcomponente", (req, res) => {
 
 
 
+});
+//Agregar componente
+router.get("/Componentes/AgregarComponente", (req, res) => {
+    res.render("Componentes/AgregarComponente");
 });
 module.exports = router;

@@ -13,6 +13,8 @@ import {
   URLAPI,
   ObtenerIdTecnicoSesion,
   obtenerUsuarioLocalStorage,
+  imprimirEtiquetaSimple,
+  imprimirEtiquetaRegulatorio,
 } from "../Utils.js";
 
 //IMPORTAR FUNCIONES PARA INCIALIZAR MODALES
@@ -23,12 +25,10 @@ import {
   inicializarDataTableAreasPorTipoUnidad,
   inicializarDataTableDispositivos,
   inicializarDataTableCatalogoComponentePorDispositivo,
-  inicializarDataTableFactura
+  inicializarDataTableFactura,
 } from "../UtilsFuncionesModales.js";
 
 const api = URLAPI;
-const idcomponente = document.getElementById("idcomponenteValue").textContent;
-
 // Objeto para almacenar el estado del formulario (centraliza variables globales)
 const estadoFormulario = {
   //UNIDADES
@@ -43,6 +43,7 @@ const estadoFormulario = {
   IdDispositivo: null,
   Dispositivo: null,
   AbrDispositivo: null,
+  CaracteristicasAdicionales: null,
   //AREAS
   IdArea: null,
   Nombre_Area: null,
@@ -66,13 +67,14 @@ const estadoFormulario = {
   FechaFactura: null,
   Observacion: null,
   //CARACTERISTICAS COMPONENTES
+  IdComponente: null,
   NumeroSerie: null,
   NumeroConsecutivo: null,
   CodigoTI: null,
   AbrevEQ: "EQ",
   Observaciones: null,
   EstatusComponente: null,
-  EstatusInventario: null,
+  EstatusInventario: 1,
   FehaRegistro: null,
   EsClienteServidor: null,
   FechaCompra: null,
@@ -82,9 +84,14 @@ const estadoFormulario = {
   cargo: null,
   areaResponsable: null,
   //TECNICO
-  IdTecnico: document.getElementById("idtecnicoValue").textContent,
+  IdTecnico: null,
   //VARIABLES DE CONTROL
   EsDispositivoMovil: null,
+  GenerarNumeroserie: false,
+  ImpresionRapida: false,
+
+  //CODIGO REGULATORIO
+  codigoregulatorio: null,
 };
 
 const VariablesFactura = {
@@ -95,8 +102,7 @@ const VariablesFactura = {
   fechafactura: null,
   observacionfactura: null,
 };
-
-//*PERMITE REALIZAR EL ALMACENAMIENTO DE VARIABLES ANTERIORES 
+//*PERMITE REALIZAR EL ALMACENAMIENTO DE VARIABLES ANTERIORES
 const ComponentesAnteriores = {
   //CONTRATOS
   IdContrato: null,
@@ -142,30 +148,11 @@ var Toast = Swal.mixin({
   },
 });
 
-
 document.addEventListener("DOMContentLoaded", () => {
-  
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-        const target = e.target;
-        
-        // Si estamos en un textarea o el botón submit, dejamos que funcione normal
-        if (target.tagName === 'TEXTAREA' || target.type === 'submit') return;
-
-        e.preventDefault(); // Evita enviar el formulario antes de tiempo
-        
-        const currentIdx = parseInt(target.getAttribute('tabindex'));
-        const nextElement = document.querySelector(`[tabindex="${currentIdx + 1}"]`);
-        
-        if (nextElement) {
-            nextElement.focus();
-            if (nextElement.tagName === 'INPUT') nextElement.select();
-        }
-    }
-});
-  //LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL
+  //OBTENER LOCALSTORAGE NOMBRE DE USUARIO EN PERFIL
   obtenerUsuarioLocalStorage();
   let cambiosPendientes = true; // Bandera para saber si hay cambios no guardados
+  estadoFormulario.EsDispositivoMovil = General.esDispositivoMovil(); // Detecta si es un dispositivo móvil para adaptar eventos
   //SI HAY CAMBIOS PERMITE NOTIFICAR SI QUIERE SALIR EL USUARIO
   window.onbeforeunload = (event) => {
     if (cambiosPendientes) {
@@ -178,12 +165,11 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // OBTIENE DATOS
-  const editComponenteForm = document.getElementById("FormEditComponente");
-
-
-  // Inicializar DataTable al cargar la página
-  InicializarFormulario();
+  const FormAgregarComponente = document.getElementById(
+    "FormAgregarComponente",
+  );
   const switchElement = document.getElementById("switchinventario");
+
   // Event listener para cambios manuales
   switchElement.addEventListener("change", function () {
     if (this.checked) {
@@ -195,13 +181,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ENVIO DE FORMULARIO
-  editComponenteForm.addEventListener("submit", async (e) => {
+  //swicth para generar numero de serie automatico
+  const GenerarNumeroserie = document.getElementById("chkbxAutoSerie");
+
+  // Event listener para cambios manuales
+
+  // Recopila los datos del formulario
+  const idfactura = document.getElementById("txidfactura");
+  const numerofactura = document.getElementById("txtnumerofactura");
+  const nombreproveedor = document.getElementById("txtnombreprovedor");
+  const lugarcompra = document.getElementById("txtlugarcompra");
+  const numeroserie = document.getElementById("txtnumeroserie");
+  const status_equipo = document.getElementById("statusequiposelect");
+  const fecha_compra = document.getElementById("datefechacompra");
+
+  const activoEnInventario = obtenerEstadoSwitch("switchinventario");
+  const observaciones = document.getElementById("txtobservaciones");
+  const txtobservacionfactura = document.getElementById(
+    "txtobservacionfactura",
+  );
+  const datefechafactura = document.getElementById("datefechafactura");
+  const chkbxImpresionRapida = document.getElementById("chkbxImpresionRapida");
+
+  //INICIALIZAMOS FACTURA
+  variablesInicialesFactura();
+
+  //* ENVIO DE FORMULARIO
+  FormAgregarComponente.addEventListener("submit", async (e) => {
     e.preventDefault(); // Previene recargar la página
     // Recopila los datos del formulario
     let validarstatuseditarFactura = { error: false };
     const editFactura = estadoFormulario.StatusFacturaEdit;
-
     validarstatuseditarFactura =
       editFactura === true
         ? {
@@ -211,49 +221,39 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         : { error: false };
 
-    // Recopila los datos del formulario
-    const idfactura = document.getElementById("txidfactura");
-    const numerofactura = document.getElementById("txtnumerofactura");
-    const nombreproveedor = document.getElementById("txtnombreprovedor");
-    const lugarcompra = document.getElementById("txtlugarcompra");
-    const numeroserie = document.getElementById("txtnumeroserie");
-    const status_equipo = document.getElementById("statusequiposelect");
-    const fecha_compra = document.getElementById("datefechacompra");
-    const radioServidorCliente =
-      obtenerValorRadioSeleccionado("servidorcliente");
-    const activoEnInventario = obtenerEstadoSwitch("switchinventario");
-    const observaciones = document.getElementById("txtobservaciones");
-
-    // Validaciones usando General de utils.js
+    //* Validaciones usando General de utils.js
     const validarnumeroFactura = General.validar_Campos_String(
       numerofactura.value.trim(),
-      "El Número de Factura"
+      "El Número de Factura",
     );
     const validarnombreproveedor = General.validar_Campos_String(
       nombreproveedor.value.trim(),
-      "El nombre de Proveedor"
+      "El nombre de Proveedor",
     );
     const validarlugarcompra = General.validar_Campos_String(
       lugarcompra.value.trim(),
-      "El lugar de compra"
+      "El lugar de compra",
     );
     const validaridfactura = General.verificacion_numerica_entero(
       idfactura.value,
-      "El ID Factura"
+      "El ID Factura",
     );
     const validarnumeroserie = General.validar_Campos_String(
       numeroserie.value,
-      "El número de serie "
+      "El número de serie ",
     );
     const validarstatus_equipo = General.validar_Campos_Select(
       status_equipo.value,
-      "un Estatus de equipo"
+      "un Estatus de equipo",
     );
     const validarObservaciones = General.validar_Campos_String(
       observaciones.value.trim(),
-      "La observaciones"
+      "La observaciones",
     );
-
+    const validarFechaCompra = General.validarFecha(
+      fecha_compra.value,
+      "La fecha de compra",
+    );
     if (
       validarstatuseditarFactura.error ||
       validarnumeroFactura.error ||
@@ -262,7 +262,8 @@ document.addEventListener("DOMContentLoaded", () => {
       validaridfactura.error ||
       validarnumeroserie.error ||
       validarstatus_equipo.error ||
-      validarObservaciones.error
+      validarObservaciones.error ||
+      validarFechaCompra.error
     ) {
       // Array de todas las validaciones para iterar
       const validations = [
@@ -274,6 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
         validarnumeroserie,
         validarstatus_equipo,
         validarObservaciones,
+        validarFechaCompra,
       ];
       // Encontrar la primera validación que falló
       const failedValidation = validations.find((val) => val.error);
@@ -282,83 +284,93 @@ document.addEventListener("DOMContentLoaded", () => {
         icon: failedValidation.icon,
         title: failedValidation.message,
       });
-    } else {
-      estadoFormulario.IdFactura = idfactura.value;
-      estadoFormulario.NumeroSerie = numeroserie.value;
-      estadoFormulario.Observaciones = observaciones.value;
-      estadoFormulario.EstatusComponente = status_equipo.value;
+      return;
+    }
+    // Si pasa todas las validaciones, continúa con el proceso de guardado
+    //TOMAMOS VALOR DE RADIO DE CLIENTE SERVIDOR
+    const radioServidorCliente =
+      obtenerValorRadioSeleccionado("servidorcliente");
+    estadoFormulario.EsClienteServidor = radioServidorCliente;
+    if (GenerarNumeroserie) {
+      estadoFormulario.GenerarNumeroserie = GenerarNumeroserie.checked
+        ? true
+        : false; // Retorna true si activado, false si desactivado
+    }
+ 
+    estadoFormulario.IdFactura = idfactura.value;
+    estadoFormulario.NumeroSerie = numeroserie.value;
+    estadoFormulario.Observaciones = observaciones.value;
+    estadoFormulario.EstatusComponente = status_equipo.value;
+    estadoFormulario.EsClienteServidor = radioServidorCliente;
+    estadoFormulario.FechaCompra = fecha_compra.value;
 
-      estadoFormulario.EsClienteServidor = radioServidorCliente;
-      estadoFormulario.FechaCompra = fecha_compra.value;
-      estadoFormulario.EstatusInventario = activoEnInventario;
-
-      const dataComponenteActualizado = {
-        //UNIDADES
-        FK_id_unidad: estadoFormulario.IdUnidadValue,
-        operacion: estadoFormulario.operacion,
-        estado_equipo: estadoFormulario.Estado,
-        Abreviatura_Estado: estadoFormulario.AbrevEstado,
-        //FACTURAS
-        FK_Factura: estadoFormulario.IdFactura,
-        //RESPONSABLES
-        FK_id_responsable: estadoFormulario.IdResponsable,
-        //AREAS
-        FK_id_area: estadoFormulario.IdArea,
-        //DISPOSITIVOS
-        FK_id_dispositivo: estadoFormulario.IdDispositivo,
-        abreviatura_tipo: estadoFormulario.AbrDispositivo,
-        //CATALOGOS
-        FK_id_catalogo_componentes: estadoFormulario.IdCatalogoComponente,
-        //CARACTERISTICAS COMPONENTES
-        numero_serie: estadoFormulario.NumeroSerie,
-        numero_consecutivo: estadoFormulario.NumeroConsecutivo,
-        abreviatura_EQ: estadoFormulario.AbrevEQ,
-        observaciones: estadoFormulario.Observaciones,
-        status_componente: estadoFormulario.EstatusComponente,
-        status_inventario: estadoFormulario.EstatusInventario,
-        FechaRegistro: estadoFormulario.FehaRegistro,
-        EsClienteServidor: estadoFormulario.EsClienteServidor,
-        FechaCompra: estadoFormulario.FechaCompra,
-        //TECNICO
-
-        FK_IdTecnico: document.getElementById("idtecnicoValue").textContent,
-        //contrato
-        numero_contrato_actual: estadoFormulario.contratoid,
+    //asignacion de data del componente a insertar
+    const dataComponente = {
+      //UNIDADES
+      FK_id_unidad: estadoFormulario.IdUnidadValue,
+      operacion: estadoFormulario.operacion,
+      estado_equipo: estadoFormulario.Estado,
+      Abreviatura_Estado: estadoFormulario.AbrevEstado,
+      //FACTURAS
+      FK_Factura: estadoFormulario.IdFactura,
+      //RESPONSABLES
+      FK_id_responsable: estadoFormulario.IdResponsable,
+      //AREAS
+      FK_id_area: estadoFormulario.IdArea,
+      //DISPOSITIVOS
+      FK_id_dispositivo: estadoFormulario.IdDispositivo,
+      abreviatura_tipo: estadoFormulario.AbrDispositivo,
+      //CATALOGOS
+      FK_id_catalogo_componentes: estadoFormulario.IdCatalogoComponente,
+      //CARACTERISTICAS COMPONENTES
+      numero_serie: estadoFormulario.NumeroSerie,
+      observaciones: estadoFormulario.Observaciones,
+      status_componente: estadoFormulario.EstatusComponente,
+      status_inventario: estadoFormulario.EstatusInventario,
+      EsClienteServidor: estadoFormulario.EsClienteServidor,
+      FK_IdTecnico: null, // document.getElementById("idtecnicoValue").textContent,
+      FechaCompra: estadoFormulario.FechaCompra,
+      GenerarNumeroserie: estadoFormulario.GenerarNumeroserie,
+    };
+    //PERMITE OBTENER DEL CACHE EL ID DEL USUARIO QUE INICIO SESION
+    const sesionTecnico = await ObtenerIdTecnicoSesion();
+    let IdTecnico = sesionTecnico.data.id_tecnico;
+    estadoFormulario.IdTecnico = IdTecnico;
+    if (sesionTecnico || sesionTecnico.body) {
+      dataComponente.FK_IdTecnico = IdTecnico;
+      const config = {
+        url: `${api}/api/componentes/AgregarNuevoComponente`,
+        data: dataComponente,
+        successTitle: "Componente agregado exitosamente",
       };
-      //PERMITE OBTENER DEL CACHE EL ID DEL USUARIO QUE INICIO SESION
-      const sesionTecnico = await ObtenerIdTecnicoSesion();
-      let IdTecnico = sesionTecnico.data.id_tecnico;
+      const response = await handlePOST(config);
+      Swal.fire({
+        icon: response.data.icon || "success",
+        title: response.data.tittle,
+        text: response.data.message,
+        showConfirmButton: false,
+        timer: 2000,
+      });
 
-      if (sesionTecnico || sesionTecnico.body) {
-        //*Preparar la Petición de Actualización (PUT)
-        dataComponenteActualizado.FK_IdTecnico = IdTecnico;
 
-        const config = {
-          url: `${api}/api/componentes/EditarComponentePorID`,
-          id: idcomponente,
-          data: {
-          
-            data: dataComponenteActualizado, //datos actualizados del componente
-            data_componentes_anteriores: ComponentesAnteriores, // Los datos anteriores
-          },
-          successTitle: `El componente se ha Modificado Exitosamente`,
-        };
+      if (response.data.error === false) {
+        console.log("response", response);
+        estadoFormulario.IdComponente = response.data.idInsertado;
+        estadoFormulario.CodigoTI = response.data.body;
+        cambiosPendientes = false; // Resetea la bandera al guardar exitosamente
+        estadoFormulario.StatusFacturaEdit = false;
+        
+        setTimeout(() => {
+          if (estadoFormulario.ImpresionRapida) {
+            abrirmodalGeneradorQR();
+          }
+        }, 3000);
+            
 
-        const response = await handlePUT(config);
-
-        if (response.error === false && response.status == 200) {
-          setTimeout(() => {
-            cambiosPendientes = false;
-            window.location.href = `/EditarComponente/${response.body.codigo_TI}`;
-          }, 1000);
-        } else {
-          Swal.fire({
-            icon: response.icon,
-            title: "Error en la edicion",
-            text: response.message || "Datos no Válidos",
-          });
-        }
+        
+        resetvariables();
       }
+      console.log("Respuesta del servidor:", response);
     }
   });
 
@@ -372,7 +384,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const EleccionUnidad = await clsFuncionesModales.BuscarUnidad(searchTerm);
       //asignacion a variables globales del array
       asignacionVariablesUnidades(EleccionUnidad);
-      
     });
   }
 
@@ -381,52 +392,47 @@ document.addEventListener("DOMContentLoaded", () => {
     inputBusqueda.addEventListener("keydown", async function (event) {
       if (event.key === "Enter") {
         const searchTerm = $("#inputBusqueda").val().trim();
-        const EleccionUnidad = await clsFuncionesModales.BuscarUnidad(
-          searchTerm
-        );
+        const EleccionUnidad =
+          await clsFuncionesModales.BuscarUnidad(searchTerm);
         //asignacion a variables globales del array
         asignacionVariablesUnidades(EleccionUnidad);
       }
     });
   }
 
-//*EVENTO BOTON BUSCAR RESPONSABLE EN MODAL
-const inputBusquedaResponsable = document.getElementById(
-            "inputBusquedaResponsable"
-          );
-    if (inputBusquedaResponsable) {
+  //*EVENTO BOTON BUSCAR RESPONSABLE EN MODAL
+  const inputBusquedaResponsable = document.getElementById(
+    "inputBusquedaResponsable",
+  );
+  if (inputBusquedaResponsable) {
     inputBusquedaResponsable.addEventListener(
       "keydown",
       async function (event) {
-         // Usa 'Enter' 
+        // Usa 'Enter'
         if (event.key === "Enter") {
-          
-         
           const EleccionResponsable =
             await clsFuncionesModales.BuscarResponsable(
               inputBusquedaResponsable.value,
-              estadoFormulario.IdUnidadValue
-            ); 
+              estadoFormulario.IdUnidadValue,
+            );
 
-            asignacionVariablesResponsables(EleccionResponsable);
+          asignacionVariablesResponsables(EleccionResponsable);
         }
-      }
+      },
     );
   } else {
     console.error("No se encuentra tu búsqueda del Responsable");
   }
 
-      const btnBuscarResponsable = document.getElementById("btnBuscarResponsable");
+  const btnBuscarResponsable = document.getElementById("btnBuscarResponsable");
   if (btnBuscarResponsable) {
     btnBuscarResponsable.addEventListener("click", async () => {
-   
-
       const EleccionResponsable =
         await inicializarDataTableResponsablePorIdUnidad(
           inputBusquedaResponsable.value,
-          estadoFormulario.IdUnidadValue
+          estadoFormulario.IdUnidadValue,
         );
-         asignacionVariablesResponsables(EleccionResponsable);
+      asignacionVariablesResponsables(EleccionResponsable);
     });
   }
   //*EVENTO BOTON BUSCAR AREA EN MODAL
@@ -438,7 +444,7 @@ const inputBusquedaResponsable = document.getElementById(
 
       const EleccionArea = await clsFuncionesModales.BuscarArea(
         searchTerm,
-        estadoFormulario.tipo_unidad
+        estadoFormulario.tipo_unidad,
       );
       asignacionVariablesAreas(EleccionArea);
     });
@@ -449,10 +455,10 @@ const inputBusquedaResponsable = document.getElementById(
   if (inputBusquedaArea) {
     inputBusquedaArea.addEventListener("keydown", async function (event) {
       if (event.key === "Enter") {
-        // Usa 'Enter' 
+        // Usa 'Enter'
         const EleccionArea = await clsFuncionesModales.BuscarArea(
           inputBusquedaArea.value,
-          estadoFormulario.tipo_unidad
+          estadoFormulario.tipo_unidad,
         ); // Llama a la función de búsqueda
 
         asignacionVariablesAreas(EleccionArea);
@@ -462,29 +468,28 @@ const inputBusquedaResponsable = document.getElementById(
     console.error("No se encuentra tu búsqueda del Área");
   }
 
-
-
   //*EVENTO BOTON BUSCAR DISPOSITIVO EN MODAL
   const btnBuscarDispositivo = document.getElementById("btnBuscarDispositivo");
   if (btnBuscarDispositivo) {
-      btnBuscarDispositivo.addEventListener("click", async () => {
+    btnBuscarDispositivo.addEventListener("click", async () => {
       // captura los valores JUSTO en el momento del clic
       const searchTerm = $("#inputBusquedadispositivo").val().trim();
 
-      const EleccionDispositivos=
+      const EleccionDispositivos =
         await inicializarDataTableDispositivos(searchTerm);
 
-        asignacionVariablesDispositivos(EleccionDispositivos);
+      asignacionVariablesDispositivos(EleccionDispositivos);
     });
   }
 
-   // EVENTO PARA BUSCAR CON ENTER EN EL INPUT DEL MODAL
+  // EVENTO PARA BUSCAR CON ENTER EN EL INPUT DEL MODAL
   const inputDispositivo = document.getElementById("inputBusquedadispositivo");
   if (inputDispositivo) {
-    inputDispositivo.addEventListener("keydown",async function (event) {
+    inputDispositivo.addEventListener("keydown", async function (event) {
       if (event.key === "Enter") {
         // Usa 'Enter'
-        const EleccionDispositivos=await clsFuncionesModales.BuscarDispositivo(inputDispositivo.value);
+        const EleccionDispositivos =
+          await clsFuncionesModales.BuscarDispositivo(inputDispositivo.value);
         asignacionVariablesDispositivos(EleccionDispositivos); // Llama a la función de búsqueda
       }
     });
@@ -492,59 +497,58 @@ const inputBusquedaResponsable = document.getElementById(
     console.error("No se encuentra tu búsqueda de dispositivo");
   }
 
-
   //   //*EVENTO BOTON BUSCAR CATALOGO COMPONENTE EN MODAL
   const btnBuscarcatalogo = document.getElementById("btnBuscarcatalogo");
   if (btnBuscarcatalogo) {
-     btnBuscarcatalogo.addEventListener("click", async () => {
+    btnBuscarcatalogo.addEventListener("click", async () => {
       // captura los valores JUSTO en el momento del clic
       const searchTerm = $("#inputBusquedaCatalogo").val().trim();
 
-      const EleccionResponsable =
+      const EleccionCatalogo =
         await inicializarDataTableCatalogoComponentePorDispositivo(
           searchTerm,
-          estadoFormulario.IdDispositivo
+          estadoFormulario.IdDispositivo,
         );
-        asignacionVariablesCatalogoComponentes(EleccionResponsable);
+
+      asignacionVariablesCatalogoComponentes(EleccionCatalogo);
     });
-   
-    
   }
   // EVENTO PARA BUSCAR CON ENTER EN EL INPUT DEL MODAL
   const inputBusquedaCatalogo = document.getElementById(
-    "inputBusquedaCatalogo"
+    "inputBusquedaCatalogo",
   );
   if (inputBusquedaCatalogo) {
-    inputBusquedaCatalogo.addEventListener("keydown",async function (event) {
+    inputBusquedaCatalogo.addEventListener("keydown", async function (event) {
       if (event.key === "Enter") {
-        // Usa 'Enter' 
-        const EleccionCatalogoComponentes=await clsFuncionesModales.BuscarCatalogoComponente(inputBusquedaCatalogo.value,estadoFormulario.IdDispositivo); // Llama a la función de búsqueda
+        // Usa 'Enter'
+        const EleccionCatalogoComponentes =
+          await clsFuncionesModales.BuscarCatalogoComponente(
+            inputBusquedaCatalogo.value,
+            estadoFormulario.IdDispositivo,
+          ); // Llama a la función de búsqueda
+        console.log("EleccionCatalogoComponentes", EleccionCatalogoComponentes);
         asignacionVariablesCatalogoComponentes(EleccionCatalogoComponentes);
       }
     });
   } else {
     console.error("No se encuentra tu Búsqueda de Catálogo");
   }
-    //*EVENTO BOTON BUSCAR FACTURA EN MODAL
+  //*EVENTO BOTON BUSCAR FACTURA EN MODAL
   const btnBuscarfactura = document.getElementById("btnBuscarfactura");
- 
-    if (btnBuscarfactura) {
-      btnBuscarfactura.addEventListener("click", async () => {
+
+  if (btnBuscarfactura) {
+    btnBuscarfactura.addEventListener("click", async () => {
       // captura los valores JUSTO en el momento del clic
       const searchTerm = $("#inputBusquedafactura").val().trim();
 
-      const EleccionFactura =
-        await inicializarDataTableFactura(
-          searchTerm,
-          estadoFormulario.IdUnidadValue
-        );
-      
-        asignacionVariablesFacturas(EleccionFactura);
-    });
-     
-   
-  }
+      const EleccionFactura = await inicializarDataTableFactura(
+        searchTerm,
+        estadoFormulario.IdUnidadValue,
+      );
 
+      asignacionVariablesFacturas(EleccionFactura);
+    });
+  }
 
   /*////////////////////////////////////////////////////////////////////////////////////////////////////////////*
   
@@ -555,12 +559,13 @@ const inputBusquedaResponsable = document.getElementById(
   //* Evento para abrir modal unidades
   document
     .getElementById("txtIdUnidad")
-    .addEventListener("keydown",  function (event) {
+    .addEventListener("keydown", async function (event) {
+      event.preventDefault();
       if (event.key === "F1" || event.key === "F2") {
-        event.preventDefault();
         document.getElementById("inputBusqueda").value = "";
         $("#consultaUnidadesModal").modal("show");
-        inicializarDataTableUnidades("");
+        const EleccionUnidad = await inicializarDataTableUnidades("");
+        asignacionVariablesUnidades(EleccionUnidad);
       }
     });
 
@@ -572,10 +577,8 @@ const inputBusquedaResponsable = document.getElementById(
         event.preventDefault();
         document.getElementById("inputBusqueda").value = "";
         $("#consultaUnidadesModal").modal("show");
-        inicializarDataTableUnidades("");
-         setTimeout(() => {
-        document.getElementById('txtarea').focus(); 
-    }, 500);
+        const EleccionUnidad = await inicializarDataTableUnidades("");
+        asignacionVariablesUnidades(EleccionUnidad);
       }
     });
 
@@ -595,9 +598,9 @@ const inputBusquedaResponsable = document.getElementById(
           $("#consultaAreasModal").modal("show");
           const EleccionArea = await inicializarDataTableAreasPorTipoUnidad(
             "",
-            estadoFormulario.tipo_unidad
+            estadoFormulario.tipo_unidad,
           );
-           asignacionVariablesAreas(EleccionArea);
+          asignacionVariablesAreas(EleccionArea);
         }
       }
     });
@@ -618,7 +621,7 @@ const inputBusquedaResponsable = document.getElementById(
           $("#consultaAreasModal").modal("show");
           const EleccionArea = await inicializarDataTableAreasPorTipoUnidad(
             "",
-            estadoFormulario.tipo_unidad
+            estadoFormulario.tipo_unidad,
           );
 
           asignacionVariablesAreas(EleccionArea);
@@ -626,10 +629,11 @@ const inputBusquedaResponsable = document.getElementById(
       }
     });
 
-  
   //* INICIO EVENTO TECLADO PARA ABRIR MODAL RESPONSABLE
 
-  document.getElementById("txtidresponsable").addEventListener("keydown", async function (event) {
+  document
+    .getElementById("txtidresponsable")
+    .addEventListener("keydown", async function (event) {
       if (event.key === "F1" || event.key === "F2") {
         event.preventDefault();
         if (!estadoFormulario.IdUnidadValue) {
@@ -644,14 +648,12 @@ const inputBusquedaResponsable = document.getElementById(
           const EleccionResponsable =
             await inicializarDataTableResponsablePorIdUnidad(
               "",
-              estadoFormulario.IdUnidadValue
+              estadoFormulario.IdUnidadValue,
             );
-           asignacionVariablesResponsables(EleccionResponsable);
+          asignacionVariablesResponsables(EleccionResponsable);
         }
       }
     });
-
-
 
   //*inicializarDataTable RESPONSABLE
   // Evento //INICIO EVENTO TOUCH PARA ABRIR MODAL RESPONSABLE
@@ -671,40 +673,37 @@ const inputBusquedaResponsable = document.getElementById(
           const EleccionResponsable =
             await inicializarDataTableResponsablePorIdUnidad(
               "",
-              estadoFormulario.IdUnidadValue
+              estadoFormulario.IdUnidadValue,
             );
           asignacionVariablesResponsables(EleccionResponsable);
         }
       }
     });
 
-  
-
   //* Evento para abrir modal DISPOSITIVOS
   document
     .getElementById("txtIddispositivo")
-    .addEventListener("keydown",async function (event) {
+    .addEventListener("keydown", async function (event) {
       if (event.key === "F1" || event.key === "F2") {
         event.preventDefault();
         document.getElementById("inputBusquedadispositivo").value = "";
         $("#consultaDispositivosModal").modal("show");
-        const EleccionDispositivos = await inicializarDataTableDispositivos('');
-      
+        const EleccionDispositivos = await inicializarDataTableDispositivos("");
+
         asignacionVariablesDispositivos(EleccionDispositivos);
       }
     });
- 
 
   // Evento touch para abrir modal DISPOSITIVOS
   document
     .getElementById("txtIddispositivo")
-    .addEventListener("click",async function (event) {
+    .addEventListener("click", async function (event) {
       if (estadoFormulario.EsDispositivoMovil == true) {
         event.preventDefault();
         document.getElementById("inputBusquedadispositivo").value = "";
         $("#consultaDispositivosModal").modal("show");
-        const EleccionDispositivos = await inicializarDataTableDispositivos('');
-        
+        const EleccionDispositivos = await inicializarDataTableDispositivos("");
+
         asignacionVariablesDispositivos(EleccionDispositivos);
       }
     });
@@ -712,7 +711,7 @@ const inputBusquedaResponsable = document.getElementById(
   //* Evento para abrir modal CATALOGOS
   document
     .getElementById("txtIdCatalogo")
-    .addEventListener("keydown", function (event) {
+    .addEventListener("keydown", async function (event) {
       if (event.key === "F1" || event.key === "F2") {
         event.preventDefault();
         if (!estadoFormulario.IdDispositivo) {
@@ -723,20 +722,22 @@ const inputBusquedaResponsable = document.getElementById(
         } else {
           document.getElementById("inputBusquedaCatalogo").value = "";
           $("#consultaCatalogoComponenteModal").modal("show");
-          let searchTerm = "";
-          inicializarDataTableCatalogoComponentePorDispositivo(
-            searchTerm,
-            estadoFormulario.IdDispositivo
-          );
+
+          const EleccionCatalogoComponentes =
+            await inicializarDataTableCatalogoComponentePorDispositivo(
+              "",
+              estadoFormulario.IdDispositivo,
+            );
+
+          asignacionVariablesCatalogoComponentes(EleccionCatalogoComponentes);
         }
       }
     });
-  
 
   // Evento touch para abrir modal CATALOGOS COMPONENTES
   document
     .getElementById("txtIdCatalogo")
-    .addEventListener("click",async function (event) {
+    .addEventListener("click", async function (event) {
       if (estadoFormulario.EsDispositivoMovil == true) {
         event.preventDefault();
         if (!estadoFormulario.IdDispositivo) {
@@ -747,28 +748,29 @@ const inputBusquedaResponsable = document.getElementById(
         } else {
           document.getElementById("inputBusquedaCatalogo").value = "";
           $("#consultaCatalogoComponenteModal").modal("show");
-       
-         const EleccionCatalogoComponentes= await inicializarDataTableCatalogoComponentePorDispositivo(
-            "",
-            estadoFormulario.IdDispositivo
-          );
+
+          const EleccionCatalogoComponentes =
+            await inicializarDataTableCatalogoComponentePorDispositivo(
+              "",
+              estadoFormulario.IdDispositivo,
+            );
+
           asignacionVariablesCatalogoComponentes(EleccionCatalogoComponentes);
         }
       }
     });
 
-
   //* Evento para abrir modal FACTURAS
   document
     .getElementById("txidfactura")
-    .addEventListener("keydown",async function (event) {
+    .addEventListener("keydown", async function (event) {
       if (event.key === "F1" || event.key === "F2") {
         event.preventDefault();
 
         if (estadoFormulario.StatusFacturaEdit == true) {
-           document.getElementById("inputBusquedafactura").value = "";
+          document.getElementById("inputBusquedafactura").value = "";
           $("#consultaFacturaModal").modal("show"); // Mostrar modal
-           const EleccionFactura= await inicializarDataTableFactura("");
+          const EleccionFactura = await inicializarDataTableFactura("");
           asignacionVariablesFacturas(EleccionFactura);
         }
       }
@@ -776,11 +778,13 @@ const inputBusquedaResponsable = document.getElementById(
   // EVENTO PARA BUSCAR CON ENTER EN EL INPUT DEL MODAL
   const inputBusquedafactura = document.getElementById("inputBusquedafactura");
   if (inputBusquedafactura) {
-    inputBusquedafactura.addEventListener("keydown",async function (event) {
+    inputBusquedafactura.addEventListener("keydown", async function (event) {
       if (event.key === "Enter") {
-        // Usa 'Enter' 
-        const EleccionFactura= await clsFuncionesModales.BuscarFactura(inputBusquedafactura.value); // Llama a la función de búsqueda
-        
+        // Usa 'Enter'
+        const EleccionFactura = await clsFuncionesModales.BuscarFactura(
+          inputBusquedafactura.value,
+        ); // Llama a la función de búsqueda
+
         asignacionVariablesFacturas(EleccionFactura);
       }
     });
@@ -791,29 +795,46 @@ const inputBusquedaResponsable = document.getElementById(
   // Evento touch para abrir modal FACTURAS
   document
     .getElementById("txidfactura")
-    .addEventListener("click",async function (event) {
+    .addEventListener("click", async function (event) {
       if (estadoFormulario.EsDispositivoMovil == true) {
         event.preventDefault();
         if (estadoFormulario.StatusFacturaEdit == true) {
           document.getElementById("inputBusquedafactura").value = ""; // Limpiar el campo de búsqueda al abrir el modal
           $("#consultaFacturaModal").modal("show"); // Mostrar modal
-          const EleccionFactura= await inicializarDataTableFactura("");
+          const EleccionFactura = await inicializarDataTableFactura("");
           asignacionVariablesFacturas(EleccionFactura);
-          
-          //const input = document.getElementById("inputBusquedafactura");
         }
       }
-     
     });
 
   //*TERMINA
+  /*////////////////////////////////////////////////////////////////////////////////////////////////////////////*
+  
+    //* EVENTOS FORMULARIO
+  
+  //* /////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+  GenerarNumeroserie.addEventListener("change", function () {
+    if (this.checked) {
+      numeroserie.disabled = true;
+      numeroserie.value = "GENERANDO";
+    } else {
+      numeroserie.value = "";
+      numeroserie.disabled = false;
+    }
+  });
+  chkbxImpresionRapida.addEventListener("change", function () {
+    if (this.checked) {
+      estadoFormulario.ImpresionRapida = true;
+    } else {
+      estadoFormulario.ImpresionRapida = false;
+    }
+  });
 
   //*////////////////////////////////////////////////////////////////////////////////////////////////////////////*
 
-  //*FUNCIONES PARA ASIGNACION DE CAMPOS
-
+  //*FUNCIONES ADICIONALES
   //*//////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-
   function asignacionVariablesUnidades(data) {
     estadoFormulario.IdUnidadValue = data.id_unidad;
     estadoFormulario.contratoid = data.num_contrato_actual;
@@ -826,14 +847,14 @@ const inputBusquedaResponsable = document.getElementById(
       document.getElementById("txtIdUnidad").value =
         General.concatenar_contrato_unidad(
           estadoFormulario.IdUnidadValue,
-          estadoFormulario.contratoid
+          estadoFormulario.contratoid,
         );
     } else {
       estadoFormulario.contratoid = "0";
       document.getElementById("txtIdUnidad").value =
         General.concatenar_contrato_unidad(
           estadoFormulario.IdUnidadValue,
-          estadoFormulario.contratoid
+          estadoFormulario.contratoid,
         );
     }
     document.getElementById("txtnombreunidad").value = data.nombre_unidad;
@@ -844,8 +865,6 @@ const inputBusquedaResponsable = document.getElementById(
     document.getElementById("txtcargoresponsable").value = "";
     document.getElementById("txtarea").value = "";
     document.getElementById("txtarearesponsable").value = "";
-   
-  
   }
 
   function asignacionVariablesResponsables(data) {
@@ -865,84 +884,148 @@ const inputBusquedaResponsable = document.getElementById(
       estadoFormulario.areaResponsable;
   }
 
-  function asignacionVariablesAreas(data)
-{
-  //asignacion a variables globales del array
-      estadoFormulario.IdArea = data.id_area;
-      estadoFormulario.Nombre_Area = data.area;
-      //ASIGNACION A INPUTS
-      document.getElementById("txtarea").value = estadoFormulario.Nombre_Area;
-}
+  function asignacionVariablesAreas(data) {
+    //asignacion a variables globales del array
+    estadoFormulario.IdArea = data.id_area;
+    estadoFormulario.Nombre_Area = data.area;
+    //ASIGNACION A INPUTS
+    document.getElementById("txtarea").value = estadoFormulario.Nombre_Area;
+  }
 
-function asignacionVariablesDispositivos(data)
-{
-  
-                 estadoFormulario.IdDispositivo = data.id_dispositivo;
-                  estadoFormulario.Dispositivo = data.tipo_equipo;
-                  estadoFormulario.AbrDispositivo = data.abreviatura_tipo;
-                        //ASIGNACION A INPUTS
-                  document.getElementById("txtIddispositivo").value =
-                    estadoFormulario.IdDispositivo;
-                  document.getElementById("txtdispositivo").value =
-                    estadoFormulario.Dispositivo;
-                    //LIMPIEZA DE INPUTS POR SELECCION
-                  document.getElementById("txtIdCatalogo").value = "";
-                  document.getElementById("txtnombrecatalogo").value = "";
-                  document.getElementById("txtdescripcioncatalogo").value = "";
-}
+  function asignacionVariablesDispositivos(data) {
+    estadoFormulario.IdDispositivo = data.id_dispositivo;
+    estadoFormulario.Dispositivo = data.tipo_equipo;
+    estadoFormulario.AbrDispositivo = data.abreviatura_tipo;
+    estadoFormulario.CaracteristicasAdicionales =
+      data.CaracteristicasAdicionales;
+    //ASIGNACION A INPUTS
+    document.getElementById("txtIddispositivo").value =
+      estadoFormulario.IdDispositivo;
+    document.getElementById("txtdispositivo").value =
+      estadoFormulario.Dispositivo;
+    //LIMPIEZA DE INPUTS POR SELECCION
+    document.getElementById("txtIdCatalogo").value = "";
+    document.getElementById("txtnombrecatalogo").value = "";
+    document.getElementById("txtdescripcioncatalogo").value = "";
+    console.log(
+      "CaracteristicasAdicionales",
+      estadoFormulario.CaracteristicasAdicionales,
+    );
+    if (estadoFormulario.CaracteristicasAdicionales == "NO") {
+      chbxservidor.disabled = true;
+      chbxcliente.disabled = true;
+      chbxna.checked = true;
+    } else {
+      chbxservidor.disabled = false;
+      chbxcliente.disabled = false;
+    }
+  }
 
- function asignacionVariablesCatalogoComponentes(data)
-{
-  //asignacion a variables globales del array
-     estadoFormulario.IdCatalogoComponente =
-                    data.id_catalogo_componente;
-                  estadoFormulario.Nombre_Catalogo = data.nombre_catalogo;
-                  estadoFormulario.Descripcion = data.descripcion_modelo;
-                  estadoFormulario.marca = data.marca;
-                  estadoFormulario.modelo = data.modelo;
-                  estadoFormulario.procesador = data.Procesador;
-                  estadoFormulario.memoria_ram = data["Memoria Ram"];
-                  estadoFormulario.disco_duro = data["Disco Duro"];
-                  estadoFormulario.sistema_operativo =
-                    data["Sistema Operativo"];
-      //ASIGNACION A INPUTS
-      document.getElementById("txtIdCatalogo").value =
-                  estadoFormulario.IdCatalogoComponente;
-                document.getElementById("txtnombrecatalogo").value =
-                  estadoFormulario.Nombre_Catalogo;
-                document.getElementById("txtdescripcioncatalogo").value =
-                  estadoFormulario.Descripcion;
-}
+  function asignacionVariablesCatalogoComponentes(data) {
+    //asignacion a variables globales del array
+    estadoFormulario.IdCatalogoComponente = data.id_catalogo_componente;
+    estadoFormulario.Nombre_Catalogo = data.nombre_catalogo;
+    estadoFormulario.Descripcion = data.descripcion_modelo;
+    estadoFormulario.marca = data.marca;
+    estadoFormulario.modelo = data.modelo;
+    estadoFormulario.procesador = data.Procesador;
+    estadoFormulario.memoria_ram = data["Memoria Ram"];
+    estadoFormulario.disco_duro = data["Disco Duro"];
+    estadoFormulario.sistema_operativo = data["Sistema Operativo"];
+    //ASIGNACION A INPUTS
+    document.getElementById("txtIdCatalogo").value =
+      estadoFormulario.IdCatalogoComponente;
+    document.getElementById("txtnombrecatalogo").value =
+      estadoFormulario.Nombre_Catalogo;
+    document.getElementById("txtdescripcioncatalogo").value =
+      estadoFormulario.Descripcion;
+  }
 
- function asignacionVariablesFacturas(data)
-{
-  //asignacion a variables globales del array
+  function asignacionVariablesFacturas(data) {
+    //asignacion a variables globales del array
     estadoFormulario.IdFactura = data.IdFactura;
-                  estadoFormulario.NumeroFactura = data.NumeroFactura;
-                  estadoFormulario.NombreProveedor = data.NombreProveedor;
-                  estadoFormulario.LugarCompra = data.LugarCompra;
-                  estadoFormulario.FechaFactura = data.FechaFactura;
-                  estadoFormulario.Observacion = data.Observacion;
-      //ASIGNACION A INPUTS
-      document.getElementById("txidfactura").value =
-                  estadoFormulario.IdFactura;
-                document.getElementById("txtnumerofactura").value =
-                  estadoFormulario.NumeroFactura;
-                document.getElementById("txtnombreprovedor").value =
-                  estadoFormulario.NombreProveedor;
-                document.getElementById("txtlugarcompra").value =
-                  estadoFormulario.LugarCompra;
-                document.getElementById("txtobservacionfactura").value =
-                  estadoFormulario.Observacion;
-                document.getElementById("datefechafactura").value =
-                  conversionFecha(estadoFormulario.FechaFactura);
+    estadoFormulario.NumeroFactura = data.NumeroFactura;
+    estadoFormulario.NombreProveedor = data.NombreProveedor;
+    estadoFormulario.LugarCompra = data.LugarCompra;
+    estadoFormulario.FechaFactura = data.FechaFactura;
+    estadoFormulario.Observacion = data.Observacion;
+    //ASIGNACION A INPUTS
+    document.getElementById("txidfactura").value = estadoFormulario.IdFactura;
+    document.getElementById("txtnumerofactura").value =
+      estadoFormulario.NumeroFactura;
+    document.getElementById("txtnombreprovedor").value =
+      estadoFormulario.NombreProveedor;
+    document.getElementById("txtlugarcompra").value =
+      estadoFormulario.LugarCompra;
+    document.getElementById("txtobservacionfactura").value =
+      estadoFormulario.Observacion;
+    document.getElementById("datefechafactura").value = conversionFecha(
+      estadoFormulario.FechaFactura,
+    );
+  }
 
-}
+  function variablesInicialesFactura() {
+    //ASIGNACION A VARIABLES GLOBALES
+    estadoFormulario.IdFactura = "1";
+    estadoFormulario.NumeroFactura = "N/A";
+    estadoFormulario.NombreProveedor = "N/A";
+    estadoFormulario.LugarCompra = "N/A";
+    estadoFormulario.FechaFactura = "2002-01-01";
+    estadoFormulario.Observacion = "SO";
+    estadoFormulario.StatusFacturaEdit = false;
+    //ASIGNACION DE INPUTS FACTURAS
+    idfactura.value = estadoFormulario.IdFactura;
+    numerofactura.value = estadoFormulario.NumeroFactura;
+    nombreproveedor.value = estadoFormulario.NombreProveedor;
+    lugarcompra.value = estadoFormulario.LugarCompra;
+    txtobservacionfactura.value = estadoFormulario.Observacion;
+    datefechafactura.value = conversionFecha(estadoFormulario.FechaFactura);
+  }
+  function resetvariables() {
+    //DISPOSITIVO
+    estadoFormulario.IdDispositivo = "";
+    estadoFormulario.Dispositivo = "";
+    estadoFormulario.AbrDispositivo = "";
+    estadoFormulario.CaracteristicasAdicionales = "";
+    //CATALOGO COMPONENTE
+    estadoFormulario.IdCatalogoComponente = "";
+    estadoFormulario.Nombre_Catalogo = "";
+    estadoFormulario.Descripcion = "";
+    estadoFormulario.marca = "";
+    estadoFormulario.modelo = "";
+    estadoFormulario.procesador = "";
+    estadoFormulario.memoria_ram = "";
+    estadoFormulario.disco_duro = "";
+    estadoFormulario.sistema_operativo = "";
+    //CARACTERISTICAS COMPONENTES
+    estadoFormulario.NumeroSerie = "";
+    estadoFormulario.EstatusComponente = "";
+    estadoFormulario.FehaRegistro = "";
+    estadoFormulario.EsClienteServidor = "";
+    estadoFormulario.FechaCompra = "";
+    estadoFormulario.IdTecnico = "";
+    estadoFormulario.GenerarNumeroserie = false;
+    estadoFormulario.EstatusInventario = 1;
 
+    //ASIGNACION A INPUTS
+    txtIddispositivo.value = "";
+    txtdispositivo.value = "";
+    txtIdCatalogo.value = "";
+    txtnombrecatalogo.value = "";
+    txtdescripcioncatalogo.value = "";
+    numeroserie.value = "";
+    numeroserie.disabled = false;
+    status_equipo.value = "";
+    fecha_compra.value = "";
+    chbxna.checked = true;
+    cambiarLabelSwitch("switchinventario", "ACTIVO");
+    
+    GenerarNumeroserie.checked = false;
+  }
 
   //*////////////////////////////////////////////////////////////////////////////////////////////////////////////*
 
-  //* FUNCIONES PARA FACTURAS Y OTROS EVENTOS (SE ENCUENTRAN EN EL FORMULARIO BOTONES ETC)
+  //* FUNCIONES PARA FACTURAS Y OTROS EVENTOS (SE ENCUENTRAN EN EL FORMULARIO BOTONES )
 
   //*//////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
@@ -957,12 +1040,14 @@ function asignacionVariablesDispositivos(data)
       const inputlugarcompra = document.getElementById("txtlugarcompra");
       const inputfechafactura = document.getElementById("datefechafactura");
       const inputobservacionfactura = document.getElementById(
-        "txtobservacionfactura"
+        "txtobservacionfactura",
       );
       const btncancnuevafactura = document.getElementById(
-        "btncancnuevafactura"
+        "btncancnuevafactura",
       );
+      const btneditarfactura = document.getElementById("btneditarfactura");
 
+      //RESTAURAR VALORES ANTERIORES AL CANCELAR LA OPERACION
       //RESTAURAR VALORES ANTERIORES AL CANCELAR LA OPERACION
       inputidfactura.value = VariablesFactura.idfactura;
       inputnumerofactura.value = VariablesFactura.numerofactura;
@@ -970,7 +1055,14 @@ function asignacionVariablesDispositivos(data)
       inputlugarcompra.value = VariablesFactura.lugarcompra;
       inputfechafactura.value = conversionFecha(VariablesFactura.fechafactura);
       inputobservacionfactura.value = VariablesFactura.observacionfactura;
+      inputidfactura.disabled = true;
+      inputnumerofactura.disabled = true;
+      inputnombreproveedor.disabled = true;
+      inputlugarcompra.disabled = true;
+      inputfechafactura.disabled = true;
+      inputobservacionfactura.disabled = true;
       btncancnuevafactura.hidden = true;
+      btneditarfactura.disabled = false;
     });
 
   //*INICIO EVENTO PARA EL BOTON 'btnguardarfactura'
@@ -978,13 +1070,14 @@ function asignacionVariablesDispositivos(data)
     .getElementById("btnnuevafactura")
     .addEventListener("click", function () {
       estadoFormulario.StatusFacturaEdit = false;
+
       const inputidfactura = document.getElementById("txidfactura");
       const inputnumerofactura = document.getElementById("txtnumerofactura");
       const inputnombreproveedor = document.getElementById("txtnombreprovedor");
       const inputlugarcompra = document.getElementById("txtlugarcompra");
       const inputfechafactura = document.getElementById("datefechafactura");
       const inputobservacionfactura = document.getElementById(
-        "txtobservacionfactura"
+        "txtobservacionfactura",
       );
       const btneditarfactura = document.getElementById("btneditarfactura");
       const btncancelarfactura = document.getElementById("btncancnuevafactura");
@@ -1029,7 +1122,7 @@ function asignacionVariablesDispositivos(data)
       const inputlugarcompra = document.getElementById("txtlugarcompra");
       const inputfechafactura = document.getElementById("datefechafactura");
       const inputobservacionfactura = document.getElementById(
-        "txtobservacionfactura"
+        "txtobservacionfactura",
       );
       const btneditarfactura = document.getElementById("btneditarfactura");
       const btncancelarfactura = document.getElementById("btncancnuevafactura");
@@ -1077,7 +1170,6 @@ function asignacionVariablesDispositivos(data)
           inputobservacionfactura.disabled = true;
           btneditarfactura.disabled = false;
           btncancelarfactura.hidden = true;
-         
         }
       }
 
@@ -1087,7 +1179,7 @@ function asignacionVariablesDispositivos(data)
           if (
             General.verificacion_numerica_entero(
               inputidfactura.value,
-              "El ID factura"
+              "El ID factura",
             )
           ) {
             // Validar datos
@@ -1099,35 +1191,16 @@ function asignacionVariablesDispositivos(data)
               return;
             }
 
-            const data = {
-              idFactura: inputidfactura.value,
-            };
-
-            if (isNaN(data.idFactura)) {
-              Toast.fire({
-                icon: "warning",
-                title: "Id Factura Inválida",
-              });
-              return;
-            }
-
-            const config = {
-              url: `${api}/api/componentes/EditarComponenteFactura`,
-              id: idcomponente,
-              data: data,
-              //submitButtonId: 'btnEditarLavador',
-              //formId: 'formularioPersonal',
-              //modalId: 'editarEmpleadoLavadoModal',
-              //table: table, // Tu DataTable
-              successTitle: `La Factura del Componente de ha Modificado Exitosamente`,
-            };
-
-            const response = await handlePUT(config);
-
-            if (response.error === false && response.status == 200) {
-              estadoFormulario.StatusFacturaEdit = false;
-              inputidfactura.disabled = true;
-            }
+            estadoFormulario.StatusFacturaEdit = false;
+            estadoFormulario.IdFactura = inputidfactura.value;
+            inputidfactura.disabled = true;
+            inputnumerofactura.disabled = true;
+            inputnombreproveedor.disabled = true;
+            inputlugarcompra.disabled = true;
+            inputfechafactura.disabled = true;
+            inputobservacionfactura.disabled = true;
+            btneditarfactura.disabled = false;
+            btncancelarfactura.hidden = true;
           } else {
             console.log("El valor no es válido.");
           }
@@ -1140,238 +1213,179 @@ function asignacionVariablesDispositivos(data)
   document
     .getElementById("btneditarfactura")
     .addEventListener("click", function (event) {
-
       const inputidfactura = document.getElementById("txidfactura");
       inputidfactura.disabled = false;
       estadoFormulario.StatusFacturaEdit = true;
     });
 
-  // FUNCION INICIALIZAR FORMULARIO
-  async function InicializarFormulario() {
-    // Reiniciar el formulario
-    document.getElementById("FormEditComponente").reset();
-    // Limpiar los campos de error
-    const errorFields = document.querySelectorAll(".error");
-    errorFields.forEach((field) => (field.textContent = ""));
+  //*////////////////////////////////////////////////////////////////////////////////////////////////////////////*
 
-    const validaridcomponente = General.verificacion_numerica_entero(
-      idcomponente,
-      "El ID Componente"
+  //* IMPRESION DE ETIQUETAS Y GENERACION DE QR
+
+  //*//////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+  //DECLARACION DE VARIABLES
+  //botones
+  const btnGenerarQR = document.getElementById("btnGenerarQR");
+  const btnImprimirEtiqueta = document.getElementById("btnImprimirEtiqueta");
+  const btncerrar = document.getElementById("btncerrar");
+  const btoncerrarmodal = document.getElementById("btoncerrarmodal");
+  //container
+  const container = document.getElementById("container-input-regulatorio");
+  const textboxregulatorio = document.getElementById("textboxregulatorio");
+  const inputRegulatorio = document.getElementById("inputRegulatorio");
+  const checkRegulatorio = document.getElementById("checkRegulatorio");
+  const imgQR = document.getElementById("img_qr");
+
+  const view_id = document.getElementById("view_id");
+  const view_codigo_ti = document.getElementById("view_codigo_ti");
+  const view_numero_serie = document.getElementById("view_numero_serie");
+  const view_dispositivo = document.getElementById("view_dispositivo");
+  const view_marca = document.getElementById("view_marca");
+  const view_modelo = document.getElementById("view_modelo");
+
+  function abrirmodalGeneradorQR() {
+    if (estadoFormulario.ImpresionRapida == true) {
+    
+    
+    QRCode.toDataURL(
+        estadoFormulario.CodigoTI,
+        { width: 150 },
+        function (err, url) {
+            if (err) {
+                console.error('Error al generar QR:', err);
+                return;
+            }
+            
+            // Mostrar QR en el modal
+            imgQR.src = url;
+            
+            // IMPRIMIR DENTRO DEL CALLBACK (después de que el QR esté listo)
+            // ✅ Se pasa el 'url' como segundo parámetro
+            imprimirEtiquetaSimple(estadoFormulario.CodigoTI, url);
+        }
     );
+} else {
+      $("#modalDetalleQR").modal("show");
 
-    if (validaridcomponente.error) {
-      // Array de todas las validaciones para iterar
-      const validations = [validaridcomponente];
-
-      // Encontrar la primera validación que falló
-      const failedValidation = validations.find((val) => val.error);
-      Swal.fire({
-        icon: failedValidation.icon,
-        title: "ID no Válido",
-        text: failedValidation.message || "Login exitoso.",
-      }).then(() => {
-        window.location.href = "/EditarDatos";
-      });
-    } else {
-      //asignar a campo
-      document.getElementById("txtidcomponente").value = idcomponente;
-
-      const config = {
-        url: `${api}/api/componentes/ConsultarIdComponente/${idcomponente}`, // URL específica
-        timeoutDuration: 5000, //ajusta el timeout si es necesario
-        // data: {} //  no se pasa si no hay query params
-      };
-      const response = await handleGET(config);
-
-      const data = response.data;
-
-      // Verifica que el cuerpo de la respuesta contenga datos
-      if (data.body.length > 0) {
-        const componente = data.body[0]; // Accede al primer elemento del array
-
-        //* Llenar el variables globales con los datos del componente trae desde la API
-
-        document.getElementById("txtcodigoti").value = componente.codigo_TI;
-        estadoFormulario.IdUnidadValue = componente.id_unidad.toString();
-        estadoFormulario.operacion = componente.operacion.toString();
-        estadoFormulario.contratoid = componente.num_contrato_actual.toString();
-        estadoFormulario.tipo_unidad = componente.tipo_unidad;
-        estadoFormulario.nombre_unidad = componente.nombre_unidad; //nombre_unidad
-        estadoFormulario.Estado = componente.Estado; //Estado
-        estadoFormulario.IdDispositivo = componente.id_dispositivo;
-        estadoFormulario.EsClienteServidor = componente.EsClienteServidor;
-        estadoFormulario.IdArea = componente.FK_id_area;
- 
-        estadoFormulario.AbrevEstado = componente.abreviatura_estado;
-        estadoFormulario.AbrDispositivo = componente.abreviatura_tipo;
-        estadoFormulario.IdCatalogoComponente =
-          componente.id_catalogo_componente;
-        estadoFormulario.NumeroSerie = componente.numero_serie;
-        estadoFormulario.NumeroConsecutivo = componente.numero_consecutivo;
-        estadoFormulario.CodigoTI = componente.codigo_TI;
-        estadoFormulario.Observaciones = componente.observaciones;
-        estadoFormulario.EstatusComponente = componente.status_componente;
-        estadoFormulario.EstatusInventario = componente.status_inventario;
-        estadoFormulario.FehaRegistro = componente.FechaRegistro;
-        estadoFormulario.FechaCompra = componente.FechaCompra;
-        estadoFormulario.IdResponsable = componente.id_responsable;
-        estadoFormulario.IdTecnico = componente.FK_IdTecnico;
-        estadoFormulario.IdFactura = componente.IdFactura;
-
-        //FACTURAS
-        VariablesFactura.idfactura = componente.IdFactura;
-        VariablesFactura.numerofactura = componente.NumeroFactura;
-        VariablesFactura.nombreproveedor = componente.NombreProveedor;
-        VariablesFactura.lugarcompra = componente.LugarCompra;
-        VariablesFactura.observacionfactura = componente.Observacion;
-        VariablesFactura.fechafactura = componente.FechaFactura;
-        //*LLENADO DE FORMULARIO CON DATOS OBTENIDOS DE COMPONENTES (API)
-        //conversion de variables a dato a mostrar
-        if (estadoFormulario.operacion === "GUANAJUATO") {
-          document.getElementById("txtIdUnidad").value =
-            General.concatenar_contrato_unidad(
-              estadoFormulario.IdUnidadValue,
-              estadoFormulario.contratoid
-            );
-        } else {
-          document.getElementById("txtIdUnidad").value =
-            estadoFormulario.IdUnidadValue;
-        }
-        document.getElementById("txtnombreunidad").value =
-          estadoFormulario.nombre_unidad;
-        document.getElementById("txtoperacion").value =
-          estadoFormulario.operacion;
-        document.getElementById("txtarea").value = componente.area;
-        document.getElementById("txtidresponsable").value =
-          componente.id_responsable;
-        document.getElementById("txtnombreresponsable").value =
-          componente.nombre_responsable;
-        document.getElementById("txtcargoresponsable").value = componente.cargo;
-        document.getElementById("txtarearesponsable").value = componente.area;
-        document.getElementById("txtIddispositivo").value =
-          estadoFormulario.IdDispositivo;
-        document.getElementById("txtdispositivo").value =
-          componente.tipo_equipo;
-        document.getElementById("txtIdCatalogo").value =
-          estadoFormulario.IdCatalogoComponente;
-        document.getElementById("txtnombrecatalogo").value =
-          componente.marca + " " + componente.modelo;
-        document.getElementById("txtdescripcioncatalogo").value =
-          componente.descripcion_modelo;
-        document.getElementById("txtnumeroserie").value =
-          estadoFormulario.NumeroSerie;
-        document.getElementById("txtobservaciones").value =
-          estadoFormulario.Observaciones;
-
-        //*SWITCH QUE PERMITE DAR UN ACTIVO O CANCELADO
-        const switchElement = document.getElementById("switchinventario");
-      
-        if (estadoFormulario.EstatusInventario.toString() == "1") {
-          switchElement.checked = true; // Activar switch si activo
-          cambiarLabelSwitch("switchinventario", "ACTIVO");
-          
-        } else if (estadoFormulario.EstatusInventario.toString() === "0") {
-          switchElement.checked = false; // Desactivar si cancelado
-          cambiarLabelSwitch("switchinventario", "CANCELADO");
-        } else {
-          switchElement.checked = false; // Por defecto, desactivado
-          cambiarLabelSwitch("switchinventario", "UNDEFINED");
-        }
-
-       
-        document.getElementById("datefechacompra").value = conversionFecha(
-          estadoFormulario.FechaCompra
-        );
-        let clienteservidor = estadoFormulario.EsClienteServidor.toString();
-        if (clienteservidor === "SERVIDOR") {
-          document.getElementById("chbxservidor").checked = true;
-        } else if (clienteservidor === "CLIENTE") {
-          document.getElementById("chbxcliente").checked = true;
-        } else if (clienteservidor === "N/A") {
-          document.getElementById("chbxna").checked = true;
-        }
-        document.getElementById("statusequiposelect").value =
-          estadoFormulario.EstatusComponente.toString();
-        document.getElementById("txidfactura").value =
-          VariablesFactura.idfactura;
-        document.getElementById("txtnumerofactura").value =
-          VariablesFactura.numerofactura;
-        document.getElementById("txtnombreprovedor").value =
-          VariablesFactura.nombreproveedor;
-        document.getElementById("txtlugarcompra").value =
-          VariablesFactura.lugarcompra;
-        document.getElementById("datefechafactura").value = conversionFecha(
-          VariablesFactura.fechafactura
-        );
-        document.getElementById("txtobservacionfactura").value =
-          VariablesFactura.observacionfactura;
-      } else {
-        Toast.fire({
-          icon: "error",
-          title: "No se encontraron datos del componente Solicitado",
-        });
-        console.error("No se encontraron datos del componente Solicitado");
-      }
-      estadoFormulario.EsDispositivoMovil = General.esDispositivoMovil();
-
-      //*LLENADO DE ARRAY COMPONENTES ANTERIOR PARA REGISTRAR MOVIMIENTO ANTERIOR
-      //CONTRATOS
-      ComponentesAnteriores.IdContrato = estadoFormulario.contratoid;
-      //unidades
-      ComponentesAnteriores.FK_id_unidad = estadoFormulario.IdUnidadValue;
-      ComponentesAnteriores.operacion = estadoFormulario.operacion;
-      ComponentesAnteriores.estado_equipo = estadoFormulario.Estado;
-      ComponentesAnteriores.Abreviatura_Estado = estadoFormulario.AbrevEstado;
-      //FACTURAS
-      ComponentesAnteriores.FK_Factura = estadoFormulario.IdFactura;
-      //RESPONSABLES
-
-      ComponentesAnteriores.FK_id_responsable = estadoFormulario.IdResponsable;
-      //AREAS
-      ComponentesAnteriores.FK_id_area = estadoFormulario.IdArea; //IdArea
-      //DISPOSITIVOS
-      ComponentesAnteriores.FK_id_dispositivo = estadoFormulario.IdDispositivo;
-      ComponentesAnteriores.abreviatura_tipo = estadoFormulario.AbrDispositivo;
-      //COMPONENTES
-      ComponentesAnteriores.FK_id_catalogo_componentes =
-        estadoFormulario.IdCatalogoComponente;
-      ComponentesAnteriores.numero_serie = estadoFormulario.NumeroSerie;
-      ComponentesAnteriores.numero_consecutivo =
-        estadoFormulario.NumeroConsecutivo;
-      ComponentesAnteriores.abreviatura_EQ = estadoFormulario.AbrevEQ;
-      ComponentesAnteriores.observaciones = estadoFormulario.Observaciones;
-      ComponentesAnteriores.status_componente =
-        estadoFormulario.EstatusComponente;
-      ComponentesAnteriores.status_inventario =
-        estadoFormulario.EstatusInventario;
-      ComponentesAnteriores.FechaRegistro = estadoFormulario.FehaRegistro;
-      ComponentesAnteriores.EsClienteServidor =
-        estadoFormulario.EsClienteServidor;
-      ComponentesAnteriores.FechaCompra = estadoFormulario.FechaCompra;
-      ComponentesAnteriores.codigoTI = estadoFormulario.CodigoTI;
+      view_id.textContent = estadoFormulario.IdComponente;
+      view_codigo_ti.textContent = estadoFormulario.CodigoTI;
+      view_numero_serie.textContent = estadoFormulario.NumeroSerie;
+      view_dispositivo.textContent = estadoFormulario.Dispositivo;
+      view_marca.textContent = estadoFormulario.marca;
+      view_modelo.textContent = estadoFormulario.modelo;
     }
   }
 
-  // FUNCION ActualizarComponenteFactura
-  //inicio UPDATE COMPONENTE FACTURA
-  async function ActualizarComponenteFactura() {
-    const id_factura = document.getElementById("idpersonallavadoHidden").value;
-    if (id_factura === "*") {
-      Toast.fire({
-        icon: "warning",
-        title: "Es un *.",
-      });
-    } else if (id_factura != "*") {
-      const verificar_numero = General.verificacion_numerica_entero(id_factura);
-      if (verificar_numero === true) {
-      } else {
+ 
+
+  // Mostrar u ocultar el campo de código regulatorio según el estado del checkbox
+  checkRegulatorio.addEventListener("change", function () {
+    if (this.checked) {
+      container.classList.remove("d-none");
+      container.classList.add("d-block");
+      textboxregulatorio.hidden = false;
+
+      inputRegulatorio.focus();
+    } else {
+      textboxregulatorio.hidden = true;
+      container.classList.add("d-none");
+      container.classList.remove("d-block");
+      inputRegulatorio.value = ""; // Limpiamos el dato al desmarcar
+    }
+  });
+  // Evento para generar el código QR al hacer clic en el botón "btnGenerarQR"
+  btnGenerarQR.addEventListener("click", function () {
+    //provisional
+    const codigoTI = document.getElementById("view_codigo_ti").textContent;
+    estadoFormulario.CodigoTI = codigoTI; // Guardar el código TI en el
+
+    // Limpiar QR anterior
+    imgQR.src = "";
+
+    QRCode.toDataURL(
+      estadoFormulario.CodigoTI,
+      { width: 150 },
+      function (err, url) {
+        imgQR.src = url;
+        // Habilitamos el botón de imprimir una vez generado
+
+        btnImprimirEtiqueta.disabled = false;
+        btnImprimirEtiqueta.className = "btn btn-primary";
+        document.getElementById("view_codigo_ti_etiqueta").textContent =
+          estadoFormulario.CodigoTI;
+        if (checkRegulatorio.checked == true) {
+          document.getElementById(
+            "view_codigo_regulatorio_etiqueta",
+          ).textContent = inputRegulatorio.value;
+          estadoFormulario.codigoregulatorio = inputRegulatorio.value;
+        }
+      },
+    );
+  });
+  // Evento para imprimir la etiqueta al hacer clic en el botón "btnImprimirEtiqueta"
+  btnImprimirEtiqueta.addEventListener("click", async function () {
+    const qrYaGenerado = document.getElementById("img_qr").src;
+    if (checkRegulatorio.checked == true) {
+      //generar etiqueta con codigo regulatorio
+      if (
+        inputRegulatorio.value == "" ||
+        !inputRegulatorio.value ||
+        inputRegulatorio.value == null
+      ) {
         Toast.fire({
           icon: "warning",
-          title: "Dato Inválido",
+          title: "Código Regulatorio no Válido",
         });
+        return;
       }
-    }
+      if (
+        document.getElementById("view_codigo_regulatorio_etiqueta")
+          .textContent == "--"
+      ) {
+        Toast.fire({
+          icon: "warning",
+          title: "Generar el Código QR para imprimir la etiqueta",
+        });
+        return;
+      }
 
-    // Obtener el ID del lavador a editar
+      await imprimirEtiquetaRegulatorio(
+        estadoFormulario.CodigoTI,
+        estadoFormulario.codigoregulatorio,
+        qrYaGenerado,
+      );
+    } else {
+      await imprimirEtiquetaSimple(estadoFormulario.CodigoTI, qrYaGenerado);
+    }
+    limpiarmodalQR();
+    $("#modalDetalleQR").modal("hide");
+  });
+  btncerrar.addEventListener("click", async function () {
+    limpiarmodalQR();
+    $("#modalDetalleQR").modal("hide");
+  });
+  btoncerrarmodal.addEventListener("click", async function () {
+    limpiarmodalQR();
+    $("#modalDetalleQR").modal("hide");
+  });
+  // Función para limpiar el modal después de imprimir la etiqueta
+  function limpiarmodalQR() {
+    /*view_id.textContent = "--";
+    view_codigo_ti.textContent = "--";
+    view_numero_serie.textContent = "--";
+    view_dispositivo.textContent = "--";
+    view_marca.textContent = "--";
+    view_modelo.textContent = "--";*/
+    checkRegulatorio.checked = false;
+    textboxregulatorio.hidden = true;
+    imgQR.src = "/resources/exampleQR.png";
+    btnImprimirEtiqueta.disabled = true;
+    textboxregulatorio.hidden = true;
+    container.classList.add("d-none");
+    container.classList.remove("d-block");
+    inputRegulatorio.value = ""; // Limpiamos el dato al desmarcar
+    document.getElementById("view_codigo_regulatorio_etiqueta").textContent =
+      "--";
   }
 });

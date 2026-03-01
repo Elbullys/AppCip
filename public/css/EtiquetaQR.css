@@ -1,0 +1,276 @@
+/* ============================================
+   ESTILOS PARA AMBAS ETIQUETAS
+   ============================================ */
+
+/* Ocultar áreas de impresión por defecto */
+#area-impresion-regulatorio,
+#area-impresion-ti {
+    display: none;
+}
+
+/* ============================================
+   ETIQUETA CON CÓDIGO REGULATORIO
+   ============================================ */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    #area-impresion-regulatorio,
+    #area-impresion-regulatorio * {
+        visibility: visible;
+    }
+    
+    #area-impresion-regulatorio {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: block !important;
+    }
+    
+    .etiqueta-regulatorio {
+        width: 250px;
+        height: 120px;
+        position: relative;
+        font-family: 'Arial', sans-serif;
+    }
+    
+    /* QR: posición (5,5), tamaño 100x100 */
+    .qr-regulatorio {
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        width: 100px;
+        height: 100px;
+    }
+    
+    #qr-regulatorio img {
+        width: 100px;
+        height: 100px;
+    }
+    
+    /* Textos: posición a la derecha del QR */
+    .textos-regulatorio {
+        position: absolute;
+        left: 110px;
+        top: 15px;
+        width: 140px;
+    }
+    
+    .label-bold {
+        font-family: 'Arial', sans-serif;
+        font-size: 7pt;
+        font-weight: bold;
+    }
+    
+    .codigo-normal {
+        font-family: 'Arial', sans-serif;
+        font-size: 7pt;
+        font-weight: normal;
+    }
+    
+    .codigo-chico {
+        font-family: 'Arial', sans-serif;
+        font-size: 7pt;
+        font-weight: normal;
+    }
+    
+    .linea-1 {
+        position: absolute;
+        top: 5px;
+        left: 10px;
+    }
+    
+    .linea-2 {
+        position: absolute;
+        top: 20px;
+        left: -10px;
+    }
+    
+    .linea-3 {
+        position: absolute;
+        top: 35px;
+        left: 15px;
+    }
+    
+    .linea-4 {
+        position: absolute;
+        top: 45px;
+        left: 0px;
+    }
+    
+    .linea-5 {
+        position: absolute;
+        top: 60px;
+        left: -10px;
+    }
+    
+    @page {
+        size: auto;
+        margin: 0mm;
+    }
+}
+
+/* ============================================
+   ETIQUETA SOLO CÓDIGO TI
+   ============================================ */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    #area-impresion-ti,
+    #area-impresion-ti * {
+        visibility: visible;
+    }
+    
+    #area-impresion-ti {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: block !important;
+    }
+    
+    .etiqueta-ti {
+        width: 250px;
+        height: 120px;
+        position: relative;
+        font-family: 'Arial', sans-serif;
+    }
+    
+    /* QR: posición (5,5), tamaño 100x100 */
+    .qr-ti {
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        width: 100px;
+        height: 100px;
+    }
+    
+    #qr-ti img {
+        width: 100px;
+        height: 100px;
+    }
+    
+    /* Textos: posición a la derecha del QR */
+    .textos-ti {
+        position: absolute;
+        left: 110px;
+        top: 30px;
+        width: 140px;
+    }
+    
+    .linea-1-ti {
+        position: absolute;
+        top: 5px;
+        left: 10px;
+    }
+    
+    .linea-2-ti {
+        position: absolute;
+        top: 20px;
+        left: -10px;
+    }
+    
+    .codigo-grande {
+        font-family: 'Arial', sans-serif;
+        font-size: 9pt;
+        font-weight: normal;
+    }
+    
+    @page {
+        size: auto;
+        margin: 0mm;
+    }
+}
+
+/*GENERADOR QR*/
+/* Estilos para el Modal de Detalle de TI */
+
+/* 1. Encabezado y Estructura General */
+#modalDetalleQR .modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+    border: none;
+}
+
+#modalDetalleQR .modal-header {
+    background: #212529; /* Negro elegante */
+    border-bottom: 2px solid #0d6efd; /* Línea acento azul */
+}
+
+/* 2. Visualización de Datos */
+#modalDetalleQR label {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+    margin-bottom: 2px;
+}
+
+#modalDetalleQR span {
+    display: block;
+    color: #333;
+}
+
+/* Badge personalizado para el Código TI */
+#view-codigo-ti {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    padding: 8px 12px;
+    border: 1px dashed #0dcaf0;
+    background-color: #f0faff;
+}
+
+/* 3. Contenedor del QR */
+#container-qr {
+    transition: all 0.3s ease;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#container-qr:hover {
+    border-color: #0d6efd;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#img-qr {
+    transition: transform 0.2s ease;
+    image-rendering: pixelated; /* Mantiene el QR nítido */
+}
+
+/* 4. Switch Regulatorio */
+.form-check-input:checked {
+    background-color: #198754; /* Verde para activo */
+    border-color: #198754;
+}
+
+.form-check.form-switch {
+    transition: background 0.3s ease;
+}
+
+.form-check.form-switch:has(input:checked) {
+    background-color: #e8f5e9 !important; /* Fondo verde suave al activar */
+    border-color: #198754 !important;
+}
+
+/* 5. Estilos para impresión (Solo para la etiqueta) */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #container-qr, #container-qr * {
+        visibility: visible;
+    }
+    #container-qr {
+        position: absolute;
+        left: 0;
+        top: 0;
+        border: none;
+        box-shadow: none;
+    }
+}

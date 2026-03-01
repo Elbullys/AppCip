@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     mostrarElementos(["#colrow4"]);
     colrow3.style.display = "none";
     document.getElementById("lblcontraseña").textContent = "Contraseña";
-
+    LlenadoListasDesplegablesModalResponsable(true);
     //abrir modal
     upsertResponsableModal.show();
   });
@@ -443,7 +443,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               searchTerm: "",
             }),
           },
-          true,
+          true,//LIMPIAR SELECT
         );
 
         //PARA SELECCIONAR EL AREA CORRESPONDIENTE AL RESPONSABLE,
@@ -453,10 +453,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Evento para capturar el cambio en el select de área y actualizar el estado global
         selectArea.addEventListener("change", (e) => {
           const seleccionado = e.target.options[e.target.selectedIndex];
-
+        
           if (e.target.value !== "") {
             // Capturamos el ID
             StatePanelResponsable.IdArea = e.target.value;
+          
 
             // Capturamos el Texto
             StatePanelResponsable.Nombre_Area = seleccionado.text;
@@ -464,6 +465,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Reset
             StatePanelResponsable.IdArea = null;
             StatePanelResponsable.Nombre_Area = "";
+            console.log("area vacia");
           }
         });
       });
@@ -791,6 +793,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     $("#upsertResponsableModal").off("shown.bs.modal");
 
     upsertResponsableModal.hide();
+  }
+
+  //*FUNCION LLENADO DE LISTAS DESPLEGABLES MODAL RESPONSABLE
+  function LlenadoListasDesplegablesModalResponsable(limpiarOpciones) {
+    //*LLENADO DE LISTA DESPLEGABLES areas
+    loader.cargarOpciones(
+      {
+        endpoint: `${api}/api/areas/ConsultaAreaPorTipoUnidad`, // Tu endpoint
+        selectId: "selectArea",
+        renderOption: (item) => ({
+          value: item.IdProcesador,
+          text: `${item.Fabricante} ${item.id_area}-${item.area}`,
+        }),
+        getExtraParams: () => ({
+          TipoUnidad: StatePanelResponsable.tipo_unidad,
+              searchTerm: "",
+        }),
+      },
+      limpiarOpciones,
+    );
+
+    // Evento para cuando cambie el select PROCESADOR
+     let selectArea = document.getElementById("selectArea");
+    selectArea.addEventListener("change", (e) => {
+        StatePanelResponsable.IdArea = e.target.value;
+        
+        const combo = e.target;
+        StatePanelResponsable.Nombre_Area =
+          combo.options[combo.selectedIndex].text;
+      });
+
   }
   //*////////////////////////////////////////////////////////////////////////////////////////////////////////////*
 

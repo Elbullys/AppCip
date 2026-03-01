@@ -1,4 +1,4 @@
-<%- include("../template/cabecera",{tituloweb:'Editar Componente'}) %>
+<%- include("../template/cabecera",{tituloweb:'Agregar Componente'}) %>
 <%- include("../template/navbar") %>
 
 <div class="container py-5">
@@ -8,19 +8,15 @@
         <!-- Header del formulario -->
 
         <div class="form-header text-center">
-          <h1><i class="fa-solid fa-computer"></i> Modificar Componente</h1>
+          <h1 ><i class="fa-solid fa-computer"></i>  Agregar Componente</h1>
           <p class="mb-0">Complete todos los campos requeridos (*)</p>
         </div>
 
 
         <!-- DATOS PRINCIPALES DE COMPONENTE -->
-        <h5 class="text-center" id="databusqueda" style="display: none">
-          id componente: <span id="idcomponenteValue"><%= idcomponente %></span>
-        </h5>
-        <span hidden="true" id="idtecnicoValue"><%= IdTecnico %></span>
         <div class="row g-3 m-2">
           <div class="col-md-6">
-            <label for="componenteID" class="form-label">ID Componente</label>
+            <label for="componenteID" class="form-label" tabindex="-1">ID Componente</label>
             <div class="input-icon">
               <i class="fa-solid fa-hashtag"></i>
               <input
@@ -29,22 +25,9 @@
                 id="txtidcomponente"
                 placeholder="ID Componente"
                 disabled="false"
-                value=""
-                required
-              />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <label for="componentCodigoTI" class="form-label">Código TI</label>
-            <div class="input-icon">
-              <i class="fa-solid fa-tag"></i>
-              <input
-                type="text"
-                class="form-control"
-                id="txtcodigoti"
-                placeholder="Código TI"
-                disabled="false"
-                required
+                value="*"
+                tabindex="-1"
+              
               />
             </div>
           </div>
@@ -52,19 +35,19 @@
 
         <form
           class="p-4 p-md-5"
-          id="FormEditComponente" 
+          id="FormAgregarComponente" 
           autocomplete="off"
         >
-          <input type="hidden" name="id" id="idcomponenteHidden" />
+          <input type="hidden" name="id" id="idcomponenteHidden" tabindex="-1"/>
           <!-- Sección de ubicacion del equipo-->
           <div class="mb-5">
             <h3 class="section-title">
-              <i class="fa-solid fa-location-dot"></i> Ubicación del Equipo
+              <i class="fa-solid fa-location-dot" tabindex="-1"></i> Ubicación del Equipo
             </h3>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="unidad" class="form-label">Id Unidad</label>
-                <div class="input-icon">
+            <div class="row g-3" tabindex="-1">
+              <div class="col-md-6" tabindex="-1">
+                <label for="unidad" class="form-label" tabindex="-1">Id Unidad</label>
+                <div class="input-icon" tabindex="-1">
                   <i class="fa-solid fa-hashtag"></i>
                   <input
                     type="text"
@@ -72,13 +55,16 @@
                     id="txtIdUnidad"
                     placeholder="Id Unidad"
                     autocomplete="off"
-                    required
+                    tabindex="0"
+                    readonly
+                    style="cursor: pointer; background-color: #fff;"
+                  required
                   />
                 </div>
               </div>
-              <div class="col-md-6">
-                <label for="unidad" class="form-label">Nombre de Unidad</label>
-                <div class="input-icon">
+              <div class="col-md-6" >
+                <label for="unidad" class="form-label" >Nombre de Unidad</label>
+                <div class="input-icon" >
                   <i class="fa-solid fa-building"></i>
                   <input
                     type="text"
@@ -86,29 +72,29 @@
                     id="txtnombreunidad"
                     placeholder="Unidad"
                     disabled="false"
-                    required
+                    tabindex="-1"
                   />
                 </div>
               </div>
-              <div class="col-md-6">
-                <label for="unidad" class="form-label">Operación</label>
-                <div class="input-icon">
-                  <i class="fa-solid fa-briefcase"></i>
+              <div class="col-md-6" tabindex="-1">
+                <label for="unidad" class="form-label" tabindex="-1">Operación</label>
+                <div class="input-icon" tabindex="-1">
+                  <i class="fa-solid fa-briefcase" tabindex="-1"></i>
                   <input
                     type="text"
                     class="form-control"
                     id="txtoperacion"
                     placeholder="Operación"
                     disabled="false"
-                    required
+                    tabindex="-1"
                   />
                 </div>
               </div>
-              <div class="col-md-6">
-                <label for="ubicacion" class="form-label"
+              <div class="col-md-6" tabindex="-1">
+                <label for="ubicacion" class="form-label" tabindex="-1"
                   >Ubicacion de Equipo</label
                 >
-                <div class="input-icon">
+                <div class="input-icon" tabindex="-1">
                   <i class="fa-solid fa-thumbtack"></i>
                   <input
                     type="text"
@@ -116,6 +102,9 @@
                     id="txtarea"
                     placeholder="Ubicación"
                     autocomplete="off"
+                    readonly
+                    style="cursor: pointer; background-color: #fff;"
+                    tabindex="2"
                     required
                   />
                 </div>
@@ -138,6 +127,9 @@
                     id="txtidresponsable"
                     placeholder="ID del Responsable"
                     autocomplete="off"
+                    tabindex="3"
+                    readonly
+                    style="cursor: pointer; background-color: #fff;"
                     required
                   />
                 </div>
@@ -153,7 +145,7 @@
                     placeholder="Nombre del Responsable"
                     autocomplete="off"
                     disabled="false"
-                    required
+                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -167,7 +159,7 @@
                     id="txtcargoresponsable"
                     placeholder="Cargo"
                     disabled="false"
-                    required
+                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -181,7 +173,7 @@
                     id="txtarearesponsable"
                     placeholder="Área del Responsable"
                     disabled="false"
-                    required
+                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -204,6 +196,9 @@
                     placeholder="Id Dispositivo"
                     autocomplete="off"
                     required
+                    readonly
+                    style="cursor: pointer; background-color: #fff;"
+                    tabindex="4"
                   />
                 </div>
               </div>
@@ -217,7 +212,8 @@
                     id="txtdispositivo"
                     placeholder="Nombre del Dispositivo"
                     disabled="false"
-                    required
+                    tabindex="-1"
+                 
                   />
                 </div>
               </div>
@@ -230,6 +226,9 @@
                     class="form-control"
                     id="txtIdCatalogo"
                     autocomplete="off"
+                    readonly
+                    style="cursor: pointer; background-color: #fff;"
+                    tabindex="5"
                     required
                   />
                 </div>
@@ -244,7 +243,7 @@
                     id="txtnombrecatalogo"
                     placeholder="Nombre del Catálogo"
                     disabled="false"
-                    required
+                   tabindex="-1"
                   />
                 </div>
               </div>
@@ -257,7 +256,7 @@
                     id="txtdescripcioncatalogo"
                     placeholder="Descripción del Catálogo"
                     disabled="false"
-                    required
+                    tabindex="-1"
                   ></textarea>
                 </div>
               </div>
@@ -284,16 +283,36 @@
                     placeholder="Número de Serie"
                     autocomplete="off"
                     required
+                    tabindex="6"
                   />
                 </div>
               </div>
+              <!-- CHECKBOX PARA GENERAR NÚMERO DE SERIE AUTOMÁTICO -->
+    <div class="col-md-6 d-flex align-items-end">
+      <div class="form-check form-switch">
+        <input 
+          class="form-check-input" 
+          type="checkbox" 
+          id="chkbxAutoSerie" 
+          style="cursor: pointer;"
+          tabindex="7"
+        >
+        <label 
+          class="form-check-label fw-bold text-primary" 
+          for="chkbxAutoSerie"
+          style="cursor: pointer;"
+        >
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Generar número de serie
+        </label>
+      </div>
+    </div>
               <div class="col-md-6">
                 <label for="statusequipo" class="form-label"
                   >Estado del Equipo</label
                 >
                 <div class="input-icon">
                   <i class="fa-solid fa-circle-check"></i>
-                  <select class="form-select" id="statusequiposelect" required>
+                  <select class="form-select" id="statusequiposelect" tabindex="8" required>
                     <option value="" selected disabled>
                       Codición del Equipo
                     </option>
@@ -318,10 +337,10 @@
                 >
                 <div class="input-icon">
                   <i class="fas fa-calendar-alt"></i>
-                  <input type="date" class="form-control" id="datefechacompra" />
+                  <input type="date" class="form-control" id="datefechacompra" tabindex="9" required/>
                 </div>
               </div>
-              <div class="group-servidorCliente col-md-6">
+              <div class="group-servidorCliente col-md-6" id="servidorcliente">
                 <label class="form-label">¿Es Servidor ó Cliente?</label>
                 <div class="form-check">
                   <input
@@ -330,6 +349,8 @@
                     type="radio"
                     id="chbxservidor"
                     value="SERVIDOR"
+                    tabindex="10"
+                
                   />
                   <label class="form-label" for="lbservidor">
                     SERVIDOR
@@ -342,6 +363,7 @@
                     type="radio"
                     id="chbxcliente"
                     value="CLIENTE"
+                    tabindex="11"
                   />
                   <label class="form-label" for="lbcliente">
                     CLIENTE
@@ -354,6 +376,7 @@
                     type="radio"
                     id="chbxna"
                     value="N/A"
+                    tabindex="12"
                     checked
                   />
                   <label class="form-label" for="lbna" >
@@ -361,17 +384,15 @@
                   </label>
                 </div>
               </div>
-              <!-- Switch de Bootstrap agregado aquí -->
               <div class="col-md-6">
                 <label class="form-label">¿Activo en Inventario?</label>
                 <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="switchinventario">
+                  <input class="form-check-input" type="checkbox" id="switchinventario" tabindex="13" checked="true">
                   <label class="form-label" for="switchinventario">
-                   UNDEFINED
+                   ACTIVO
                   </label>
                 </div>
               </div>
-              <!-- Fin del switch -->
                <div class="col-md-12">
                 <label for="observaciones" class="form-label">Observaciones</label>
                 <div class="input-icon">
@@ -379,6 +400,7 @@
                     type="text"
                     class="form-control"
                     id="txtobservaciones"
+                    tabindex="14"
                     required
                   ></textarea>
                 </div>
@@ -501,6 +523,23 @@
                   ></textarea>
                 </div>
               </div>
+     <div class="col-md-6 d-flex align-items-end">
+        <div class="form-check form-switch">
+        <input 
+          class="form-check-input" 
+          type="checkbox" 
+          id="chkbxImpresionRapida" 
+          style="cursor: pointer;"
+          >
+        <label 
+          class="form-check-label fw-bold text-primary" 
+          for="chkbxImpresionRapida"
+          style="cursor: pointer;"
+        >
+          <i class="fa fa-print"></i> Impresión Rápida
+        </label>
+        </div>
+    </div>
             </div>
           </div>
 
@@ -509,8 +548,9 @@
             <button type="button" class="btn btn-outline-secondary">
               <i class="fas fa-arrow-left me-2"></i>Volver
             </button>
-            <button type="submit" id="btnmodificar" class="btn btn-primary btn-submit" >
-              <i class="fa-solid fa-floppy-disk"></i> Modificar Componente
+
+            <button type="submit" id="btnmodificar" class="btn btn-primary btn-submit" tabindex="15">
+              <i class="fa-solid fa-floppy-disk"></i> Agregar Componente
             </button>
           </div>
         </form>
@@ -519,7 +559,7 @@
   </div>
 </div>
 
-<script src="/js/RouterAPI/Componentes/RouterEditarComponente.js" type="module"></script>
+<script src="/js/RouterAPI/Componentes/RouterAgregarComponente.js" type="module"></script>
 
 
 <%- include("../template/footer") %>
@@ -529,3 +569,4 @@
 <%- include("../Catalogos/modal/ModalConsultarCatalogosComponentes") %>
 <%- include("../Factura/modal/ModalConsultar_Factura") %>
 <%- include("../Responsables/modal/ModalConsultar_Responsable") %>
+<%- include("../ImpresionQR/modal/ModalGeneradorQR") %>

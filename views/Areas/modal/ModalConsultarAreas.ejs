@@ -28,7 +28,7 @@
         <div class="card-body"> 
                     <div class="input-group mb-3">
                         <input type="text" id="inputBusquedaArea" class="form-control" placeholder="Buscar Área..." autocomplete="off"  tabindex="1">
-                        <button id="btnBuscarArea" class="btn btn-primary">Buscar</button>
+                        <button id="btnBuscarArea" class="btn btn-primary" tabindex="2">Buscar</button>
                     </div>
                 </div>
                  
@@ -38,6 +38,7 @@
             id="table_Modal_ConsultaArea"
             class="table tableModalConsulta table-striped table-hover table-sm"
             style="width: 100%"
+            tabindex="3"
           >
             <thead>
               <tr>
@@ -47,13 +48,14 @@
                 <th scope="col">Descripción</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody tabindex="4"></tbody>
           </table>
           <div class="text-center mb-1 mt-2">
             <button
               type="button"
               id="btnSeleccionarArea"
               class="btn btn-primary"
+              tabindex="5"
             >
               Seleccionar
             </button>
