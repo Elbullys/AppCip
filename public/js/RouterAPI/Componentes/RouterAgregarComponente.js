@@ -296,7 +296,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ? true
         : false; // Retorna true si activado, false si desactivado
     }
- 
+
     estadoFormulario.IdFactura = idfactura.value;
     estadoFormulario.NumeroSerie = numeroserie.value;
     estadoFormulario.Observaciones = observaciones.value;
@@ -352,25 +352,19 @@ document.addEventListener("DOMContentLoaded", () => {
         timer: 2000,
       });
 
-
       if (response.data.error === false) {
-        console.log("response", response);
         estadoFormulario.IdComponente = response.data.idInsertado;
         estadoFormulario.CodigoTI = response.data.body;
+        estadoFormulario.NumeroSerie = response.data.numero_serie;
         cambiosPendientes = false; // Resetea la bandera al guardar exitosamente
         estadoFormulario.StatusFacturaEdit = false;
-        
-        setTimeout(() => {
-          if (estadoFormulario.ImpresionRapida) {
-            abrirmodalGeneradorQR();
-          }
-        }, 3000);
-            
 
-        
-        resetvariables();
+        setTimeout(async () => {
+          await abrirmodalGeneradorQR();
+          resetvariables(); // Se ejecuta exactamente después de abrir el modal (tras los 3 seg)
+        }, 3000);
       }
-      console.log("Respuesta del servidor:", response);
+      
     }
   });
 
@@ -526,7 +520,7 @@ document.addEventListener("DOMContentLoaded", () => {
             inputBusquedaCatalogo.value,
             estadoFormulario.IdDispositivo,
           ); // Llama a la función de búsqueda
-        console.log("EleccionCatalogoComponentes", EleccionCatalogoComponentes);
+        
         asignacionVariablesCatalogoComponentes(EleccionCatalogoComponentes);
       }
     });
@@ -907,10 +901,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("txtIdCatalogo").value = "";
     document.getElementById("txtnombrecatalogo").value = "";
     document.getElementById("txtdescripcioncatalogo").value = "";
-    console.log(
-      "CaracteristicasAdicionales",
-      estadoFormulario.CaracteristicasAdicionales,
-    );
+   
     if (estadoFormulario.CaracteristicasAdicionales == "NO") {
       chbxservidor.disabled = true;
       chbxcliente.disabled = true;
@@ -1019,7 +1010,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fecha_compra.value = "";
     chbxna.checked = true;
     cambiarLabelSwitch("switchinventario", "ACTIVO");
-    
+
     GenerarNumeroserie.checked = false;
   }
 
@@ -1202,7 +1193,7 @@ document.addEventListener("DOMContentLoaded", () => {
             btneditarfactura.disabled = false;
             btncancelarfactura.hidden = true;
           } else {
-            console.log("El valor no es válido.");
+            console.error("El valor no es válido.");
           }
         }
       }
@@ -1244,40 +1235,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const view_marca = document.getElementById("view_marca");
   const view_modelo = document.getElementById("view_modelo");
 
-  function abrirmodalGeneradorQR() {
+  async function abrirmodalGeneradorQR() {
     if (estadoFormulario.ImpresionRapida == true) {
-    
-    
-    QRCode.toDataURL(
+      QRCode.toDataURL(
         estadoFormulario.CodigoTI,
         { width: 150 },
         function (err, url) {
-            if (err) {
-                console.error('Error al generar QR:', err);
-                return;
-            }
-            
-            // Mostrar QR en el modal
-            imgQR.src = url;
-            
-            // IMPRIMIR DENTRO DEL CALLBACK (después de que el QR esté listo)
-            // ✅ Se pasa el 'url' como segundo parámetro
-            imprimirEtiquetaSimple(estadoFormulario.CodigoTI, url);
-        }
-    );
-} else {
-      $("#modalDetalleQR").modal("show");
+          if (err) {
+            console.error("Error al generar QR:", err);
+            return;
+          }
 
+          // Mostrar QR en el modal
+          imgQR.src = url;
+
+          // IMPRIMIR DENTRO DEL CALLBACK (después de que el QR esté listo)
+          // ✅ Se pasa el 'url' como segundo parámetro
+          imprimirEtiquetaSimple(estadoFormulario.CodigoTI, url);
+        },
+      );
+    } else {
       view_id.textContent = estadoFormulario.IdComponente;
       view_codigo_ti.textContent = estadoFormulario.CodigoTI;
       view_numero_serie.textContent = estadoFormulario.NumeroSerie;
       view_dispositivo.textContent = estadoFormulario.Dispositivo;
       view_marca.textContent = estadoFormulario.marca;
       view_modelo.textContent = estadoFormulario.modelo;
+      $("#modalDetalleQR").modal("show");
     }
   }
-
- 
 
   // Mostrar u ocultar el campo de código regulatorio según el estado del checkbox
   checkRegulatorio.addEventListener("change", function () {

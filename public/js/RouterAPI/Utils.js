@@ -427,8 +427,8 @@ export class General {
       };
     }
 
-    // 3. Validar antigüedad mínima razonable (ej. año 2000)
-    if (fechaSeleccionada.getFullYear() < 2000) {
+    // 3. Validar antigüedad mínima razonable
+    if (fechaSeleccionada.getFullYear() < 1999) {
       return {
         error: true,
         message: mensaje + " es demasiado antigua",
