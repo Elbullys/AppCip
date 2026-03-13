@@ -23,6 +23,22 @@
     z-index: 10; /* Por encima del tbody */
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
 }
+/* ============================================
+   PAGINACIÓN DATATABLES - HOVER AZUL
+   ============================================ */
+/* 1. ELIMINAR EL FONDO NEGRO Y DEGRADADO DE DATATABLES */
+.dt-paging-button.page-item .page-link:hover,
+.dt-paging-button.page-item:hover .page-link,
+.dt-paging-button.page-item:hover {
+   
+    background: #d9dadc !important;
+   
+   
+}
+
+
+
+
 
 
 

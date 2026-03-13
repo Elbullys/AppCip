@@ -68,4 +68,13 @@ router.get("/FormularioEditarComponente/:idcomponente", (req, res) => {
 router.get("/Componentes/AgregarComponente", (req, res) => {
     res.render("Componentes/AgregarComponente");
 });
+
+//IMPRESION DE ETIQUETA CODIGO 
+router.get("/Componentes/ImprimirEtiqueta", (req, res) => {
+    res.render("ImpresionQR/VistaImpresionQRCodigoTI");
+});
+
+router.get("/Componentes/ConsultaDeComponentes", (req, res) => {
+    res.render("Componentes/ConsultaComponenteBusqueda");
+});
 module.exports = router;

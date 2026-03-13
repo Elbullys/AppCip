@@ -1,0 +1,120 @@
+<%- include("../template/cabecera",{tituloweb:'Generador de Etiquetas QR'}) %>
+<%- include("../template/navbar") %>
+
+<link href="../css/EtiquetaQR.css" rel="stylesheet" />
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10 card shadow-lg p-4">
+      <h3 class="mb-4">
+        <i class="fas fa-qrcode me-2 mt-3"></i>Generador de Etiqueta QR
+      </h3>
+
+      <div class="row">
+        <!-- COLUMNA IZQUIERDA: DATOS -->
+        <div class="col-md-7 pe-md-4 border-end">
+          <div class="mb-4">
+            <label class="small fw-bold">ID del Componente</label>
+            <div id="view_id" class="fs-4 fw-bold text-primary">
+              <input
+                type="text"
+                class="form-control"
+                id="inputidcomponente"
+                placeholder="ID"
+                tabindex="1"
+                autofocus
+                autocomplete="off"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="small fw-bold">Código TI</label>
+              <div id="view_codigo_ti" class="p-2 border rounded bg-light text-center fw-bold">--</div>
+            </div>
+            <div class="col-6">
+              <label class="small fw-bold">N° de Serie</label>
+              <div id="view_numero_serie" class="p-2 border rounded bg-light text-truncate">--</div>
+            </div>
+            <div class="col-12">
+              <label class="small fw-bold">Dispositivo</label>
+              <div id="view_dispositivo" class="fw-semibold text-secondary border-bottom">--</div>
+            </div>
+            <div class="col-6">
+              <label class="small fw-bold">Marca</label>
+              <div id="view_marca" class="border-start ps-2">--</div>
+            </div>
+            <div class="col-6">
+              <label class="small fw-bold">Modelo</label>
+              <div id="view_modelo" class="border-start ps-2">--</div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-top">
+            <div class="row align-items-center g-3">
+              <div class="col-auto">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="checkRegulatorio" tabindex="2" />
+                  <label class="form-check-label fw-bold ms-2" for="checkRegulatorio">
+                    <i class="fas fa-shield-alt text-warning me-1"></i> Código Regulatorio
+                  </label>
+                </div>
+              </div>
+              <div id="container-input-regulatorio" class="col d-none animate__animated animate__fadeInLeft">
+                <div class="input-group input-group-sm">
+                  <input type="text" id="inputRegulatorio" class="form-control" tabindex="3" placeholder="Ej: EQ-REG-GTO-584" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: PREVISUALIZACIÓN -->
+        <div class="col-md-5 text-center d-flex flex-column align-items-center justify-content-center py-3 bg-light rounded">
+          <div class="etiqueta-preview-container">
+            
+            <div id="etiqueta-real" class="etiqueta-sticker shadow">
+              <div class="qr-box">
+                <img id="img_qr" src="/resources/exampleQR.png" alt="QR" />
+              </div>
+              <div class="info-box">
+                <div class="label-ti">CÓDIGO TI:</div>
+                <div id="view_codigo_ti_etiqueta" class="value-ti">--</div>
+                <div id="textboxregulatorio" class="text-box" hidden>
+                  <div class="label-ti">REGULATORIO:</div>
+                  <div id="view_codigo_regulatorio_etiqueta" class="value-reg">--</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="small text-muted mt-2 mb-0">
+            <i class="fas fa-eye me-1"></i> Vista previa de impresión
+          </p>
+        </div>
+      </div>
+
+      <!-- BOTONES -->
+      <div class="row mt-4 pt-3 border-top">
+        <div class="col-12">
+          <div class="d-flex flex-wrap justify-content-center gap-3">
+            <button type="button" class="btn btn-danger" id="btnNuevo" tabindex="4">
+              <i class="fas fa-plus me-2"></i>Nuevo
+            </button>
+            <button type="button" class="btn btn-primary" id="btnGenerarQR" tabindex="5">
+              <i class="fas fa-qrcode me-2"></i>Generar QR
+            </button>
+            <button type="button" class="btn btn-success" id="btnImprimirEtiqueta" tabindex="6" disabled>
+              <i class="fas fa-print me-2"></i>Imprimir Etiqueta
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/RouterAPI/ImpresionEtiqueta/RouterImpresionQR.js" type="module"></script>
+<%- include("../template/footer") %>
+<%- include("../Componentes/modal/ModalConsultaTodosComponente") %>

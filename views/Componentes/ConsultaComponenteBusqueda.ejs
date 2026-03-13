@@ -1,0 +1,230 @@
+<%- include("../template/cabecera",{tituloweb:'Consulta de Componentes'}) %>
+<%- include("../template/navbar") %>
+
+<link href="../css/FiltroAvanzado.css" rel="stylesheet" />
+
+<div class="container py-4">
+  <div class="row">
+    
+    <!-- COLUMNA IZQUIERDA: FILTROS -->
+    <div class="col-lg-3 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">
+            <i class="fas fa-filter me-2"></i>Filtros
+          </h5>
+        </div>
+        <div class="card-body p-0">
+          
+          <!-- Botón Móvil: Toggle Filtros -->
+          <div class="d-lg-none p-3 border-bottom">
+            <button type="button" class="btn btn-outline-primary w-100" id="btnToggleFiltros">
+              <i class="fas fa-filter me-2"></i>Mostrar/Ocultar Filtros
+            </button>
+          </div>
+
+          <!-- Filtros con Scroll -->
+          <div class="filtros-scroll" id="filtrosScroll">
+            
+            <!-- Filtro 1: Código TI -->
+            <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Código TI</label>
+              <input type="text" class="form-control form-control-sm" id="filtroCodigoTI" placeholder="Buscar...">
+            </div>
+
+            <!-- Filtro 2: Número de Serie -->
+            <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Número de Serie</label>
+              <input type="text" class="form-control form-control-sm" id="filtroNumeroSerie" placeholder="Buscar...">
+            </div>
+
+            <!-- Filtro 3: Técnico -->
+            <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Técnico</label>
+              <select class="form-select form-select-sm" id="filtroTecnico" style="width: 100%;">
+                <option value="">-- Seleccionar Técnico --</option>
+              </select>
+            </div>
+
+            <!-- Filtro 4: Unidad -->
+            <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Unidad</label>
+              <select class="form-select form-select-sm" id="filtroUnidad" style="width: 100%;">
+                <option value="">-- Seleccionar Unidad --</option>
+              </select>
+            </div>
+             <!-- Filtro 5: Areas -->
+            <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Áreas</label>
+              <select class="form-select form-select-sm" id="filtroArea" style="width: 100%;">
+                <option value="">-- Seleccionar Área --</option>
+              </select>
+            </div>
+
+            <!-- Filtro 6: Responsable -->
+            <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Responsable</label>
+              <select class="form-select form-select-sm" id="filtroResponsable" style="width: 100%;">
+                <option value="">-- Seleccionar Responsable --</option>
+              </select>
+            </div>
+
+            <!-- Filtro 7: Dispositivos -->
+            <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Dispositivo</label>
+              <select class="form-select form-select-sm" id="filtroDispositivo" style="width: 100%;">
+                <option value="">-- Seleccionar Dispositivo --</option>
+              </select>
+            </div>
+
+             <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Marca</label>
+              <select class="form-select form-select-sm" id="filtroMarca" style="width: 100%;">
+                <option value="">-- Seleccionar Marca --</option>
+              </select>
+            </div>
+            <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Modelo</label>
+              <select class="form-select form-select-sm" id="filtroModelo" style="width: 100%;">
+                <option value="">-- Seleccionar Modelo --</option>
+              </select>
+            </div>
+             <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Catálogo</label>
+              <select class="form-select form-select-sm" id="filtroCatalogo" style="width: 100%;">
+                <option value="">-- Seleccionar Catálogo --</option>
+              </select>
+            </div>
+            <!-- Filtro 8: Marca -->
+            <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Catálogo</label>
+              <select class="form-select form-select-sm" id="filtroCatalogo" style="width: 100%;">
+                <option value="">-- Seleccionar Catálogo --</option>
+              </select>
+            </div>
+
+         
+
+          
+            <div class="p-3 border-bottom">
+              <div class="filtros-avanzados d-none" id="filtrosAvanzados">
+                <!-- Filtro 10: Procesador -->
+                <div class="p-2 border-bottom">
+                  <label class="form-label small fw-bold">Procesador</label>
+                  <select class="form-select form-select-sm" id="filtroProcesador" style="width: 100%;">
+                    <option value="">-- Seleccionar Procesador --</option>
+                  </select>
+                </div>
+
+                <!-- Filtro 11: Memoria RAM -->
+                <div class="p-2 border-bottom">
+                  <label class="form-label small fw-bold">Memoria RAM</label>
+                  <select class="form-select form-select-sm" id="filtroMemoriaRam" style="width: 100%;">
+                    <option value="">-- Seleccionar RAM --</option>
+                  </select>
+                </div>
+
+                <!-- Filtro 12: Almacenamiento -->
+                <div class="p-2 border-bottom">
+                  <label class="form-label small fw-bold">Almacenamiento</label>
+                  <select class="form-select form-select-sm" id="filtroAlmacenamiento" style="width: 100%;">
+                    <option value="">-- Seleccionar Almacenamiento --</option>
+                  </select>
+                </div>
+
+                <!-- Filtro 13: Sistema Operativo -->
+                <div class="p-2 border-bottom">
+                  <label class="form-label small fw-bold">Sistema Operativo</label>
+                  <select class="form-select form-select-sm" id="filtroSistemaOp" style="width: 100%;">
+                    <option value="">-- Seleccionar SO --</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filtro 14: Status -->
+            <div class="p-3 border-bottom">
+              <label class="form-label small fw-bold">Status</label>
+              <select class="form-select form-select-sm" id="filtroStatus" style="width: 100%;">
+                <option value="">-- Condición del Equipo --</option>
+                <option value="BUENAS CONDICIONES">BUENAS CONDICIONES</option>
+                <option value="MEDIA VIDA">MEDIA VIDA</option>
+                <option value="MAL ESTADO">MAL ESTADO</option>
+                <option value="EN REPARACION">EN REPARACION</option>
+                <option value="EXTRAVIADO">EXTRAVIADO</option>
+                <option value="EN REVISION">EN REVISION</option>
+                <option value="PARA PIEZAS">PARA PIEZAS</option>
+                <option value="DESCONTINUADO">DESCONTINUADO</option>
+                <option value="DESECHADO">DESECHADO</option>
+                <option value="SIN INFORMACION">SIN INFORMACION</option>
+              </select>
+            </div>
+
+            <!-- Botones de Filtros -->
+            <div class="p-3 border-top">
+              <div class="d-grid gap-2">
+                <button type="button" class="btn btn-primary btn-sm" id="btnAplicarFiltros">
+                  <i class="fas fa-search me-2"></i>Aplicar Filtros
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="btnLimpiarFiltros">
+                  <i class="fas fa-eraser me-2"></i>Limpiar
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA: DATATABLE -->
+    <div class="col-lg-9">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="fas fa-table me-2"></i>Resultados
+            </h5>
+            <div class="input-group input-group-sm" style="width: 250px;">
+              <span class="input-group-text"><i class="fas fa-search"></i></span>
+              <input type="text" class="form-control" id="busquedaTabla" placeholder="Buscar en tabla...">
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table id="tablaResultadoComponentes" class="table table-striped table-hover table-sm mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>Código TI</th>
+                  <th>Serie</th>
+                  <th>Unidad</th>
+                  <th>Responsable</th>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Status</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer bg-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <small class="text-muted" id="infoPaginacion">Mostrando 0 de 0 registros</small>
+            <nav aria-label="Paginación">
+              <ul class="pagination pagination-sm mb-0" id="paginacionTabla"></ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="/js/RouterAPI/Componentes/RouterConsultaComponenteBusqueda.js" type="module"></script>
+
+<%- include("../template/footer") %>

@@ -1266,7 +1266,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Mostrar u ocultar el campo de código regulatorio según el estado del checkbox
-  checkRegulatorio.addEventListener("change", function () {
+  checkRegulatorio.addEventListener("change",  (e) => {
     if (this.checked) {
       container.classList.remove("d-none");
       container.classList.add("d-block");
@@ -1282,9 +1282,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   // Evento para generar el código QR al hacer clic en el botón "btnGenerarQR"
   btnGenerarQR.addEventListener("click", function () {
-    //provisional
+   
     const codigoTI = document.getElementById("view_codigo_ti").textContent;
-    estadoFormulario.CodigoTI = codigoTI; // Guardar el código TI en el
+    estadoFormulario.CodigoTI = codigoTI; // Guardar el código TI en el estado del formulario
 
     // Limpiar QR anterior
     imgQR.src = "";
@@ -1342,6 +1342,14 @@ document.addEventListener("DOMContentLoaded", () => {
         qrYaGenerado,
       );
     } else {
+      if(view_codigo_ti_etiqueta.textContent == "--"||view_codigo_ti_etiqueta.textContent == ""||view_codigo_ti_etiqueta.textContent == null)
+          {
+            Toast.fire({
+              icon: "warning",
+              title: "Generar el Código QR para imprimir la etiqueta",
+            });
+            return;
+          }
       await imprimirEtiquetaSimple(estadoFormulario.CodigoTI, qrYaGenerado);
     }
     limpiarmodalQR();

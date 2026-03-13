@@ -1,0 +1,123 @@
+/* En tu archivo consultaComponentes.css */
+
+/* Filtros */
+.card-header {
+    border-radius: 8px 8px 0 0 !important;
+}
+
+.card-body {
+    border-radius: 0 0 8px 8px !important;
+}
+
+/* DataTables */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background-color: #e3f2fd !important;
+    border: 1px solid #90caf9 !important;
+    color: #1565c0 !important;
+    border-radius: 4px !important;
+    padding: 5px 10px !important;
+    margin: 0 2px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #2196f3 !important;
+    border-color: #1976d2 !important;
+    color: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.active {
+    background-color: #1976d2 !important;
+    border-color: #1565c0 !important;
+    color: white !important;
+}
+
+/* ============================================
+   FILTROS CON SCROLL
+   ============================================ */
+
+/* Contenedor con scroll */
+.filtros-scroll {
+  max-height: 70vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Scrollbar personalizado */
+.filtros-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filtros-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.filtros-scroll::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.filtros-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Sección colapsable */
+.filtros-avanzados {
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+/* Botón toggle avanzado */
+#btnToggleFiltrosAvanzados {
+  font-size: 0.9rem;
+}
+
+#btnToggleFiltrosAvanzados i {
+  transition: transform 0.3s ease;
+}
+
+#btnToggleFiltrosAvanzados.collapsed i {
+  transform: rotate(-90deg);
+}
+
+/* Botón móvil */
+#btnToggleFiltros {
+  display: none;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 991px) {
+  /* Mostrar botón toggle en móvil */
+  #btnToggleFiltros {
+    display: block;
+  }
+
+  /* Ocultar filtros por defecto en móvil */
+  .filtros-scroll {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  /* Mostrar filtros cuando se activa */
+  .filtros-scroll.show {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  /* Ajustar columnas */
+  .col-lg-3, .col-lg-9 {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  .filtros-scroll {
+    max-height: 90vh;
+  }
+}
+
